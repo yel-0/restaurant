@@ -1,25 +1,26 @@
 import React from "react";
-import { BrowserRouter, Routes, Route } from "react-router-dom";
-import Home from "./Pages/Home/Home";
-import About from "./Pages/About/About";
-import HomeLayout from "./Layout/HomeLayout";
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import { AuthProvider } from "./context/AuthContext";
+import AdminDashboard from "./Pages/Admin/AdminDashboard";
+import WaiterOrders from "./Pages/Waiter/WaiterOrders";
+import CookDashboard from "./Pages/Cook/CookDashboard";
+import Start from "./Pages/Home/Start";
+import Navbar from "./Design/Share/NavBar";
+import Footer from "./Design/Share/Footer";
 
-function App() {
-  return (
-    <BrowserRouter>
+const App = () => (
+  <AuthProvider>
+    <Router>
+      <Navbar />
       <Routes>
-        <Route
-          path="/"
-          element={
-            <HomeLayout>
-              <Home />
-            </HomeLayout>
-          }
-        />
-        <Route path="/about" element={<About />} />
+        <Route path="/admin" element={<AdminDashboard />} />
+        <Route path="/waiter" element={<WaiterOrders />} />
+        <Route path="/cook" element={<CookDashboard />} />
+        <Route path="/" element={<Start />} />
       </Routes>
-    </BrowserRouter>
-  );
-}
+      <Footer />
+    </Router>
+  </AuthProvider>
+);
 
 export default App;

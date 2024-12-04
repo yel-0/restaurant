@@ -2,6 +2,7 @@ import React from "react";
 import FoodCard from "@/Design/User/FoodCard";
 import { OrderSideBar } from "@/Design/User/OrderSideBar";
 import { SidebarTrigger } from "@/components/ui/sidebar";
+import CategoryList from "@/Design/User/CategoryList";
 
 const Home = () => {
   const foodItems = [
@@ -39,20 +40,25 @@ const Home = () => {
     },
   ];
   return (
-    <div className="flex flex-row bg-[#f3f4f6] justify-between items-start">
-      <div className="flex flex-row justify-center items-center flex-wrap gap-6 p-6 bg-gray-100">
-        {foodItems.map((item) => (
-          <FoodCard
-            key={item.id} // Use a unique key for React rendering
-            image={item.image}
-            name={item.name}
-            price={item.price}
-            isAvailable={item.isAvailable}
-            onAddToCart={() => console.log(`${item.name} added to cart!`)}
-          />
-        ))}
+    <div>
+      <div className="flex flex-row bg-white justify-between items-start">
+        <div>
+          <CategoryList />
+          <div className="flex flex-row justify-center items-center flex-wrap gap-6 p-6 ">
+            {foodItems.map((item) => (
+              <FoodCard
+                key={item.id} // Use a unique key for React rendering
+                image={item.image}
+                name={item.name}
+                price={item.price}
+                isAvailable={item.isAvailable}
+                onAddToCart={() => console.log(`${item.name} added to cart!`)}
+              />
+            ))}
+          </div>
+        </div>
+        <OrderSideBar />
       </div>
-      <OrderSideBar />
     </div>
   );
 };
