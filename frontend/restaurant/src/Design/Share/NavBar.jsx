@@ -1,30 +1,33 @@
 import { Link } from "react-router-dom";
 
 const Navbar = () => {
-  const user = { role: "admin" };
+  const user = { role: "cook" }; // Replace with real authentication logic later
+
   return (
-    <nav className="bg-blue-800 text-white shadow-lg py-4">
+    <nav className="bg-gradient-to-r from-blue-600 to-blue-800 text-white shadow-md py-4">
       <div className="container mx-auto flex justify-between items-center px-6">
+        {/* Logo Section */}
         <div className="text-2xl font-bold">
-          <Link to="/">Restaurant</Link>
+          <Link to="/" className="text-white">
+            Restaurant
+          </Link>
         </div>
-        <div className="space-x-6">
-          {user.role === "admin" && (
-            <Link to="/admin" className="hover:text-gray-400">
-              Admin Dashboard
-            </Link>
-          )}
-          {user.role === "waiter" && (
-            <Link to="/waiter" className="hover:text-gray-400">
-              Waiter Orders
-            </Link>
-          )}
-          {user.role === "cook" && (
-            <Link to="/cook" className="hover:text-gray-400">
-              Cook Dashboard
-            </Link>
-          )}
-          <Link to="/" className="hover:text-gray-400">
+
+        {/* Navigation Links */}
+        <div className="flex space-x-6 items-center">
+          <Link to="/admin" className="text-white">
+            Admin Dashboard
+          </Link>
+
+          <Link to="/waiter" className="text-white">
+            Waiter Orders
+          </Link>
+
+          <Link to="/cook" className="text-white">
+            Cook Dashboard
+          </Link>
+
+          <Link to="/" className="text-white">
             Logout
           </Link>
         </div>

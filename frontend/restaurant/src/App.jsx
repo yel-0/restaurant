@@ -1,24 +1,54 @@
 import React from "react";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import { AuthProvider } from "./context/AuthContext";
+import CookLayout from "./Layout/CookLayout";
+import AdminLayout from "./Layout/AdminLayout"; // Add Admin Layout import
+import WaiterLayout from "./Layout/WaiterLayout"; // Add Waiter Layout import
 import AdminDashboard from "./Pages/Admin/AdminDashboard";
 import WaiterOrders from "./Pages/Waiter/WaiterOrders";
 import CookDashboard from "./Pages/Cook/CookDashboard";
 import Start from "./Pages/Home/Start";
-import Navbar from "./Design/Share/NavBar";
-import Footer from "./Design/Share/Footer";
 
 const App = () => (
   <AuthProvider>
     <Router>
-      <Navbar />
+      {/* Content */}
       <Routes>
-        <Route path="/admin" element={<AdminDashboard />} />
-        <Route path="/waiter" element={<WaiterOrders />} />
-        <Route path="/cook" element={<CookDashboard />} />
+        {/* Admin Route */}
+        <Route
+          path="/admin"
+          element={
+            <AdminLayout>
+              <AdminDashboard />
+            </AdminLayout>
+          }
+        />
+
+        {/* Waiter Route */}
+        <Route
+          path="/waiter"
+          element={
+            <WaiterLayout>
+              <WaiterOrders />
+            </WaiterLayout>
+          }
+        />
+
+        {/* Cook Route */}
+        <Route
+          path="/cook"
+          element={
+            <CookLayout>
+              <CookDashboard />
+            </CookLayout>
+          }
+        />
+
+        {/* Default Route */}
         <Route path="/" element={<Start />} />
       </Routes>
-      <Footer />
+
+      {/* Footer (Optional) */}
     </Router>
   </AuthProvider>
 );
