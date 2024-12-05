@@ -8,6 +8,10 @@ import AdminDashboard from "./Pages/Admin/AdminDashboard";
 import WaiterOrders from "./Pages/Waiter/WaiterOrders";
 import CookDashboard from "./Pages/Cook/CookDashboard";
 import Start from "./Pages/Home/Start";
+import AdminUserLIst from "./Pages/Admin/AdminUserLIst";
+import AdminTables from "./Pages/Admin/AdminTables";
+import AdminMenu from "./Pages/Admin/AdminMenu";
+import AdminInventory from "./Pages/Admin/AdminInventory";
 
 const App = () => (
   <AuthProvider>
@@ -20,6 +24,38 @@ const App = () => (
           element={
             <AdminLayout>
               <AdminDashboard />
+            </AdminLayout>
+          }
+        />
+        <Route
+          path="/admin/users"
+          element={
+            <AdminLayout>
+              <AdminUserLIst />
+            </AdminLayout>
+          }
+        />
+        <Route
+          path="/admin/tables"
+          element={
+            <AdminLayout>
+              <AdminTables />
+            </AdminLayout>
+          }
+        />
+        <Route
+          path="/admin/menus"
+          element={
+            <AdminLayout>
+              <AdminMenu />
+            </AdminLayout>
+          }
+        />
+        <Route
+          path="/admin/inventory"
+          element={
+            <AdminLayout>
+              <AdminInventory />
             </AdminLayout>
           }
         />

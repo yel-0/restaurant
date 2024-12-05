@@ -8,7 +8,7 @@ import {
 } from "@/components/ui/sidebar";
 import { SidebarProvider } from "@/components/ui/sidebar";
 import Navbar from "@/Design/Share/NavBar";
-import Footer from "@/Design/Share/Footer";
+import { Link } from "react-router-dom";
 
 const AdminLayout = ({ children }) => {
   return (
@@ -21,16 +21,52 @@ const AdminLayout = ({ children }) => {
           </SidebarHeader>
           <SidebarContent>
             <SidebarGroup>
-              <div className="p-4 border-b border-gray-700">Dashboard</div>
+              <Link to={"/admin"} className="p-4 border-b border-gray-700">
+                Dashboard
+              </Link>
             </SidebarGroup>
             <SidebarGroup>
-              <div className="p-4 border-b border-gray-700">Users</div>
+              <Link
+                to={"/admin/users"}
+                className="p-4 border-b border-gray-700"
+              >
+                Users
+              </Link>
             </SidebarGroup>
             <SidebarGroup>
-              <div className="p-4 border-b border-gray-700">Reports</div>
+              <Link
+                to={"/admin/tables"}
+                className="p-4 border-b border-gray-700"
+              >
+                Tables
+              </Link>
             </SidebarGroup>
             <SidebarGroup>
-              <div className="p-4 border-b border-gray-700">Settings</div>
+              <Link
+                to={"/admin/menus"}
+                className="p-4 border-b border-gray-700"
+              >
+                Menu
+              </Link>
+            </SidebarGroup>
+            <SidebarGroup>
+              <Link
+                to={"/admin/inventory"}
+                className="p-4 border-b border-gray-700"
+              >
+                Inventory
+              </Link>
+            </SidebarGroup>
+            <SidebarGroup>
+              <Link
+                to={"/admin/reports"}
+                className="p-4 border-b border-gray-700"
+              >
+                Reports
+              </Link>
+            </SidebarGroup>
+            <SidebarGroup>
+              <Link className="p-4 border-b border-gray-700">Settings</Link>
             </SidebarGroup>
           </SidebarContent>
           <SidebarFooter>
