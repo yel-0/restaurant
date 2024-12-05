@@ -10,6 +10,7 @@ import {
 } from "@/components/ui/table";
 import { UpdateTableDialog } from "@/Design/Admin/UpdateTableDialog";
 import { DeleteTableDialog } from "@/Design/Admin/DeleteTableDialog";
+import { CreateTableDialog } from "@/Design/Admin/CreateTableDialog";
 const AdminTables = () => {
   // Example data for tables
   const tables = [
@@ -53,7 +54,9 @@ const AdminTables = () => {
   return (
     <div className="p-6 bg-white shadow rounded-md">
       <h1 className="text-xl font-bold mb-4">Table Management</h1>
-
+      <div className="p-4">
+        <CreateTableDialog />
+      </div>
       <Table>
         <TableCaption>A list of all tables in the restaurant.</TableCaption>
         <TableHeader>

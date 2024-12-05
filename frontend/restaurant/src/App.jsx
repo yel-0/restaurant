@@ -12,6 +12,8 @@ import AdminUserLIst from "./Pages/Admin/AdminUserLIst";
 import AdminTables from "./Pages/Admin/AdminTables";
 import AdminMenu from "./Pages/Admin/AdminMenu";
 import AdminInventory from "./Pages/Admin/AdminInventory";
+import AdminCreateMenu from "./Pages/Admin/AdminCreateMenu";
+import AdminUpdateMenu from "./Pages/Admin/AdminUpdateMenu";
 
 const App = () => (
   <AuthProvider>
@@ -48,6 +50,22 @@ const App = () => (
           element={
             <AdminLayout>
               <AdminMenu />
+            </AdminLayout>
+          }
+        />
+        <Route
+          path="/admin/menu/create"
+          element={
+            <AdminLayout>
+              <AdminCreateMenu />
+            </AdminLayout>
+          }
+        />
+        <Route
+          path="/admin/menu/update"
+          element={
+            <AdminLayout>
+              <AdminUpdateMenu />
             </AdminLayout>
           }
         />

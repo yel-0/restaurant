@@ -1,4 +1,6 @@
 import React from "react";
+import { Link } from "react-router-dom";
+import { DeleteMenuItemDialog } from "./DeleteMenuItemDialog";
 
 const AdminMenuItemCard = ({ item }) => {
   return (
@@ -20,12 +22,13 @@ const AdminMenuItemCard = ({ item }) => {
       <div className="flex justify-between items-center">
         <span className="text-lg font-bold">${item.price}</span>
         <div className="flex space-x-2">
-          <button className="px-3 py-1 bg-blue-600 text-white text-sm rounded-md">
+          <Link
+            to="/admin/menu/update"
+            className="px-3 py-1 bg-blue-600 text-white text-sm rounded-md"
+          >
             Edit
-          </button>
-          <button className="px-3 py-1 bg-red-600 text-white text-sm rounded-md">
-            Delete
-          </button>
+          </Link>
+          <DeleteMenuItemDialog />
         </div>
       </div>
     </div>

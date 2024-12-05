@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import AdminCategorySelector from "@/Design/Admin/AdminCategorySelector";
 import AdminMenuItemCard from "@/Design/Admin/AdminMenuItemCard";
+import { Link } from "react-router-dom";
 const AdminMenu = () => {
   // Static data for menu items
   const menuItems = [
@@ -73,9 +74,12 @@ const AdminMenu = () => {
       <div className="flex flex-row justify-between items-center">
         <AdminCategorySelector />
 
-        <button className="px-4 py-2 text-sm font-medium rounded mb-6 bg-blue-600 text-white">
+        <Link
+          to="/admin/menu/create"
+          className="px-4 py-2 text-sm font-medium rounded mb-6 bg-blue-600 text-white"
+        >
           Create
-        </button>
+        </Link>
       </div>
       {/* Menu Items */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
