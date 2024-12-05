@@ -16,6 +16,8 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { Button } from "@/components/ui/button";
+import UpdateUserDialog from "@/Design/Admin/UpdateUserDialog";
+import DeleteUserDialog from "@/Design/Admin/DeleteUserDialog";
 
 const AdminUserList = () => {
   // Example data for users
@@ -133,13 +135,9 @@ const AdminUserList = () => {
               <TableCell>{user.role}</TableCell>
               <TableCell>{user.email}</TableCell>
               <TableCell className="text-center">{user.status}</TableCell>
-              <TableCell className="text-center">
-                <Button className="px-3 py-1 rounded-lg text-sm font-medium text-white bg-blue-500  hover:bg-blue-600 transition">
-                  Edit
-                </Button>
-                <Button className="ml-2 px-3 py-1 text-sm font-medium text-white bg-red-500 rounded-lg hover:bg-red-600 transition">
-                  Delete
-                </Button>
+              <TableCell className="text-center gap-3 flex justify-center items-center">
+                <UpdateUserDialog />
+                <DeleteUserDialog />
               </TableCell>
             </TableRow>
           ))}
