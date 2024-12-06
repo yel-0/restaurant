@@ -49,22 +49,22 @@ const AdminLayout = ({ children }) => {
                 Menu
               </Link>
             </SidebarGroup>
-            <SidebarGroup>
+            {/* <SidebarGroup>
               <Link
                 to={"/admin/inventory"}
                 className="p-4 border-b border-gray-700"
               >
                 Inventory
               </Link>
-            </SidebarGroup>
-            <SidebarGroup>
+            </SidebarGroup> */}
+            {/* <SidebarGroup>
               <Link
                 to={"/admin/reports"}
                 className="p-4 border-b border-gray-700"
               >
                 Reports
               </Link>
-            </SidebarGroup>
+            </SidebarGroup> */}
             <SidebarGroup>
               <Link className="p-4 border-b border-gray-700">Settings</Link>
             </SidebarGroup>
