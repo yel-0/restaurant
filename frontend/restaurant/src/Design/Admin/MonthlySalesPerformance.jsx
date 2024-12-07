@@ -17,15 +17,20 @@ import {
   ChartTooltipContent,
 } from "@/components/ui/chart";
 
-// Daily data example
-const dailyChartData = [
-  { day: "Monday", revenue: 1200, target: 1500 },
-  { day: "Tuesday", revenue: 1800, target: 1700 },
-  { day: "Wednesday", revenue: 2000, target: 1900 },
-  { day: "Thursday", revenue: 2200, target: 2100 },
-  { day: "Friday", revenue: 2500, target: 2400 },
-  { day: "Saturday", revenue: 2700, target: 2600 },
-  { day: "Sunday", revenue: 3000, target: 2800 },
+// Monthly data example
+const monthlyChartData = [
+  { month: "January", revenue: 12000, target: 15000 },
+  { month: "February", revenue: 14000, target: 17000 },
+  { month: "March", revenue: 16000, target: 19000 },
+  { month: "April", revenue: 18000, target: 21000 },
+  { month: "May", revenue: 20000, target: 23000 },
+  { month: "June", revenue: 22000, target: 25000 },
+  { month: "July", revenue: 24000, target: 27000 },
+  { month: "August", revenue: 26000, target: 29000 },
+  { month: "September", revenue: 28000, target: 31000 },
+  { month: "October", revenue: 30000, target: 33000 },
+  { month: "November", revenue: 32000, target: 35000 },
+  { month: "December", revenue: 34000, target: 37000 },
 ];
 
 const chartConfig = {
@@ -39,22 +44,23 @@ const chartConfig = {
   },
 };
 
-export function SalesPerformance() {
+export function MonthlySalesPerformance() {
   return (
     <Card className="w-full">
       <CardHeader>
         <CardTitle>Sales Performance</CardTitle>
-        <CardDescription>Daily Revenue vs Target</CardDescription>
+        <CardDescription>Monthly Revenue vs Target</CardDescription>
       </CardHeader>
       <CardContent>
         <ChartContainer config={chartConfig}>
-          <BarChart width="100%" height={300} data={dailyChartData}>
+          <BarChart width="100%" height={300} data={monthlyChartData}>
             <CartesianGrid vertical={false} />
             <XAxis
-              dataKey="day"
+              dataKey="month"
               tickLine={false}
               tickMargin={10}
               axisLine={false}
+              tickFormatter={(value) => value.slice(0, 3)} // Shorten month names
             />
             <YAxis
               tickFormatter={(value) => `$${value / 1000}k`}
@@ -72,10 +78,10 @@ export function SalesPerformance() {
       </CardContent>
       <CardFooter className="flex-col items-start gap-2 text-sm">
         <div className="flex gap-2 font-medium leading-none">
-          Trending up by 3.1% this week <TrendingUp className="h-4 w-4" />
+          Trending up by 4.5% this year <TrendingUp className="h-4 w-4" />
         </div>
         <div className="leading-none text-muted-foreground">
-          Showing revenue performance for the current week.
+          Showing revenue performance for the year 2024.
         </div>
       </CardFooter>
     </Card>
