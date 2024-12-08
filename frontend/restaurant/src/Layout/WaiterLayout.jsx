@@ -9,6 +9,7 @@ import {
 import { SidebarProvider } from "@/components/ui/sidebar";
 import Navbar from "@/Design/Share/NavBar";
 import Footer from "@/Design/Share/Footer";
+import { Link } from "react-router-dom";
 
 const WaiterLayout = ({ children }) => {
   return (
@@ -18,6 +19,19 @@ const WaiterLayout = ({ children }) => {
         <Sidebar className="w-64 h-screen bg-gray-800 border-none text-white">
           <SidebarHeader>
             <div className="p-4 text-lg font-bold">Waiter Dashboard</div>
+          </SidebarHeader>
+          <SidebarHeader>
+            <Link
+              to="/waiter/order/lists"
+              className="p-4 border-b border-gray-700"
+            >
+              Waiter Dashboard
+            </Link>
+          </SidebarHeader>
+          <SidebarHeader>
+            <Link to="/waiter/tables" className="p-4 border-b border-gray-700">
+              Waiter Tables
+            </Link>
           </SidebarHeader>
           <SidebarContent>
             <SidebarGroup>

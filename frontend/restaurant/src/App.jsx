@@ -15,6 +15,10 @@ import AdminInventory from "./Pages/Admin/AdminInventory";
 import AdminCreateMenu from "./Pages/Admin/AdminCreateMenu";
 import AdminUpdateMenu from "./Pages/Admin/AdminUpdateMenu";
 import AdminOrderDetail from "./Pages/Admin/AdminOrderDetail";
+import AdminOrderView from "./Pages/Admin/AdminOrderView";
+import WaiterOrderList from "./Pages/Waiter/WaiterOrderList";
+import WaiterOrderDetail from "./Pages/Waiter/WaiterOrderDetail";
+import WaiterTablesList from "./Pages/Waiter/WaiterTablesList";
 
 const App = () => (
   <AuthProvider>
@@ -71,6 +75,14 @@ const App = () => (
           }
         />
         <Route
+          path="/admin/order/lists"
+          element={
+            <AdminLayout>
+              <AdminOrderView />
+            </AdminLayout>
+          }
+        />
+        <Route
           path="/admin/order/detail"
           element={
             <AdminLayout>
@@ -93,6 +105,30 @@ const App = () => (
           element={
             <WaiterLayout>
               <WaiterOrders />
+            </WaiterLayout>
+          }
+        />
+        <Route
+          path="/waiter/order/lists"
+          element={
+            <WaiterLayout>
+              <WaiterOrderList />
+            </WaiterLayout>
+          }
+        />
+        <Route
+          path="/waiter/order/detail"
+          element={
+            <WaiterLayout>
+              <WaiterOrderDetail />
+            </WaiterLayout>
+          }
+        />
+        <Route
+          path="/waiter/tables"
+          element={
+            <WaiterLayout>
+              <WaiterTablesList />
             </WaiterLayout>
           }
         />

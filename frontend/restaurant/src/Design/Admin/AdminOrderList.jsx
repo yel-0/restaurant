@@ -110,6 +110,7 @@ export function AdminOrderList() {
       <Table>
         <TableHeader>
           <TableRow>
+            <TableHead>Table</TableHead>
             <TableHead>Order ID</TableHead>
             <TableHead>Customer</TableHead>
             <TableHead>Items</TableHead>
@@ -120,8 +121,10 @@ export function AdminOrderList() {
           </TableRow>
         </TableHeader>
         <TableBody>
-          {orders.map((order) => (
+          {orders.map((order, index) => (
             <TableRow key={order.id}>
+              <TableCell>Table {index + 1}</TableCell>{" "}
+              {/* Table number column */}
               <TableCell>{order.id}</TableCell>
               <TableCell>{order.customer}</TableCell>
               <TableCell>{order.items}</TableCell>
@@ -133,7 +136,7 @@ export function AdminOrderList() {
                     statusColors[order.status]
                   }-200 w-[80px] text-center`}
                 >
-                  <div className=" w-full">{order.status}</div>
+                  <div className="w-full">{order.status}</div>
                 </Badge>
               </TableCell>
               <TableCell>{order.date}</TableCell>

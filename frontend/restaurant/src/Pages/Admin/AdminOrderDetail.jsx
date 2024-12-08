@@ -1,14 +1,16 @@
-import React from "react";
+import React, { useState } from "react";
 
 const AdminOrderDetail = () => {
-  // Static data for the order
-  const order = {
+  const TAX_RATE = 0.1;
+
+  // Initial order data
+  const initialOrder = {
     id: "101",
     tableNumber: 5,
     waiterName: "John Doe",
     status: "Pending",
     orderTime: "2024-12-08 12:30 PM",
-    cashStatus: "Done", // New field for cash status
+    cashStatus: "Pending",
     items: [
       {
         name: "Pasta",
@@ -22,18 +24,12 @@ const AdminOrderDetail = () => {
         pricePerUnit: 8.0,
         image: "https://via.placeholder.com/100?text=Salad",
       },
-      {
-        name: "Soup",
-        quantity: 3,
-        pricePerUnit: 5.0,
-        image: "https://via.placeholder.com/100?text=Soup",
-      },
     ],
     specialRequests: "No onions in the salad, please.",
   };
 
-  // Define tax rate (for example 10%)
-  const TAX_RATE = 0.1;
+  // State for the order
+  const [order, setOrder] = useState(initialOrder);
 
   // Calculate total price
   const calculateTotal = () => {
@@ -42,122 +38,122 @@ const AdminOrderDetail = () => {
       .toFixed(2);
   };
 
-  // Calculate tax amount
+  // Calculate tax
   const calculateTax = () => {
     const total = parseFloat(calculateTotal());
     return (total * TAX_RATE).toFixed(2);
   };
 
-  // Calculate final total with tax
+  // Calculate final total
   const calculateFinalTotal = () => {
     const total = parseFloat(calculateTotal());
     const tax = parseFloat(calculateTax());
     return (total + tax).toFixed(2);
   };
 
+  // Handle quantity update
+  const updateQuantity = (index, newQuantity) => {
+    setOrder((prevOrder) => {
+      const updatedItems = [...prevOrder.items];
+      updatedItems[index].quantity = newQuantity;
+      return { ...prevOrder, items: updatedItems };
+    });
+  };
+
+  // Handle adding a new item
+  const addItem = (newItem) => {
+    setOrder((prevOrder) => ({
+      ...prevOrder,
+      items: [...prevOrder.items, newItem],
+    }));
+  };
+
+  // Handle deleting an item
+  const deleteItem = (index) => {
+    setOrder((prevOrder) => {
+      const updatedItems = prevOrder.items.filter((_, i) => i !== index);
+      return { ...prevOrder, items: updatedItems };
+    });
+  };
+
+  // Handle payment update
+  const markAsPaid = () => {
+    setOrder((prevOrder) => ({ ...prevOrder, cashStatus: "Done" }));
+  };
+
   return (
-    <div className="max-w-5xl mx-auto bg-white rounded-lg shadow-xl p-6 space-y-8">
-      {/* Header Section */}
-      <div className="border-b border-gray-300 pb-4">
-        <h1 className="text-3xl font-bold text-gray-800">
-          Admin Order Details
-        </h1>
-        <p className="text-sm text-gray-500 mt-2">
-          Order ID: <span className="font-semibold">{order.id}</span>
-        </p>
+    <div className="max-w-4xl mx-auto bg-white shadow-lg rounded-lg p-6 space-y-6">
+      {/* Header */}
+      <div>
+        <h1 className="text-3xl font-bold text-gray-800 mb-2">Order Details</h1>
+        <p className="text-gray-600">Order ID: {order.id}</p>
       </div>
 
-      {/* Order Overview */}
-      <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
+      {/* Order Summary */}
+      <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
         <div>
-          <h2 className="text-sm font-semibold text-gray-600 uppercase">
-            Table Number
-          </h2>
-          <p className="text-xl font-bold text-gray-800">{order.tableNumber}</p>
+          <h2 className="font-medium text-gray-700">Table Number</h2>
+          <p className="text-gray-900">{order.tableNumber}</p>
         </div>
         <div>
-          <h2 className="text-sm font-semibold text-gray-600 uppercase">
-            Waiter Name
-          </h2>
-          <p className="text-xl font-bold text-gray-800">{order.waiterName}</p>
+          <h2 className="font-medium text-gray-700">Waiter Name</h2>
+          <p className="text-gray-900">{order.waiterName}</p>
         </div>
         <div>
-          <h2 className="text-sm font-semibold text-gray-600 uppercase">
-            Status
-          </h2>
+          <h2 className="font-medium text-gray-700">Order Status</h2>
+          <p className="text-gray-900">{order.status}</p>
+        </div>
+        <div>
+          <h2 className="font-medium text-gray-700">Payment Status</h2>
           <span
-            className={`inline-block px-4 py-1 text-sm font-semibold rounded-full ${
-              order.status === "Pending"
-                ? "bg-yellow-100 text-yellow-800"
-                : order.status === "In Progress"
-                ? "bg-blue-100 text-blue-800"
-                : "bg-green-100 text-green-800"
+            className={`font-semibold ${
+              order.cashStatus === "Done" ? "text-green-600" : "text-red-600"
             }`}
           >
-            {order.status}
+            {order.cashStatus}
           </span>
         </div>
-        <div>
-          <h2 className="text-sm font-semibold text-gray-600 uppercase">
-            Order Time
-          </h2>
-          <p className="text-xl font-bold text-gray-800">{order.orderTime}</p>
-        </div>
       </div>
 
-      {/* Cash Status */}
+      {/* Items Table */}
       <div>
-        <h2 className="text-sm font-semibold text-gray-600 uppercase mt-4">
-          Cash Payment Status
-        </h2>
-        <span
-          className={`inline-block px-4 py-1 text-sm font-semibold rounded-full ${
-            order.cashStatus === "Done"
-              ? "bg-green-100 text-green-800"
-              : "bg-red-100 text-red-800"
-          }`}
-        >
-          {order.cashStatus === "Done" ? "Paid" : "Pending"}
-        </span>
-      </div>
-
-      {/* Ordered Items */}
-      <div>
-        <h3 className="text-2xl font-semibold text-gray-700 mb-4">
-          Ordered Items
-        </h3>
-        <table className="w-full border-collapse rounded-lg shadow-sm">
+        <h3 className="text-2xl font-bold text-gray-800 mb-4">Ordered Items</h3>
+        <table className="min-w-full table-auto border-collapse border border-gray-200">
           <thead>
-            <tr className="bg-gray-100 text-left text-sm font-medium text-gray-700">
-              <th className="px-4 py-3 border-b">Image</th>
-              <th className="px-4 py-3 border-b">Item</th>
-              <th className="px-4 py-3 border-b text-center">Quantity</th>
-              <th className="px-4 py-3 border-b text-center">Price</th>
-              <th className="px-4 py-3 text-right">Subtotal</th>
+            <tr className="bg-gray-100 text-left">
+              <th className="px-4 py-2 border border-gray-200">Item</th>
+              <th className="px-4 py-2 border border-gray-200">Quantity</th>
+              <th className="px-4 py-2 border border-gray-200">Price</th>
+              <th className="px-4 py-2 border border-gray-200">Subtotal</th>
+              <th className="px-4 py-2 border border-gray-200">Actions</th>
             </tr>
           </thead>
           <tbody>
             {order.items.map((item, index) => (
-              <tr
-                key={index}
-                className="hover:bg-gray-50 text-sm transition-colors"
-              >
-                <td className="px-4 py-3 border-b">
-                  <img
-                    src={item.image}
-                    alt={item.name}
-                    className="w-16 h-16 rounded object-cover"
+              <tr key={index} className="border-b">
+                <td className="px-4 py-2">{item.name}</td>
+                <td className="px-4 py-2">
+                  <input
+                    type="number"
+                    min="1"
+                    value={item.quantity}
+                    onChange={(e) =>
+                      updateQuantity(index, parseInt(e.target.value, 10))
+                    }
+                    className="w-16 p-1 border border-gray-300 rounded"
                   />
                 </td>
-                <td className="px-4 py-3 border-b">{item.name}</td>
-                <td className="px-4 py-3 border-b text-center">
-                  {item.quantity}
-                </td>
-                <td className="px-4 py-3 border-b text-center">
-                  ${item.pricePerUnit.toFixed(2)}
-                </td>
-                <td className="px-4 py-3 border-b text-right">
+                <td className="px-4 py-2">${item.pricePerUnit.toFixed(2)}</td>
+                <td className="px-4 py-2">
                   ${(item.quantity * item.pricePerUnit).toFixed(2)}
+                </td>
+                <td className="px-4 py-2">
+                  <button
+                    onClick={() => deleteItem(index)}
+                    className="text-red-500 hover:underline"
+                  >
+                    Delete
+                  </button>
                 </td>
               </tr>
             ))}
@@ -165,34 +161,52 @@ const AdminOrderDetail = () => {
         </table>
       </div>
 
-      {/* Special Requests */}
-      <div className="bg-gray-50 rounded-lg p-4 shadow-sm border border-gray-300">
-        <h3 className="text-lg font-semibold text-gray-700 mb-2">
-          Special Requests
-        </h3>
-        <p className="text-sm text-gray-600 italic">
-          {order.specialRequests || "None"}
-        </p>
+      {/* Add Item Button */}
+      {/* <div>
+        <button
+          onClick={() =>
+            addItem({
+              name: "Soup",
+              quantity: 1,
+              pricePerUnit: 5.0,
+              image: "https://via.placeholder.com/100?text=Soup",
+            })
+          }
+          className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700"
+        >
+          Add Soup
+        </button>
+      </div> */}
+
+      {/* Total Calculation */}
+      <div className="border-t border-gray-200 pt-4">
+        <div className="flex justify-between text-lg font-medium">
+          <span>Total:</span>
+          <span>${calculateTotal()}</span>
+        </div>
+        <div className="flex justify-between text-lg font-medium">
+          <span>Tax (10%):</span>
+          <span>${calculateTax()}</span>
+        </div>
+        <div className="flex justify-between text-lg font-bold text-gray-800">
+          <span>Final Total:</span>
+          <span>${calculateFinalTotal()}</span>
+        </div>
       </div>
 
-      {/* Pricing Details */}
-      <div className="flex justify-between items-center border-t border-gray-300 pt-4">
-        <h3 className="text-xl font-bold text-gray-800">Total:</h3>
-        <p className="text-2xl font-bold text-gray-600">${calculateTotal()}</p>
-      </div>
-
-      {/* Tax Details */}
-      <div className="flex justify-between items-center pt-2">
-        <h3 className="text-lg font-medium text-gray-800">Tax (10%):</h3>
-        <p className="text-xl font-bold text-gray-600">${calculateTax()}</p>
-      </div>
-
-      {/* Final Total */}
-      <div className="flex justify-between items-center pt-2 border-t border-gray-300">
-        <h3 className="text-xl font-bold text-gray-800">Final Total:</h3>
-        <p className="text-2xl font-bold text-green-600">
-          ${calculateFinalTotal()}
-        </p>
+      {/* Payment Button */}
+      <div>
+        <button
+          onClick={markAsPaid}
+          className={`w-full py-2 rounded ${
+            order.cashStatus === "Done"
+              ? "bg-gray-400 cursor-not-allowed"
+              : "bg-green-600 hover:bg-green-700"
+          } text-white`}
+          disabled={order.cashStatus === "Done"}
+        >
+          {order.cashStatus === "Done" ? "Paid" : "Mark as Paid"}
+        </button>
       </div>
     </div>
   );
