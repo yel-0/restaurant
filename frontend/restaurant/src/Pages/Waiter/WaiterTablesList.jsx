@@ -1,23 +1,30 @@
 import React, { useState } from "react";
+import {
+  Table,
+  TableBody,
+  TableCaption,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table";
 import { Button } from "@/components/ui/button";
 
+// WaiterTablesList Component
 const WaiterTablesList = () => {
-  // Sample data for tables
-  const tables = [
-    { id: 1, tableNumber: "1", isAvailable: true },
-    { id: 2, tableNumber: "2", isAvailable: false },
-    { id: 3, tableNumber: "3", isAvailable: true },
-    { id: 4, tableNumber: "4", isAvailable: false },
-    { id: 5, tableNumber: "5", isAvailable: true },
-  ];
+  // Sample data for tables, including their location and availability
+  const [tables, setTables] = useState([
+    { id: 1, tableNumber: "1", isAvailable: true, location: "Near the window" },
+    { id: 2, tableNumber: "2", isAvailable: false, location: "Near the bar" },
+    { id: 3, tableNumber: "3", isAvailable: true, location: "Outdoor seating" },
+    { id: 4, tableNumber: "4", isAvailable: false, location: "Near the stage" },
+    { id: 5, tableNumber: "5", isAvailable: true, location: "By the entrance" },
+  ]);
 
-  // State to manage table availability updates (if needed)
-  const [tableStatus, setTableStatus] = useState(tables);
-
-  // Optional: Function to toggle availability (just for demonstration)
+  // Toggle table availability
   const toggleAvailability = (tableId) => {
-    setTableStatus((prevStatus) =>
-      prevStatus.map((table) =>
+    setTables((prevTables) =>
+      prevTables.map((table) =>
         table.id === tableId
           ? { ...table, isAvailable: !table.isAvailable }
           : table
@@ -26,49 +33,55 @@ const WaiterTablesList = () => {
   };
 
   return (
-    <div className="p-8 max-w-4xl mx-auto bg-white shadow-xl rounded-lg border border-gray-200">
-      <h1 className="text-3xl font-bold text-gray-800 mb-6 text-center">
-        Table Availability
+    <div className="p-6 max-w-6xl mx-auto bg-white shadow-lg rounded-xl border border-gray-200">
+      <h1 className="text-2xl font-bold text-gray-800 mb-4">
+        Tables Availability
       </h1>
 
-      {/* Table list */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-        {tableStatus.map((table) => (
-          <div
-            key={table.id}
-            className={`flex flex-col items-center p-6 rounded-lg shadow-md border-2 ${
-              table.isAvailable
-                ? "bg-green-100 border-green-400"
-                : "bg-red-100 border-red-400"
-            }`}
-          >
-            <h2 className="text-xl font-semibold text-gray-700">
-              Table {table.tableNumber}
-            </h2>
-            <p
-              className={`mt-2 text-lg font-medium ${
-                table.isAvailable ? "text-green-600" : "text-red-600"
-              }`}
-            >
-              {table.isAvailable ? "Available" : "Occupied"}
-            </p>
-
-            {/* Button to simulate availability change */}
-            <Button
-              onClick={() => toggleAvailability(table.id)}
-              variant="outline"
-              size="sm"
-              className={`mt-4 ${
-                table.isAvailable
-                  ? "bg-red-500 text-white"
-                  : "bg-green-500 text-white"
-              }`}
-            >
-              {table.isAvailable ? "Mark as Occupied" : "Mark as Available"}
-            </Button>
-          </div>
-        ))}
-      </div>
+      <Table>
+        <TableCaption>
+          A list of tables with their availability status
+        </TableCaption>
+        <TableHeader>
+          <TableRow>
+            <TableHead>Table Number</TableHead>
+            <TableHead>Location</TableHead>
+            <TableHead>Status</TableHead>
+            <TableHead>Action</TableHead>
+          </TableRow>
+        </TableHeader>
+        <TableBody>
+          {tables.map((table) => (
+            <TableRow key={table.id}>
+              <TableCell>{table.tableNumber}</TableCell>
+              <TableCell>{table.location}</TableCell>
+              <TableCell>
+                <span
+                  className={`${
+                    table.isAvailable ? "text-green-600" : "text-red-600"
+                  } font-semibold`}
+                >
+                  {table.isAvailable ? "Available" : "Occupied"}
+                </span>
+              </TableCell>
+              <TableCell>
+                <Button
+                  onClick={() => toggleAvailability(table.id)}
+                  variant="outline"
+                  size="sm"
+                  className={`${
+                    table.isAvailable
+                      ? "bg-red-500 text-white"
+                      : "bg-green-500 text-white"
+                  }`}
+                >
+                  {table.isAvailable ? "Mark as Occupied" : "Mark as Available"}
+                </Button>
+              </TableCell>
+            </TableRow>
+          ))}
+        </TableBody>
+      </Table>
     </div>
   );
 };

@@ -101,7 +101,7 @@ const App = () => (
 
         {/* Waiter Route */}
         <Route
-          path="/waiter"
+          path="/waiter/order"
           element={
             <WaiterLayout>
               <WaiterOrders />

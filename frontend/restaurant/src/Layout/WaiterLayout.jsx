@@ -20,22 +20,28 @@ const WaiterLayout = ({ children }) => {
           <SidebarHeader>
             <div className="p-4 text-lg font-bold">Waiter Dashboard</div>
           </SidebarHeader>
-          <SidebarHeader>
-            <Link
-              to="/waiter/order/lists"
-              className="p-4 border-b border-gray-700"
-            >
-              Waiter Dashboard
-            </Link>
-          </SidebarHeader>
-          <SidebarHeader>
-            <Link to="/waiter/tables" className="p-4 border-b border-gray-700">
-              Waiter Tables
-            </Link>
-          </SidebarHeader>
+
           <SidebarContent>
             <SidebarGroup>
-              <div className="p-4 border-b border-gray-700">Orders</div>
+              <Link
+                to="/waiter/order/lists"
+                className="p-4 border-b border-gray-700"
+              >
+                Waiter OrderLists
+              </Link>
+            </SidebarGroup>
+            <SidebarGroup>
+              <Link
+                to="/waiter/tables"
+                className="p-4 border-b border-gray-700"
+              >
+                Waiter Tables
+              </Link>
+            </SidebarGroup>
+            <SidebarGroup>
+              <Link to="/waiter/order" className="p-4 border-b border-gray-700">
+                Waiter Order
+              </Link>
             </SidebarGroup>
             <SidebarGroup>
               <div className="p-4 border-b border-gray-700">Tables</div>
