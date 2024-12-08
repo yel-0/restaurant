@@ -18,8 +18,8 @@ const AdminLayout = ({ children }) => {
       {/* Sidebar */}
       <SidebarProvider>
         <Sidebar className="w-64 bg-white border-l text-black">
-          <SidebarHeader>
-            <div className="p-4 text-2xl font-bold flex items-center gap-2">
+          <SidebarHeader className="">
+            <div className="p-2 text-2xl font-bold flex  items-center gap-2">
               <Grid className="h-6 w-6 text-blue-400" />
               Blue
             </div>

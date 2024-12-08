@@ -14,6 +14,7 @@ import AdminMenu from "./Pages/Admin/AdminMenu";
 import AdminInventory from "./Pages/Admin/AdminInventory";
 import AdminCreateMenu from "./Pages/Admin/AdminCreateMenu";
 import AdminUpdateMenu from "./Pages/Admin/AdminUpdateMenu";
+import AdminOrderDetail from "./Pages/Admin/AdminOrderDetail";
 
 const App = () => (
   <AuthProvider>
@@ -66,6 +67,14 @@ const App = () => (
           element={
             <AdminLayout>
               <AdminUpdateMenu />
+            </AdminLayout>
+          }
+        />
+        <Route
+          path="/admin/order/detail"
+          element={
+            <AdminLayout>
+              <AdminOrderDetail />
             </AdminLayout>
           }
         />

@@ -10,6 +10,7 @@ import {
 } from "@/components/ui/table";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
+import { Link } from "react-router-dom";
 
 // Fake data with 10 entries
 const orders = [
@@ -137,9 +138,11 @@ export function AdminOrderList() {
               </TableCell>
               <TableCell>{order.date}</TableCell>
               <TableCell>
-                <Button size="sm" variant="outline">
-                  View
-                </Button>
+                <Link to={`/admin/order/detail`}>
+                  <Button size="sm" variant="outline">
+                    View
+                  </Button>
+                </Link>
               </TableCell>
             </TableRow>
           ))}
