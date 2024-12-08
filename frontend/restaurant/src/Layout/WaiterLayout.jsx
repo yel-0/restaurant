@@ -5,6 +5,7 @@ import {
   SidebarFooter,
   SidebarGroup,
   SidebarHeader,
+  SidebarTrigger,
 } from "@/components/ui/sidebar";
 import { SidebarProvider } from "@/components/ui/sidebar";
 import Navbar from "@/Design/Share/NavBar";
@@ -56,9 +57,11 @@ const WaiterLayout = ({ children }) => {
             </div>
           </SidebarFooter>
         </Sidebar>
+
         <div className="flex-1 flex flex-col bg-gray-100">
           <Navbar />
           <main className="flex-1 bg-white shadow rounded-lg p-6 h-full">
+            <SidebarTrigger />
             {children}
           </main>
         </div>

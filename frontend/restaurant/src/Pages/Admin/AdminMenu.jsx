@@ -1,7 +1,7 @@
 import React, { useState } from "react";
-import AdminCategorySelector from "@/Design/Admin/AdminCategorySelector";
 import AdminMenuItemCard from "@/Design/Admin/AdminMenuItemCard";
 import { Link } from "react-router-dom";
+import CategorySelector from "@/Design/Share/CategorySelector";
 const AdminMenu = () => {
   // Static data for menu items
   const menuItems = [
@@ -72,7 +72,7 @@ const AdminMenu = () => {
 
       {/* Category Navigation (optional) */}
       <div className="flex flex-row justify-between items-center">
-        <AdminCategorySelector />
+        <CategorySelector />
 
         <Link
           to="/admin/menu/create"

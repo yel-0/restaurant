@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 
-const AdminCategorySelector = () => {
+const CategorySelector = () => {
   const categories = ["All", "Beverages", "Snacks", "Main Course", "Desserts"];
   const [selectedCategory, setSelectedCategory] = useState("All");
 
@@ -23,4 +23,4 @@ const AdminCategorySelector = () => {
   );
 };
 
-export default AdminCategorySelector;
+export default CategorySelector;

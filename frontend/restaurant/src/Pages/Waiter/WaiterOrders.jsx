@@ -1,6 +1,7 @@
 import React from "react";
 import WaiterMenuItemCard from "@/Design/Waiter/WaiterMenuItemCard";
 import WaiterOrderSummary from "@/Design/Waiter/WaiterOrderSummary";
+import CategorySelector from "@/Design/Share/CategorySelector";
 
 // Fake data for the menu items
 const fakeMenuItems = [
@@ -88,9 +89,22 @@ const fakeMenuItems = [
 
 const WaiterOrders = () => {
   return (
-    <div className="p-6 max-w-7xl mx-auto bg-white shadow-lg rounded-xl border border-gray-200">
+    <div className="p-4 max-w-[1000px] mx-auto bg-white shadow-lg rounded-xl border border-gray-200">
       <h1 className="text-2xl font-bold text-gray-800 mb-6">Menu Items</h1>
 
+      <div className="mb-6 flex justify-start gap-4 items-center">
+        <input
+          type="text"
+          placeholder="Search menu items..."
+          // value={searchTerm}
+          // onChange={(e) => setSearchTerm(e.target.value)}
+          className="px-4 py-2 w-80 border rounded-lg shadow-md focus:outline-none "
+        />
+        <button className="px-4 py-2 bg-blue-600 text-white rounded-lg shadow-md">
+          Search
+        </button>
+      </div>
+      <CategorySelector />
       <div className="flex flex-row justify-center items-start">
         <div className="flex flex-row justify-center items-center flex-wrap gap-6 mb-6">
           {fakeMenuItems.map((item) => (
