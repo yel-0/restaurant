@@ -1,0 +1,132 @@
+import React from "react";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog";
+import CategorySelector from "../Share/CategorySelector";
+import WaiterMenuItemForOrderAdd from "./WaiterMenuItemForOrderAdd";
+const fakeMenuItems = [
+  {
+    id: 1,
+    name: "Burger",
+    image: "https://via.placeholder.com/300?text=Burger",
+    description: "A delicious beef burger",
+    stock: 10,
+    price: 8.99,
+  },
+  {
+    id: 2,
+    name: "Pizza",
+    image: "https://via.placeholder.com/300?text=Pizza",
+    description: "Cheese pizza with fresh toppings",
+    stock: 5,
+    price: 12.99,
+  },
+  {
+    id: 3,
+    name: "Pasta",
+    image: "https://via.placeholder.com/300?text=Pasta",
+    description: "Classic Italian pasta",
+    stock: 7,
+    price: 10.99,
+  },
+  {
+    id: 4,
+    name: "Fries",
+    image: "https://via.placeholder.com/300?text=Fries",
+    description: "Crispy golden fries",
+    stock: 15,
+    price: 3.99,
+  },
+  {
+    id: 5,
+    name: "Salad",
+    image: "https://via.placeholder.com/300?text=Salad",
+    description: "Fresh mixed salad",
+    stock: 8,
+    price: 5.99,
+  },
+  {
+    id: 6,
+    name: "Soda",
+    image: "https://via.placeholder.com/300?text=Soda",
+    description: "Refreshing soda drink",
+    stock: 20,
+    price: 1.99,
+  },
+  {
+    id: 7,
+    name: "Coffee",
+    image: "https://via.placeholder.com/300?text=Coffee",
+    description: "Hot brewed coffee",
+    stock: 25,
+    price: 2.99,
+  },
+  {
+    id: 8,
+    name: "Cake",
+    image: "https://via.placeholder.com/300?text=Cake",
+    description: "Delicious chocolate cake",
+    stock: 3,
+    price: 4.99,
+  },
+  {
+    id: 9,
+    name: "Ice Cream",
+    image: "https://via.placeholder.com/300?text=Ice+Cream",
+    description: "Cold and sweet ice cream",
+    stock: 12,
+    price: 3.49,
+  },
+  {
+    id: 10,
+    name: "Smoothie",
+    image: "https://via.placeholder.com/300?text=Smoothie",
+    description: "Fresh fruit smoothie",
+    stock: 6,
+    price: 5.49,
+  },
+];
+const OrderAddDialog = () => {
+  return (
+    <Dialog>
+      <DialogTrigger>
+        <button className="px-4 py-2 bg-green-600 text-white rounded-lg shadow-md">
+          Add New Order
+        </button>
+      </DialogTrigger>
+      <DialogContent className="h-[500px] overflow-scroll ">
+        <DialogHeader>
+          <DialogTitle>Add New Product</DialogTitle>
+          <DialogDescription>
+            Search and select a product to add it to the order.
+          </DialogDescription>
+        </DialogHeader>
+        <div className="mb-6 flex justify-start gap-4 items-center">
+          <input
+            type="text"
+            placeholder="Search menu items..."
+            className="px-4 py-2 w-80 border rounded-lg shadow-md focus:outline-none"
+          />
+          <button className="px-4 py-2 bg-blue-600 text-white rounded-lg shadow-md">
+            Search
+          </button>
+        </div>
+        <CategorySelector />
+        <div className="flex flex-row justify-center  items-start">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+            {fakeMenuItems.map((item) => (
+              <WaiterMenuItemForOrderAdd key={item.id} item={item} />
+            ))}
+          </div>
+        </div>
+      </DialogContent>
+    </Dialog>
+  );
+};
+
+export default OrderAddDialog;

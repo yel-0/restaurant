@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
+import OrderAddDialog from "@/Design/Waiter/OrderAddDialog";
 
 export default function WaiterOrderDetail() {
   const { orderId } = useParams(); // Get the order ID from URL params
@@ -86,9 +87,13 @@ export default function WaiterOrderDetail() {
       <div className="space-y-8">
         {/* Order Information */}
         <div className="bg-blue-100 p-6 rounded-xl shadow-md">
-          <h2 className="text-2xl font-semibold text-gray-700 mb-4">
-            Order Information
-          </h2>
+          <div className="flex flex-row justify-between">
+            <h2 className="text-2xl font-semibold text-gray-700 mb-4">
+              Order Information
+            </h2>{" "}
+            <OrderAddDialog />
+          </div>
+
           <div className="text-gray-600 text-lg">
             <p>
               Table: <span className="font-semibold">{order.table}</span>
