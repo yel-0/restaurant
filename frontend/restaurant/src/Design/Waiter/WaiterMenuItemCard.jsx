@@ -1,6 +1,16 @@
 import React from "react";
-
+import { useOrderCart } from "@/context/OrderCartContext";
 const WaiterMenuItemCard = ({ item }) => {
+  const { addToCart } = useOrderCart(); // Access addToCart function from the context
+
+  const handleAddToOrder = () => {
+    // Add the item to the order using the addToCart function from the context
+    addToCart(item);
+
+    // Optionally, show a confirmation message
+    alert(`Added ${item.name} to the order`);
+  };
+
   return (
     <div className="border rounded-lg shadow-md p-4 w-64">
       <img
@@ -20,7 +30,7 @@ const WaiterMenuItemCard = ({ item }) => {
       <div className="flex justify-between items-center">
         <span className="text-lg font-bold">${item.price}</span>
         <button
-          onClick={() => alert(`Added ${item.name} to the order`)}
+          onClick={handleAddToOrder}
           className="px-3 py-1 bg-green-600 text-white text-sm rounded-md"
         >
           Add to Order

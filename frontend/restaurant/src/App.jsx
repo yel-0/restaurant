@@ -19,136 +19,148 @@ import AdminOrderView from "./Pages/Admin/AdminOrderView";
 import WaiterOrderList from "./Pages/Waiter/WaiterOrderList";
 import WaiterOrderDetail from "./Pages/Waiter/WaiterOrderDetail";
 import WaiterTablesList from "./Pages/Waiter/WaiterTablesList";
+import WaiterOrderSummary from "./Pages/Waiter/WaiterOrderSummary";
+import { OrderCartProvider } from "./context/OrderCartContext";
 
 const App = () => (
   <AuthProvider>
-    <Router>
-      {/* Content */}
-      <Routes>
-        {/* Admin Route */}
-        <Route
-          path="/admin"
-          element={
-            <AdminLayout>
-              <AdminDashboard />
-            </AdminLayout>
-          }
-        />
-        <Route
-          path="/admin/users"
-          element={
-            <AdminLayout>
-              <AdminUserLIst />
-            </AdminLayout>
-          }
-        />
-        <Route
-          path="/admin/tables"
-          element={
-            <AdminLayout>
-              <AdminTables />
-            </AdminLayout>
-          }
-        />
-        <Route
-          path="/admin/menus"
-          element={
-            <AdminLayout>
-              <AdminMenu />
-            </AdminLayout>
-          }
-        />
-        <Route
-          path="/admin/menu/create"
-          element={
-            <AdminLayout>
-              <AdminCreateMenu />
-            </AdminLayout>
-          }
-        />
-        <Route
-          path="/admin/menu/update"
-          element={
-            <AdminLayout>
-              <AdminUpdateMenu />
-            </AdminLayout>
-          }
-        />
-        <Route
-          path="/admin/order/lists"
-          element={
-            <AdminLayout>
-              <AdminOrderView />
-            </AdminLayout>
-          }
-        />
-        <Route
-          path="/admin/order/detail"
-          element={
-            <AdminLayout>
-              <AdminOrderDetail />
-            </AdminLayout>
-          }
-        />
-        <Route
-          path="/admin/inventory"
-          element={
-            <AdminLayout>
-              <AdminInventory />
-            </AdminLayout>
-          }
-        />
+    <OrderCartProvider>
+      <Router>
+        {/* Content */}
+        <Routes>
+          {/* Admin Route */}
+          <Route
+            path="/admin"
+            element={
+              <AdminLayout>
+                <AdminDashboard />
+              </AdminLayout>
+            }
+          />
+          <Route
+            path="/admin/users"
+            element={
+              <AdminLayout>
+                <AdminUserLIst />
+              </AdminLayout>
+            }
+          />
+          <Route
+            path="/admin/tables"
+            element={
+              <AdminLayout>
+                <AdminTables />
+              </AdminLayout>
+            }
+          />
+          <Route
+            path="/admin/menus"
+            element={
+              <AdminLayout>
+                <AdminMenu />
+              </AdminLayout>
+            }
+          />
+          <Route
+            path="/admin/menu/create"
+            element={
+              <AdminLayout>
+                <AdminCreateMenu />
+              </AdminLayout>
+            }
+          />
+          <Route
+            path="/admin/menu/update"
+            element={
+              <AdminLayout>
+                <AdminUpdateMenu />
+              </AdminLayout>
+            }
+          />
+          <Route
+            path="/admin/order/lists"
+            element={
+              <AdminLayout>
+                <AdminOrderView />
+              </AdminLayout>
+            }
+          />
+          <Route
+            path="/admin/order/detail"
+            element={
+              <AdminLayout>
+                <AdminOrderDetail />
+              </AdminLayout>
+            }
+          />
+          <Route
+            path="/admin/inventory"
+            element={
+              <AdminLayout>
+                <AdminInventory />
+              </AdminLayout>
+            }
+          />
 
-        {/* Waiter Route */}
-        <Route
-          path="/waiter/order"
-          element={
-            <WaiterLayout>
-              <WaiterOrders />
-            </WaiterLayout>
-          }
-        />
-        <Route
-          path="/waiter/order/lists"
-          element={
-            <WaiterLayout>
-              <WaiterOrderList />
-            </WaiterLayout>
-          }
-        />
-        <Route
-          path="/waiter/order/detail"
-          element={
-            <WaiterLayout>
-              <WaiterOrderDetail />
-            </WaiterLayout>
-          }
-        />
-        <Route
-          path="/waiter/tables"
-          element={
-            <WaiterLayout>
-              <WaiterTablesList />
-            </WaiterLayout>
-          }
-        />
+          {/* Waiter Route */}
+          <Route
+            path="/waiter/order"
+            element={
+              <WaiterLayout>
+                <WaiterOrders />
+              </WaiterLayout>
+            }
+          />
+          <Route
+            path="/waiter/order/summary"
+            element={
+              <WaiterLayout>
+                <WaiterOrderSummary />
+              </WaiterLayout>
+            }
+          />
+          <Route
+            path="/waiter/order/lists"
+            element={
+              <WaiterLayout>
+                <WaiterOrderList />
+              </WaiterLayout>
+            }
+          />
+          <Route
+            path="/waiter/order/detail"
+            element={
+              <WaiterLayout>
+                <WaiterOrderDetail />
+              </WaiterLayout>
+            }
+          />
+          <Route
+            path="/waiter/tables"
+            element={
+              <WaiterLayout>
+                <WaiterTablesList />
+              </WaiterLayout>
+            }
+          />
 
-        {/* Cook Route */}
-        <Route
-          path="/cook"
-          element={
-            <CookLayout>
-              <CookDashboard />
-            </CookLayout>
-          }
-        />
+          {/* Cook Route */}
+          <Route
+            path="/cook"
+            element={
+              <CookLayout>
+                <CookDashboard />
+              </CookLayout>
+            }
+          />
 
-        {/* Default Route */}
-        <Route path="/" element={<Start />} />
-      </Routes>
+          {/* Default Route */}
+          <Route path="/" element={<Start />} />
+        </Routes>
 
-      {/* Footer (Optional) */}
-    </Router>
+        {/* Footer (Optional) */}
+      </Router>
+    </OrderCartProvider>
   </AuthProvider>
 );
 

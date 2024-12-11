@@ -79,49 +79,53 @@ export default function WaiterOrderDetail() {
 
   return (
     <div className="p-8 max-w-4xl mx-auto bg-white shadow-xl rounded-lg border border-gray-200">
-      <h1 className="text-3xl font-bold text-gray-800 mb-6 text-center">
+      <h1 className="text-4xl font-extrabold text-gray-900 mb-8 text-center">
         Order Details - {order.id}
       </h1>
 
-      <div className="space-y-6">
+      <div className="space-y-8">
         {/* Order Information */}
-        <div className="bg-blue-50 p-4 rounded-lg">
-          <h2 className="text-xl font-semibold text-gray-700 mb-2">
+        <div className="bg-blue-100 p-6 rounded-xl shadow-md">
+          <h2 className="text-2xl font-semibold text-gray-700 mb-4">
             Order Information
           </h2>
-          <p className="text-gray-600">Table: {order.table}</p>
-          <p className="text-gray-600">
-            Status:{" "}
-            <span
-              className={`font-bold ${
-                order.status === "Pending"
-                  ? "text-yellow-500"
-                  : order.status === "Served"
-                  ? "text-green-500"
-                  : "text-red-500"
-              }`}
-            >
-              {order.status}
-            </span>
-          </p>
+          <div className="text-gray-600 text-lg">
+            <p>
+              Table: <span className="font-semibold">{order.table}</span>
+            </p>
+            <p>
+              Status:{" "}
+              <span
+                className={`font-semibold ${
+                  order.status === "Pending"
+                    ? "text-yellow-600"
+                    : order.status === "Served"
+                    ? "text-green-600"
+                    : "text-red-600"
+                }`}
+              >
+                {order.status}
+              </span>
+            </p>
+          </div>
         </div>
 
         {/* Items Ordered */}
         <div>
-          <h2 className="text-2xl font-semibold text-gray-700 mb-4">
+          <h2 className="text-3xl font-semibold text-gray-700 mb-6">
             Items Ordered:
           </h2>
-          <ul className="space-y-4">
+          <ul className="space-y-6">
             {order.items.map((item) => (
               <li
                 key={item.id}
-                className="flex items-center justify-between border-b border-gray-300 pb-4 hover:bg-gray-50 transition duration-200"
+                className="flex items-center justify-between border-b border-gray-300 pb-4 hover:bg-gray-100 transition duration-300 ease-in-out"
               >
-                <div className="flex items-center space-x-4">
+                <div className="flex items-center space-x-6">
                   <img
                     src={item.imageUrl}
                     alt={item.name}
-                    className="w-20 h-20 object-cover rounded-lg shadow-md"
+                    className="w-24 h-24 object-cover rounded-xl shadow-lg"
                   />
                   <div className="text-gray-700">
                     <p className="font-semibold text-lg">{item.name}</p>
@@ -130,7 +134,7 @@ export default function WaiterOrderDetail() {
                     </p>
                   </div>
                 </div>
-                <div className="flex items-center space-x-6">
+                <div className="flex items-center space-x-4">
                   <input
                     type="number"
                     min="1"
@@ -138,13 +142,13 @@ export default function WaiterOrderDetail() {
                     onChange={(e) =>
                       handleQuantityChange(item.id, parseInt(e.target.value))
                     }
-                    className="w-20 p-2 border-2 border-gray-300 rounded-md text-center focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                    className="w-24 p-3 border-2 border-gray-300 rounded-md text-center focus:outline-none focus:ring-2 focus:ring-indigo-500 transition duration-200"
                   />
                   <Button
                     onClick={() => handleDeleteItem(item.id)}
                     variant="outline"
                     size="sm"
-                    className="bg-red-500 text-white hover:bg-red-600"
+                    className="bg-red-500 text-white hover:bg-red-600 transition duration-200"
                   >
                     Delete
                   </Button>
@@ -155,25 +159,25 @@ export default function WaiterOrderDetail() {
         </div>
 
         {/* Total and Actions */}
-        <div className="flex justify-between items-center mt-6">
-          <p className="text-2xl font-semibold">
+        <div className="flex justify-between items-center mt-8">
+          <p className="text-3xl font-semibold text-gray-800">
             Total: ${calculateTotal().toFixed(2)}
           </p>
         </div>
 
-        <div className="mt-6 flex space-x-6">
+        <div className="mt-8 flex space-x-8">
           <Button
             variant="outline"
-            size="sm"
-            className="w-1/2 bg-green-500 text-white hover:bg-green-600"
+            size="lg"
+            className="w-1/2 bg-green-500 text-white hover:bg-green-600 transition duration-200"
             onClick={handleMarkAsServed}
           >
             Mark as Served
           </Button>
           <Button
             variant="outline"
-            size="sm"
-            className="w-1/2 bg-red-500 text-white hover:bg-red-600"
+            size="lg"
+            className="w-1/2 bg-red-500 text-white hover:bg-red-600 transition duration-200"
             onClick={handleCancelOrder}
           >
             Cancel Order
@@ -185,8 +189,8 @@ export default function WaiterOrderDetail() {
       <Button
         onClick={() => navigate(-1)} // Navigate back to the previous page
         variant="outline"
-        size="sm"
-        className="mt-6 block mx-auto"
+        size="lg"
+        className="mt-8 block mx-auto"
       >
         Go Back
       </Button>

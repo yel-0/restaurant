@@ -1,6 +1,6 @@
 import React from "react";
 import WaiterMenuItemCard from "@/Design/Waiter/WaiterMenuItemCard";
-import WaiterOrderSummary from "@/Design/Waiter/WaiterOrderSummary";
+import WaiterOrderSummary from "@/Pages/Waiter/WaiterOrderSummary";
 import CategorySelector from "@/Design/Share/CategorySelector";
 
 // Fake data for the menu items
@@ -89,7 +89,7 @@ const fakeMenuItems = [
 
 const WaiterOrders = () => {
   return (
-    <div className="p-4 max-w-[1000px] mx-auto bg-white shadow-lg rounded-xl border border-gray-200">
+    <div className="p-4  mx-auto bg-white shadow-lg rounded-xl border border-gray-200">
       <h1 className="text-2xl font-bold text-gray-800 mb-6">Menu Items</h1>
 
       <div className="mb-6 flex justify-start gap-4 items-center">
@@ -106,13 +106,13 @@ const WaiterOrders = () => {
       </div>
       <CategorySelector />
       <div className="flex flex-row justify-center items-start">
-        <div className="flex flex-row justify-center items-center flex-wrap gap-6 mb-6">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
           {fakeMenuItems.map((item) => (
             <WaiterMenuItemCard key={item.id} item={item} />
           ))}
         </div>
 
-        <WaiterOrderSummary />
+        {/* <WaiterOrderSummary /> */}
       </div>
     </div>
   );

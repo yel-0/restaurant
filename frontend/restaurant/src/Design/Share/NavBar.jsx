@@ -1,7 +1,9 @@
+// src/components/Navbar.js
 import { Link } from "react-router-dom";
-
+import { ShoppingCart } from "lucide-react"; // Lucide icon
+import { useOrderCart } from "@/context/OrderCartContext";
 const Navbar = () => {
-  const user = { role: "cook" }; // Replace with real authentication logic later
+  const { cartItems } = useOrderCart(); // Access cart items from the context
 
   return (
     <nav className="bg-white border-b text-black shadow-md py-4">
@@ -19,7 +21,7 @@ const Navbar = () => {
             Admin Dashboard
           </Link>
 
-          <Link to="/waiter" className="text-black">
+          <Link to="/waiter/order" className="text-black">
             Waiter Orders
           </Link>
 
@@ -29,6 +31,17 @@ const Navbar = () => {
 
           <Link to="/" className="text-black">
             Logout
+          </Link>
+
+          {/* Add to Cart Icon with number of items */}
+          <Link to="/waiter/order/summary" className="relative">
+            <ShoppingCart size={24} className="text-black" />
+            {/* Cart item count badge */}
+            {cartItems.length > 0 && (
+              <span className="absolute top-[-10px] right-[-15px] inline-flex items-center justify-center w-5 h-5 text-xs font-bold text-white bg-red-500 rounded-full">
+                {cartItems.length}
+              </span>
+            )}
           </Link>
         </div>
       </div>

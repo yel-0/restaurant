@@ -17,42 +17,30 @@ const WaiterLayout = ({ children }) => {
     <div className="flex">
       {/* Sidebar */}
       <SidebarProvider>
-        <Sidebar className="w-64 h-screen bg-gray-800 border-none text-white">
+        <Sidebar className="w-64 h-screen  bg-white border-l text-black">
           <SidebarHeader>
             <div className="p-4 text-lg font-bold">Waiter Dashboard</div>
           </SidebarHeader>
 
           <SidebarContent>
             <SidebarGroup>
-              <Link
-                to="/waiter/order/lists"
-                className="p-4 border-b border-gray-700"
-              >
-                Waiter OrderLists
-              </Link>
-            </SidebarGroup>
-            <SidebarGroup>
-              <Link
-                to="/waiter/tables"
-                className="p-4 border-b border-gray-700"
-              >
-                Waiter Tables
-              </Link>
-            </SidebarGroup>
-            <SidebarGroup>
-              <Link to="/waiter/order" className="p-4 border-b border-gray-700">
+              <Link to="/waiter/order" className="p-4  border-gray-700">
                 Waiter Order
               </Link>
             </SidebarGroup>
             <SidebarGroup>
-              <div className="p-4 border-b border-gray-700">Tables</div>
+              <Link to="/waiter/order/lists" className="p-4  border-gray-700">
+                Waiter OrderLists
+              </Link>
             </SidebarGroup>
             <SidebarGroup>
-              <div className="p-4 border-b border-gray-700">Settings</div>
+              <Link to="/waiter/tables" className="p-4 border-gray-700">
+                Waiter Tables
+              </Link>
             </SidebarGroup>
           </SidebarContent>
           <SidebarFooter>
-            <div className="p-4 text-sm text-center border-t border-gray-700">
+            <div className="p-4 text-sm text-center  border-gray-700">
               Powered by Restaurant App
             </div>
           </SidebarFooter>
