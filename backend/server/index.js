@@ -26,6 +26,8 @@ app.get("/", (req, res) => {
 const userRoutes = require("./routes/User");
 app.use("/user", userRoutes);
 
+const menuRoutes = require("./routes/menuRoutes");
+app.use("/api", menuRoutes);
 app.listen(port, () => {
   console.log(`Server is running on port ${port}`);
 });
