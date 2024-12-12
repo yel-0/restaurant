@@ -21,6 +21,9 @@ import WaiterOrderDetail from "./Pages/Waiter/WaiterOrderDetail";
 import WaiterTablesList from "./Pages/Waiter/WaiterTablesList";
 import WaiterOrderSummary from "./Pages/Waiter/WaiterOrderSummary";
 import { OrderCartProvider } from "./context/OrderCartContext";
+import CookOrderDetail from "./Pages/Cook/CookOrderDetail";
+import CookOrders from "./Pages/Cook/CookOrders";
+import CookTVScreen from "./Pages/Cook/CookTvScreen";
 
 const App = () => (
   <AuthProvider>
@@ -150,6 +153,30 @@ const App = () => (
             element={
               <CookLayout>
                 <CookDashboard />
+              </CookLayout>
+            }
+          />
+          <Route
+            path="/cook/order/detail"
+            element={
+              <CookLayout>
+                <CookOrderDetail />
+              </CookLayout>
+            }
+          />
+          <Route
+            path="/cook/orders"
+            element={
+              <CookLayout>
+                <CookOrders />
+              </CookLayout>
+            }
+          />
+          <Route
+            path="/cook/tv"
+            element={
+              <CookLayout>
+                <CookTVScreen />
               </CookLayout>
             }
           />

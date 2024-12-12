@@ -8,8 +8,8 @@ import {
 } from "@/components/ui/sidebar";
 import { SidebarProvider } from "@/components/ui/sidebar";
 import Navbar from "@/Design/Share/NavBar";
-import Footer from "@/Design/Share/Footer";
-
+import { Link } from "react-router-dom";
+import { Home, Users, ListOrdered } from "lucide-react";
 const CookLayout = ({ children }) => {
   return (
     <div>
@@ -20,14 +20,44 @@ const CookLayout = ({ children }) => {
           </SidebarHeader>
           <SidebarContent>
             <SidebarGroup>
-              <div className="p-4 border-b border-gray-700">Orders</div>
+              <Link
+                to={"/cook"}
+                className="p-4 flex items-center gap-2 border-gray-700"
+              >
+                <Home className="h-5 w-5" />
+                Dashboard
+              </Link>
             </SidebarGroup>
             <SidebarGroup>
-              <div className="p-4 border-b border-gray-700">Settings</div>
+              <Link
+                to={"/cook/orders"}
+                className="p-4 flex items-center gap-2 border-gray-700"
+              >
+                <Users className="h-5 w-5" />
+                Cook Orders
+              </Link>
+            </SidebarGroup>
+            <SidebarGroup>
+              <Link
+                to={"/cook/order/detail"}
+                className="p-4 flex items-center gap-2 border-gray-700"
+              >
+                <ListOrdered className="h-5 w-5" />
+                Order Detail
+              </Link>
+            </SidebarGroup>
+            <SidebarGroup>
+              <Link
+                to={"/cook/tv"}
+                className="p-4 flex items-center gap-2 border-gray-700"
+              >
+                <ListOrdered className="h-5 w-5" />
+                Cook TV
+              </Link>
             </SidebarGroup>
           </SidebarContent>
           <SidebarFooter>
-            <div className="p-4 text-sm text-center border-t border-gray-700">
+            <div className="p-4 text-sm text-center  border-gray-700">
               Powered by Restaurant App
             </div>
           </SidebarFooter>
