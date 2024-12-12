@@ -24,6 +24,9 @@ import { OrderCartProvider } from "./context/OrderCartContext";
 import CookOrderDetail from "./Pages/Cook/CookOrderDetail";
 import CookOrders from "./Pages/Cook/CookOrders";
 import CookTVScreen from "./Pages/Cook/CookTvScreen";
+import Login from "./Pages/Auth/Login";
+import Register from "./Pages/Auth/Register";
+import AuthLayout from "./Layout/AuthLayout";
 
 const App = () => (
   <AuthProvider>
@@ -183,6 +186,23 @@ const App = () => (
 
           {/* Default Route */}
           <Route path="/" element={<Start />} />
+
+          <Route
+            path="/login"
+            element={
+              <AuthLayout>
+                <Login />
+              </AuthLayout>
+            }
+          />
+          <Route
+            path="/register"
+            element={
+              <AuthLayout>
+                <Register />
+              </AuthLayout>
+            }
+          />
         </Routes>
 
         {/* Footer (Optional) */}
