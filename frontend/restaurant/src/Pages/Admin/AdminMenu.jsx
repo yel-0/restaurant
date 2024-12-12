@@ -2,55 +2,17 @@ import React, { useState } from "react";
 import AdminMenuItemCard from "@/Design/Admin/AdminMenuItemCard";
 import { Link } from "react-router-dom";
 import CategorySelector from "@/Design/Share/CategorySelector";
+import { useGetMenus } from "@/Hook/Menu/useGetMenus";
 const AdminMenu = () => {
-  // Static data for menu items
-  const menuItems = [
-    {
-      id: 1,
-      name: "Pizza Margherita",
-      description: "Classic Italian pizza with fresh mozzarella and basil.",
-      price: 12.99,
-      stock: 20, // Stock quantity
-      image:
-        "https://images.pexels.com/photos/376464/pexels-photo-376464.jpeg?auto=compress&cs=tinysrgb&w=600",
-    },
-    {
-      id: 2,
-      name: "Spaghetti Carbonara",
-      description: "Rich and creamy pasta with bacon and Parmesan cheese.",
-      price: 14.99,
-      stock: 15, // Stock quantity
-      image:
-        "https://images.pexels.com/photos/1099680/pexels-photo-1099680.jpeg?auto=compress&cs=tinysrgb&w=600",
-    },
-    {
-      id: 3,
-      name: "Caesar Salad",
-      description:
-        "Crisp lettuce with creamy dressing, croutons, and Parmesan.",
-      price: 8.99,
-      stock: 30, // Stock quantity
-      image:
-        "https://images.pexels.com/photos/958545/pexels-photo-958545.jpeg?auto=compress&cs=tinysrgb&w=600",
-    },
-    {
-      id: 4,
-      name: "Grilled Chicken",
-      description: "Juicy grilled chicken served with a side of vegetables.",
-      price: 16.99,
-      stock: 10, // Stock quantity
-      image:
-        "https://images.pexels.com/photos/769289/pexels-photo-769289.jpeg?auto=compress&cs=tinysrgb&w=600",
-    },
-  ];
+  const { data, isLoading, error, isError } = useGetMenus({
+    category: "",
+    name: "",
+    limit: 10,
+    page: 1,
+  });
 
   // State for search term
   const [searchTerm, setSearchTerm] = useState("");
-
-  // Filtering menu items based on search
-  const filteredItems = menuItems.filter((item) =>
-    item.name.toLowerCase().includes(searchTerm.toLowerCase())
-  );
 
   return (
     <div className="container mx-auto p-6">
@@ -83,8 +45,8 @@ const AdminMenu = () => {
       </div>
       {/* Menu Items */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-        {filteredItems.map((item) => (
-          <AdminMenuItemCard key={item.id} item={item} />
+        {data?.menuItems.map((item) => (
+          <AdminMenuItemCard key={item._id} item={item} />
         ))}
       </div>
     </div>
