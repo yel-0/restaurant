@@ -46,7 +46,7 @@ const CookTVScreen = () => {
   return (
     <div className="p-6  text-white min-h-screen">
       {/* Header */}
-      <h1 className="text-4xl font-bold text-center mb-8 text-yellow-300">
+      <h1 className="text-4xl font-bold text-center mb-8 text-black">
         Kitchen Orders
       </h1>
 
