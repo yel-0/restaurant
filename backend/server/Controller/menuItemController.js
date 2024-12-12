@@ -46,7 +46,8 @@ exports.getMenuItemById = async (req, res) => {
 // Create a new menu item
 exports.createMenuItem = async (req, res) => {
   try {
-    const { name, price, category, available, image } = req.body;
+    const { name, price, category, available, image, description } = req.body;
+    console.log("hello");
 
     const newMenuItem = new MenuItem({
       name,
@@ -56,6 +57,7 @@ exports.createMenuItem = async (req, res) => {
       image,
       description,
     });
+    console.log(name, price, category, available, image, description);
 
     await newMenuItem.save();
     res.status(201).json(newMenuItem);

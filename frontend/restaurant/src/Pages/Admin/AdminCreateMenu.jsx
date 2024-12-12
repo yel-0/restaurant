@@ -1,41 +1,5 @@
 import React, { useState } from "react";
-
-// Component for uploading an image
-const MenuItemImageUpload = ({ image, setImage }) => {
-  const handleImageUpload = (e) => {
-    const file = e.target.files[0];
-    if (file) {
-      const imageUrl = URL.createObjectURL(file); // Create a local preview
-      setImage(imageUrl);
-    }
-  };
-
-  return (
-    <div className="mb-6">
-      <label
-        htmlFor="imageUpload"
-        className="block text-sm font-medium text-gray-700"
-      >
-        Upload Image
-      </label>
-      <input
-        type="file"
-        id="imageUpload"
-        accept="image/*"
-        onChange={handleImageUpload}
-        className="block w-full text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 focus:outline-none"
-      />
-      {image && (
-        <img
-          src={image}
-          alt="Preview"
-          className="mt-4 w-32 h-32 object-cover rounded-lg border border-gray-200"
-        />
-      )}
-    </div>
-  );
-};
-
+import useCreateMenu from "@/Hook/Menu/useCreateMenu";
 // Component for entering menu item details
 const MenuItemDetailsForm = ({ details, setDetails }) => {
   const handleChange = (e) => {
@@ -84,16 +48,16 @@ const MenuItemDetailsForm = ({ details, setDetails }) => {
 
       <div>
         <label
-          htmlFor="basePrice"
+          htmlFor="price"
           className="block text-sm font-medium text-gray-700"
         >
-          Base Price
+          Price
         </label>
         <input
           type="number"
-          id="basePrice"
-          name="basePrice"
-          value={details.basePrice}
+          id="price"
+          name="price"
+          value={details.price}
           onChange={handleChange}
           required
           className="mt-1 block w-full p-2 border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500"
@@ -119,34 +83,30 @@ const MenuItemDetailsForm = ({ details, setDetails }) => {
       <div className="flex items-center">
         <input
           type="checkbox"
-          id="availability"
-          name="availability"
-          checked={details.availability}
+          id="available"
+          name="available"
+          checked={details.available}
           onChange={handleChange}
           className="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded"
         />
-        <label
-          htmlFor="availability"
-          className="ml-2 block text-sm text-gray-700"
-        >
+        <label htmlFor="available" className="ml-2 block text-sm text-gray-700">
           Available
         </label>
       </div>
 
       <div>
         <label
-          htmlFor="preparationTime"
+          htmlFor="image"
           className="block text-sm font-medium text-gray-700"
         >
-          Preparation Time (minutes)
+          Image URL
         </label>
         <input
-          type="number"
-          id="preparationTime"
-          name="preparationTime"
-          value={details.preparationTime}
+          type="text"
+          id="image"
+          name="image"
+          value={details.image}
           onChange={handleChange}
-          required
           className="mt-1 block w-full p-2 border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500"
         />
       </div>
@@ -155,31 +115,46 @@ const MenuItemDetailsForm = ({ details, setDetails }) => {
 };
 
 const AdminCreateMenu = () => {
-  const [image, setImage] = useState(""); // Stores the image URL
   const [details, setDetails] = useState({
     name: "",
     category: "",
-    basePrice: "",
+    price: "",
     description: "",
-    availability: true,
-    preparationTime: "",
+    available: true,
+    image: "",
   });
+
+  const { mutate } = useCreateMenu();
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    const menuItem = { ...details, image };
-    console.log("Form submitted with: ", menuItem);
+
+    // Convert form values
+    const formData = new FormData();
+    formData.append("name", details.name);
+    formData.append("category", details.category);
+    formData.append("price", parseInt(details.price, 10));
+    formData.append("description", details.description);
+    formData.append("available", details.available ? "true" : "false");
+    formData.append("image", details.image);
+
+    // Debugging: Log the form data for verification
+    // for (let [key, value] of formData.entries()) {
+    //   console.log(`${key}: ${value}`);
+    // }
+
+    // Uncomment this to enable mutation
+    mutate(formData);
   };
 
   return (
     <form
-      className=" mx-auto p-6 bg-white rounded-lg shadow-md space-y-6"
+      className="mx-auto p-6 bg-white rounded-lg shadow-md space-y-6"
       onSubmit={handleSubmit}
     >
       <h2 className="text-2xl font-bold text-gray-800">
         Create a New Menu Item
       </h2>
-      <MenuItemImageUpload image={image} setImage={setImage} />
       <MenuItemDetailsForm details={details} setDetails={setDetails} />
       <button
         type="submit"
