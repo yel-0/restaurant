@@ -27,6 +27,7 @@ import CookTVScreen from "./Pages/Cook/CookTvScreen";
 import Login from "./Pages/Auth/Login";
 import Register from "./Pages/Auth/Register";
 import AuthLayout from "./Layout/AuthLayout";
+import AdminCategory from "./Pages/Admin/AdminCategory";
 
 const App = () => (
   <AuthProvider>
@@ -60,6 +61,14 @@ const App = () => (
             }
           />
           <Route
+            path="/admin/category"
+            element={
+              <AdminLayout>
+                <AdminCategory />
+              </AdminLayout>
+            }
+          />
+          <Route
             path="/admin/menus"
             element={
               <AdminLayout>
@@ -76,7 +85,7 @@ const App = () => (
             }
           />
           <Route
-            path="/admin/menu/update"
+            path="/admin/menu/update/:id"
             element={
               <AdminLayout>
                 <AdminUpdateMenu />

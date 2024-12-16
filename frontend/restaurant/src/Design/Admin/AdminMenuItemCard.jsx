@@ -23,12 +23,12 @@ const AdminMenuItemCard = ({ item }) => {
         <span className="text-lg font-bold">${item.price}</span>
         <div className="flex space-x-2">
           <Link
-            to="/admin/menu/update"
-            className="px-3 py-1 bg-blue-600 text-white text-sm rounded-md"
+            to={`/admin/menu/update/${item._id}`}
+            className="px-3 py-3 bg-blue-600 text-white text-sm rounded-md"
           >
             Edit
           </Link>
-          <DeleteMenuItemDialog />
+          <DeleteMenuItemDialog item={item} />
         </div>
       </div>
     </div>

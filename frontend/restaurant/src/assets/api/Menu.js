@@ -1,8 +1,6 @@
 import axios from "axios";
 
 export const createMenuItem = async (menuItemData) => {
-  //   console.log(menuItemData);
-
   try {
     const response = await axios.post(
       "http://localhost:3005/api/menu-items",
@@ -29,6 +27,29 @@ export const getMenuItems = async ({
     const response = await axios.get("http://localhost:3005/api/menu-items", {
       params: { category, name, limit, page },
     });
+    return response.data;
+  } catch (error) {
+    throw new Error(error.response?.data?.message || error.message);
+  }
+};
+
+export const deleteMenuItem = async (id) => {
+  try {
+    const response = await axios.delete(
+      `http://localhost:3005/api/menu-items/${id}`
+    );
+    return response.data;
+  } catch (error) {
+    throw new Error(error.response?.data?.message || error.message);
+  }
+};
+
+// Fetch a single menu item by ID
+export const getMenuItemById = async (id) => {
+  try {
+    const response = await axios.get(
+      `http://localhost:3005/api/menu-items/${id}`
+    );
     return response.data;
   } catch (error) {
     throw new Error(error.response?.data?.message || error.message);

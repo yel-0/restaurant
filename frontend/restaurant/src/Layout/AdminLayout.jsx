@@ -63,6 +63,15 @@ const AdminLayout = ({ children }) => {
             </SidebarGroup>
             <SidebarGroup>
               <Link
+                to={"/admin/category"}
+                className="p-4 flex items-center gap-2 border-gray-700"
+              >
+                <List className="h-5 w-5" />
+                Category
+              </Link>
+            </SidebarGroup>
+            <SidebarGroup>
+              <Link
                 to={"/admin/menus"}
                 className="p-4 flex items-center gap-2 border-gray-700"
               >
