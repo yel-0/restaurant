@@ -10,46 +10,11 @@ import {
 } from "@/components/ui/table";
 import { UpdateTableDialog } from "@/Design/Admin/UpdateTableDialog";
 import { DeleteTableDialog } from "@/Design/Admin/DeleteTableDialog";
-import { CreateTableDialog } from "@/Design/Admin/CreateTableDialog";
+import CreateTableDialog from "@/Design/Admin/CreateTableDialog";
+import useFetchTables from "@/Hook/Table/useFetchTables";
 const AdminTables = () => {
+  const { data: tables, isLoading, isError } = useFetchTables();
   // Example data for tables
-  const tables = [
-    {
-      id: 1,
-      name: "Table 1",
-      capacity: 4,
-      location: "Patio",
-      status: "Available",
-    },
-    {
-      id: 2,
-      name: "Table 2",
-      capacity: 6,
-      location: "Main Hall",
-      status: "Occupied",
-    },
-    {
-      id: 3,
-      name: "Table 3",
-      capacity: 2,
-      location: "Patio",
-      status: "Reserved",
-    },
-    {
-      id: 4,
-      name: "Table 4",
-      capacity: 8,
-      location: "Private Room",
-      status: "Available",
-    },
-    {
-      id: 5,
-      name: "Table 5",
-      capacity: 10,
-      location: "Main Hall",
-      status: "Occupied",
-    },
-  ];
 
   return (
     <div className="p-6 bg-white shadow rounded-md">
@@ -61,9 +26,8 @@ const AdminTables = () => {
         <TableCaption>A list of all tables in the restaurant.</TableCaption>
         <TableHeader>
           <TableRow>
-            <TableHead className="w-[50px]">ID</TableHead>
-            <TableHead>Name</TableHead>
-            <TableHead>Capacity</TableHead>
+            <TableHead>Table Number</TableHead>
+            <TableHead>Seat</TableHead>
             <TableHead>Location</TableHead>
             <TableHead>Status</TableHead>
             <TableHead className="text-center">Actions</TableHead>
@@ -71,10 +35,9 @@ const AdminTables = () => {
         </TableHeader>
         <TableBody>
           {tables.map((table) => (
-            <TableRow key={table.id}>
-              <TableCell className="font-medium">{table.id}</TableCell>
-              <TableCell>{table.name}</TableCell>
-              <TableCell>{table.capacity}</TableCell>
+            <TableRow key={table._id}>
+              <TableCell>{table.tableNumber}</TableCell>
+              <TableCell>{table.seats}</TableCell>
               <TableCell>{table.location}</TableCell>
               <TableCell>{table.status}</TableCell>
               <TableCell className="text-center space-x-2">
