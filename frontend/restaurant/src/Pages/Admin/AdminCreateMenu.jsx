@@ -124,7 +124,7 @@ const AdminCreateMenu = () => {
     image: "",
   });
 
-  const { mutate } = useCreateMenu();
+  const { mutate, isLoading } = useCreateMenu();
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -138,12 +138,6 @@ const AdminCreateMenu = () => {
     formData.append("available", details.available ? "true" : "false");
     formData.append("image", details.image);
 
-    // Debugging: Log the form data for verification
-    // for (let [key, value] of formData.entries()) {
-    //   console.log(`${key}: ${value}`);
-    // }
-
-    // Uncomment this to enable mutation
     mutate(formData);
   };
 
@@ -160,7 +154,7 @@ const AdminCreateMenu = () => {
         type="submit"
         className="w-full px-4 py-2 text-white bg-blue-600 rounded-md shadow hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
       >
-        Create Menu Item
+        {isLoading ? "Creating..." : "Create User"}
       </button>
     </form>
   );
