@@ -1,7 +1,9 @@
 import React, { useState } from "react";
 import useCreateMenu from "@/Hook/Menu/useCreateMenu";
+import useFetchCategories from "@/Hook/Category/useFetchCategories"; // import the custom hook for fetching categories
+
 // Component for entering menu item details
-const MenuItemDetailsForm = ({ details, setDetails }) => {
+const MenuItemDetailsForm = ({ details, setDetails, categories }) => {
   const handleChange = (e) => {
     const { name, value, type, checked } = e.target;
     const newValue = type === "checkbox" ? checked : value;
@@ -28,6 +30,7 @@ const MenuItemDetailsForm = ({ details, setDetails }) => {
         />
       </div>
 
+      {/* Category dropdown using category._id */}
       <div>
         <label
           htmlFor="category"
@@ -35,15 +38,23 @@ const MenuItemDetailsForm = ({ details, setDetails }) => {
         >
           Category
         </label>
-        <input
-          type="text"
+        <select
           id="category"
           name="category"
           value={details.category}
           onChange={handleChange}
           required
           className="mt-1 block w-full p-2 border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500"
-        />
+        >
+          <option value="" disabled>
+            Select a category
+          </option>
+          {categories?.map((category) => (
+            <option key={category._id} value={category._id}>
+              {category.name}
+            </option>
+          ))}
+        </select>
       </div>
 
       <div>
@@ -125,6 +136,11 @@ const AdminCreateMenu = () => {
   });
 
   const { mutate, isLoading } = useCreateMenu();
+  const {
+    data: categories,
+    isLoading: categoriesLoading,
+    error: categoriesError,
+  } = useFetchCategories();
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -132,7 +148,7 @@ const AdminCreateMenu = () => {
     // Convert form values
     const formData = new FormData();
     formData.append("name", details.name);
-    formData.append("category", details.category);
+    formData.append("category", details.category); // send category._id
     formData.append("price", parseInt(details.price, 10));
     formData.append("description", details.description);
     formData.append("available", details.available ? "true" : "false");
@@ -140,6 +156,10 @@ const AdminCreateMenu = () => {
 
     mutate(formData);
   };
+
+  if (categoriesLoading) return <div>Loading categories...</div>;
+  if (categoriesError)
+    return <div>Error fetching categories: {categoriesError.message}</div>;
 
   return (
     <form
@@ -149,12 +169,16 @@ const AdminCreateMenu = () => {
       <h2 className="text-2xl font-bold text-gray-800">
         Create a New Menu Item
       </h2>
-      <MenuItemDetailsForm details={details} setDetails={setDetails} />
+      <MenuItemDetailsForm
+        details={details}
+        setDetails={setDetails}
+        categories={categories}
+      />
       <button
         type="submit"
         className="w-full px-4 py-2 text-white bg-blue-600 rounded-md shadow hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
       >
-        {isLoading ? "Creating..." : "Create User"}
+        {isLoading ? "Creating..." : "Create Menu Item"}
       </button>
     </form>
   );

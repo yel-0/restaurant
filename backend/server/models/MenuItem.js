@@ -1,5 +1,7 @@
 const mongoose = require("mongoose");
 
+const Category = require("./Category");
+
 const menuItemSchema = new mongoose.Schema(
   {
     name: {
@@ -13,9 +15,9 @@ const menuItemSchema = new mongoose.Schema(
       min: 0,
     },
     category: {
-      type: String,
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "Category",
       required: true,
-      trim: true,
     },
     available: {
       type: Boolean,
