@@ -32,3 +32,14 @@ export const getMenuItems = async ({
     throw new Error(error.response?.data?.message || error.message);
   }
 };
+
+export const deleteMenuItem = async (id) => {
+  try {
+    const response = await axios.delete(
+      `http://localhost:3005/api/menu-items/${id}`
+    );
+    return response.data;
+  } catch (error) {
+    throw new Error(error.response?.data?.message || error.message);
+  }
+};

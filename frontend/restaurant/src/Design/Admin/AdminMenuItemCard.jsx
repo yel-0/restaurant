@@ -28,7 +28,7 @@ const AdminMenuItemCard = ({ item }) => {
           >
             Edit
           </Link>
-          <DeleteMenuItemDialog />
+          <DeleteMenuItemDialog item={item} />
         </div>
       </div>
     </div>

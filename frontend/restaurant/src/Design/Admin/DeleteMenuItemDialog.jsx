@@ -8,15 +8,12 @@ import {
   DialogTrigger,
 } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
+import { useMenuDelete } from "@/Hook/Menu/useMenuDelete";
+export const DeleteMenuItemDialog = ({ item }) => {
+  const { mutate: deleteMenuItem, isLoading } = useMenuDelete();
 
-export const DeleteMenuItemDialog = ({
-  menuItemId,
-  menuItemName,
-  onDelete,
-}) => {
   const handleConfirm = () => {
-    // Perform the delete operation (callback passed via props)
-    if (onDelete) onDelete(menuItemId);
+    deleteMenuItem(item._id);
   };
 
   return (
@@ -24,21 +21,25 @@ export const DeleteMenuItemDialog = ({
       <DialogTrigger asChild>
         <Button variant="destructive">Delete</Button>
       </DialogTrigger>
-      <DialogContent>
+      <DialogContent className="max-w-lg">
         <DialogHeader>
           <DialogTitle>Delete Menu Item</DialogTitle>
           <DialogDescription>
             Are you sure you want to delete the menu item:{" "}
-            <span className="font-bold">{menuItemName}</span>? This action
-            cannot be undone.
+            <span className="font-bold">{item.name}</span>? This action cannot
+            be undone.
           </DialogDescription>
         </DialogHeader>
         <div className="text-right">
-          <Button variant="outline" className="mr-2">
+          <Button variant="outline" className="mr-2" disabled={isLoading}>
             Cancel
           </Button>
-          <Button variant="destructive" onClick={handleConfirm}>
-            Confirm
+          <Button
+            variant="destructive"
+            onClick={handleConfirm}
+            disabled={isLoading}
+          >
+            {isLoading ? "Deleting..." : "Confirm"}
           </Button>
         </div>
       </DialogContent>
