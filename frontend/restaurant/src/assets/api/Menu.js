@@ -43,3 +43,15 @@ export const deleteMenuItem = async (id) => {
     throw new Error(error.response?.data?.message || error.message);
   }
 };
+
+// Fetch a single menu item by ID
+export const getMenuItemById = async (id) => {
+  try {
+    const response = await axios.get(
+      `http://localhost:3005/api/menu-items/${id}`
+    );
+    return response.data;
+  } catch (error) {
+    throw new Error(error.response?.data?.message || error.message);
+  }
+};

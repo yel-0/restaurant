@@ -76,7 +76,7 @@ const App = () => (
             }
           />
           <Route
-            path="/admin/menu/update"
+            path="/admin/menu/update/:id"
             element={
               <AdminLayout>
                 <AdminUpdateMenu />
