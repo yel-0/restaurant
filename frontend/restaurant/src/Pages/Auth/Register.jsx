@@ -1,13 +1,27 @@
-import React from "react";
+import React, { useState } from "react";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { useRegister } from "@/Hook/Auth/useRegister";
 
 const Register = () => {
+  const [name, setName] = useState("");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [role, setRole] = useState("");
+
+  const { mutate: registerUser, isLoading, error } = useRegister();
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    const userData = { name, email, password, role };
+    registerUser(userData);
+  };
+
   return (
     <div className="flex items-center justify-center min-h-screen bg-gray-100">
       <div className="bg-white p-8 rounded-lg shadow-md w-full max-w-md">
         <h1 className="text-2xl font-bold text-center mb-6">Register</h1>
-        <form>
+        <form onSubmit={handleSubmit}>
           <div className="mb-4">
             <Label
               htmlFor="name"
@@ -20,6 +34,8 @@ const Register = () => {
               type="text"
               placeholder="Enter your name"
               className="w-full mt-2 px-4 py-2 border rounded-md focus:ring focus:ring-blue-400"
+              value={name}
+              onChange={(e) => setName(e.target.value)}
             />
           </div>
           <div className="mb-4">
@@ -34,6 +50,8 @@ const Register = () => {
               type="email"
               placeholder="Enter your email"
               className="w-full mt-2 px-4 py-2 border rounded-md focus:ring focus:ring-blue-400"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
             />
           </div>
           <div className="mb-6">
@@ -48,21 +66,41 @@ const Register = () => {
               type="password"
               placeholder="Create a password"
               className="w-full mt-2 px-4 py-2 border rounded-md focus:ring focus:ring-blue-400"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
             />
+          </div>
+          <div className="mb-4">
+            <Label
+              htmlFor="role"
+              className="block text-sm font-medium text-gray-700"
+            >
+              Role
+            </Label>
+            <select
+              id="role"
+              className="w-full mt-2 px-4 py-2 border rounded-md focus:ring focus:ring-blue-400"
+              value={role}
+              onChange={(e) => setRole(e.target.value)}
+            >
+              <option value="">Select your role</option>
+              <option value="Admin">Admin</option>
+              <option value="Waiter">Waiter</option>
+              <option value="Cook">Cook</option>
+              <option value="User">User</option>
+            </select>
           </div>
           <button
             type="submit"
             className="w-full py-2 px-4 bg-blue-600 text-white font-semibold rounded-md hover:bg-blue-700"
+            disabled={isLoading}
           >
-            Register
+            {isLoading ? "Registering..." : "Register"}
           </button>
         </form>
-        <p className="text-sm text-center text-gray-600 mt-4">
-          Already have an account?{" "}
-          <a href="/login" className="text-blue-600 hover:underline">
-            Login
-          </a>
-        </p>
+        {error && (
+          <p className="text-red-500 text-center mt-2">Registration failed</p>
+        )}
       </div>
     </div>
   );
