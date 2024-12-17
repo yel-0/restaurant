@@ -12,8 +12,10 @@ const loginUser = async (credentials) => {
 export const useLogin = () => {
   return useMutation(loginUser, {
     onSuccess: (data) => {
-      console.log("Login successful", data);
-      alert("success");
+      if (data?.token) {
+        localStorage.setItem("token", data.token);
+        alert("Login successful");
+      }
     },
     onError: (error) => {
       console.error("Login failed", error);
