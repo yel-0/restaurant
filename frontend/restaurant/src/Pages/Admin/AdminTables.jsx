@@ -14,7 +14,10 @@ import CreateTableDialog from "@/Design/Admin/CreateTableDialog";
 import useFetchTables from "@/Hook/Table/useFetchTables";
 const AdminTables = () => {
   const { data: tables, isLoading, isError } = useFetchTables();
-  // Example data for tables
+
+  if (isLoading) {
+    return <div>Loading</div>;
+  }
 
   return (
     <div className="p-6 bg-white shadow rounded-md">
@@ -42,7 +45,7 @@ const AdminTables = () => {
               <TableCell>{table.status}</TableCell>
               <TableCell className="text-center space-x-2">
                 <UpdateTableDialog table={table} />
-                <DeleteTableDialog tableId={table.id} />
+                <DeleteTableDialog tableId={table._id} />
               </TableCell>
             </TableRow>
           ))}

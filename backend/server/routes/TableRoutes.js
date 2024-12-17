@@ -15,6 +15,6 @@ router.get("/:id", TableController.getTableById);
 router.put("/:id", TableController.updateTable);
 
 // Delete a table
-router.delete("/:id", TableController.deleteTable);
+router.delete("/delete/:id", TableController.deleteTable);
 
 module.exports = router;

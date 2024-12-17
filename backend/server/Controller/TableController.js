@@ -54,6 +54,7 @@ exports.updateTable = async (req, res) => {
       { tableNumber, seats, status, location },
       { new: true }
     );
+
     if (!updatedTable) {
       return res.status(404).json({ message: "Table not found" });
     }
@@ -68,6 +69,7 @@ exports.updateTable = async (req, res) => {
 exports.deleteTable = async (req, res) => {
   try {
     const deletedTable = await Table.findByIdAndDelete(req.params.id);
+
     if (!deletedTable) {
       return res.status(404).json({ message: "Table not found" });
     }
