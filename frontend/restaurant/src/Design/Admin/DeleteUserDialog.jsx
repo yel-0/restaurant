@@ -8,13 +8,13 @@ import {
   DialogTrigger,
 } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
+import useDeleteUser from "@/Hook/Auth/useDeleteUser";
+const DeleteUserDialog = ({ user }) => {
+  const { mutate } = useDeleteUser(); // Hook for deleting the user
 
-const DeleteUserDialog = () => {
-  // Static user data for the dialog
-  const user = {
-    id: 1,
-    name: "John Doe",
-    email: "john@example.com",
+  const handleDelete = () => {
+    // Call the delete function from the custom hook with the user's ID
+    mutate(user._id);
   };
 
   return (
@@ -50,13 +50,8 @@ const DeleteUserDialog = () => {
         <div className="flex justify-end gap-2">
           <Button
             type="button"
-            className="bg-gray-200 text-gray-800 hover:bg-gray-300"
-          >
-            Cancel
-          </Button>
-          <Button
-            type="button"
             className="bg-red-500 text-white hover:bg-red-600"
+            onClick={handleDelete} // Trigger the delete process
           >
             Delete
           </Button>

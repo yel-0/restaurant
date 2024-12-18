@@ -17,7 +17,7 @@ const secretKey = process.env.SECRET_KEY; // Secret key for JWT
 router.put("/update/:id", updateUser);
 
 // Delete user route
-router.delete("/:id", deleteUser);
+router.delete("/delete/:id", deleteUser);
 router.get("/users", fetchUsers);
 
 // Register route

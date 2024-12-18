@@ -34,7 +34,7 @@ const UpdateUserDialog = ({ user }) => {
     <Dialog>
       <DialogTrigger asChild>
         <Button className="bg-blue-500 text-white hover:bg-blue-600">
-          Update {role}
+          Update
         </Button>
       </DialogTrigger>
 
