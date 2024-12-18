@@ -1,12 +1,12 @@
 import { useMutation, useQueryClient } from "react-query";
 import { updateUser } from "@/assets/api/user";
+
 // Custom hook for updating a user
 const useUpdateUser = () => {
   const queryClient = useQueryClient();
 
-  return useMutation(updateUser, {
+  return useMutation(({ id, userData }) => updateUser({ id, userData }), {
     onSuccess: (data) => {
-      // Optionally invalidate the "users" query to refetch updated data
       queryClient.invalidateQueries("users");
 
       // Success message

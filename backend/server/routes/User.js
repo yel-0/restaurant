@@ -14,7 +14,7 @@ const secretKey = process.env.SECRET_KEY; // Secret key for JWT
 // const UserController = require("../Controller/UserController");
 
 // Update user route
-router.put("/:id", updateUser);
+router.put("/update/:id", updateUser);
 
 // Delete user route
 router.delete("/:id", deleteUser);

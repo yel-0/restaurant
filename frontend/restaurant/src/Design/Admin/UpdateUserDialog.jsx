@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import {
   Dialog,
   DialogContent,
@@ -9,27 +9,35 @@ import {
 } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
+import useUpdateUser from "@/Hook/Auth/useUpdateUser";
 
-const UpdateUserDialog = () => {
-  // Static user data for the dialog
-  const user = {
-    id: 1,
-    name: "John Doe",
-    role: "Waiter",
-    email: "john@example.com",
-    status: "Active",
+const UpdateUserDialog = ({ user }) => {
+  const [name, setName] = useState(user.name);
+  const [role, setRole] = useState(user.role);
+  const [email, setEmail] = useState(user.email);
+  const [password, setPassword] = useState(user.password);
+
+  const { mutate } = useUpdateUser();
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    const updatedUser = {
+      name,
+      role,
+      email,
+      password: password,
+    };
+    mutate({ id: user._id, userData: updatedUser });
   };
 
   return (
     <Dialog>
-      {/* Trigger Button */}
       <DialogTrigger asChild>
         <Button className="bg-blue-500 text-white hover:bg-blue-600">
-          Update
+          Update {role}
         </Button>
       </DialogTrigger>
 
-      {/* Dialog Content */}
       <DialogContent>
         <DialogHeader>
           <DialogTitle>Update User</DialogTitle>
@@ -38,9 +46,7 @@ const UpdateUserDialog = () => {
           </DialogDescription>
         </DialogHeader>
 
-        {/* Update User Form */}
-        <form className="space-y-4">
-          {/* Name Input */}
+        <form onSubmit={handleSubmit} className="space-y-4">
           <div>
             <label htmlFor="name" className="block text-sm font-medium">
               Name
@@ -48,25 +54,30 @@ const UpdateUserDialog = () => {
             <Input
               id="name"
               placeholder="Enter user name"
-              defaultValue={user.name}
+              value={name}
+              onChange={(e) => setName(e.target.value)}
               className="mt-1"
             />
           </div>
 
-          {/* Role Input */}
           <div>
             <label htmlFor="role" className="block text-sm font-medium">
               Role
             </label>
-            <Input
+            <select
               id="role"
-              placeholder="Enter user role"
-              defaultValue={user.role}
-              className="mt-1"
-            />
+              value={role}
+              onChange={(e) => setRole(e.target.value)}
+              className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+            >
+              <option value="user">Select Role</option>
+              <option value="User">User</option>
+              <option value="Admin">Admin</option>
+              <option value="Waiter">Waiter</option>
+              <option value="Cook">Cook</option>
+            </select>
           </div>
 
-          {/* Email Input */}
           <div>
             <label htmlFor="email" className="block text-sm font-medium">
               Email
@@ -74,25 +85,26 @@ const UpdateUserDialog = () => {
             <Input
               id="email"
               placeholder="Enter user email"
-              defaultValue={user.email}
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
               className="mt-1"
             />
           </div>
 
-          {/* Status Input */}
           <div>
-            <label htmlFor="status" className="block text-sm font-medium">
-              Status
+            <label htmlFor="password" className="block text-sm font-medium">
+              Password (Leave blank to keep unchanged)
             </label>
             <Input
-              id="status"
-              placeholder="Enter user status"
-              defaultValue={user.status}
+              id="password"
+              type="password"
+              placeholder="Enter new password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
               className="mt-1"
             />
           </div>
 
-          {/* Action Buttons */}
           <div className="flex justify-end gap-2">
             <Button
               type="button"

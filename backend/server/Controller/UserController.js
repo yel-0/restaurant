@@ -1,5 +1,5 @@
 const User = require("../models/User");
-
+const bcrypt = require("bcrypt");
 // Controller function to update a user
 const updateUser = async (req, res) => {
   const { id } = req.params;
@@ -17,8 +17,8 @@ const updateUser = async (req, res) => {
     // Update user details
     user.name = name || user.name;
     user.email = email || user.email;
-    user.password = password || user.password;
     user.role = role || user.role;
+    user.password = await bcrypt.hash(password, 10); // Hash the password
 
     // Save the updated user
     const updatedUser = await user.save();
