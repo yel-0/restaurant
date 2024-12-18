@@ -1,14 +1,6 @@
 import { useMutation, useQueryClient } from "react-query";
-import axios from "axios";
 import { useToast } from "@/hooks/use-toast";
-
-const createCategory = async (categoryData) => {
-  const response = await axios.post(
-    "http://localhost:3005/category/create",
-    categoryData
-  );
-  return response.data;
-};
+import { createCategory } from "@/assets/api/category";
 
 const useCreateCategory = () => {
   const { toast } = useToast();
