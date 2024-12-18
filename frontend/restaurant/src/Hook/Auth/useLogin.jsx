@@ -1,13 +1,5 @@
 import { useMutation } from "react-query";
-import axios from "axios";
-
-const loginUser = async (credentials) => {
-  const response = await axios.post(
-    "http://localhost:3005/user/login",
-    credentials
-  );
-  return response.data;
-};
+import { loginUser } from "@/assets/api/user";
 
 export const useLogin = () => {
   return useMutation(loginUser, {

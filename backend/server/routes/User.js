@@ -3,10 +3,22 @@ const jwt = require("jsonwebtoken");
 const User = require("../models/User");
 const router = express.Router();
 const bcrypt = require("bcrypt");
+const {
+  updateUser,
+  deleteUser,
+  fetchUsers,
+} = require("../Controller/UserController");
 
 const secretKey = process.env.SECRET_KEY; // Secret key for JWT
 // const { verifyToken } = require("../middware/Auth");
 // const UserController = require("../Controller/UserController");
+
+// Update user route
+router.put("/:id", updateUser);
+
+// Delete user route
+router.delete("/:id", deleteUser);
+router.get("/users", fetchUsers);
 
 // Register route
 router.post("/register", async (req, res) => {

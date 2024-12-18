@@ -1,13 +1,5 @@
 import { useMutation } from "react-query";
-import axios from "axios";
-
-const registerUser = async (userData) => {
-  const response = await axios.post(
-    "http://localhost:3005/user/register",
-    userData
-  );
-  return response.data;
-};
+import { registerUser } from "@/assets/api/user";
 
 export const useRegister = () => {
   return useMutation(registerUser, {
