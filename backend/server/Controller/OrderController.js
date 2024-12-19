@@ -1,11 +1,10 @@
 const Order = require("../models/Order");
-const { verifyToken } = require("../middlewares/authMiddleware");
 
 // Create an Order
 const createOrder = async (req, res) => {
   try {
     const { table, items, subtotal, tax, total, specialNotes } = req.body;
-    const createdBy = req.user.id; // Get the user from the token
+    const createdBy = req.user.userId; // Get the user from the token
 
     // Create a new order
     const newOrder = new Order({
@@ -35,7 +34,7 @@ const createOrder = async (req, res) => {
 const getAllOrders = async (req, res) => {
   try {
     const orders = await Order.find()
-      .populate("table", "name") // Optional, populate table name for convenience
+      .populate("table", "tableNumber") // Optional, populate table name for convenience
       .populate("items.product", "name price"); // Populate menu item details
     return res.status(200).json(orders);
   } catch (error) {
@@ -49,7 +48,7 @@ const getOrderById = async (req, res) => {
   try {
     const orderId = req.params.id;
     const order = await Order.findById(orderId)
-      .populate("table", "name")
+      .populate("table", "tableNumber")
       .populate("items.product", "name price")
       .populate("createdBy", "name email"); // Populate the user who created the order
 
@@ -80,7 +79,7 @@ const updateOrder = async (req, res) => {
     order.status = status || order.status;
     order.items = items || order.items;
     order.specialNotes = specialNotes || order.specialNotes;
-    order.updatedBy.push(req.user.id); // Add the current user to the update history
+    order.updatedBy.push(req.user.userId); // Add the current user to the update history
 
     // Save the updated order
     await order.save();

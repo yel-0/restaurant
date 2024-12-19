@@ -20,7 +20,7 @@ export const OrderCartProvider = ({ children }) => {
 
   const addToCart = (item, quantity = 1) => {
     setCartItems((prevItems) => {
-      const itemIndex = prevItems.findIndex((i) => i.id === item.id);
+      const itemIndex = prevItems.findIndex((i) => i._id === item._id); // Changed 'id' to '_id'
 
       if (itemIndex > -1) {
         return prevItems.map((existingItem, index) =>
@@ -36,7 +36,7 @@ export const OrderCartProvider = ({ children }) => {
 
   const decreaseQuantity = (itemId) => {
     setCartItems((prevItems) => {
-      const itemIndex = prevItems.findIndex((item) => item.id === itemId);
+      const itemIndex = prevItems.findIndex((item) => item._id === itemId); // Changed 'id' to '_id'
 
       if (itemIndex > -1) {
         const updatedItems = [...prevItems];
@@ -57,7 +57,9 @@ export const OrderCartProvider = ({ children }) => {
   };
 
   const removeFromCart = (itemId) => {
-    setCartItems((prevItems) => prevItems.filter((item) => item.id !== itemId));
+    setCartItems((prevItems) =>
+      prevItems.filter((item) => item._id !== itemId)
+    ); // Changed 'id' to '_id'
   };
 
   const clearCart = () => {
