@@ -7,10 +7,11 @@ const {
   updateUser,
   deleteUser,
   fetchUsers,
+  getAuthUserInfo,
 } = require("../Controller/UserController");
 
 const secretKey = process.env.SECRET_KEY; // Secret key for JWT
-// const { verifyToken } = require("../middware/Auth");
+const { verifyToken } = require("../middware/Auth");
 // const UserController = require("../Controller/UserController");
 
 // Update user route
@@ -19,6 +20,8 @@ router.put("/update/:id", updateUser);
 // Delete user route
 router.delete("/delete/:id", deleteUser);
 router.get("/users", fetchUsers);
+
+router.get("/auth/info", verifyToken, getAuthUserInfo);
 
 // Register route
 router.post("/register", async (req, res) => {

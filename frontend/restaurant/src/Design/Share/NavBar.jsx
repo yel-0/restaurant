@@ -2,8 +2,10 @@
 import { Link } from "react-router-dom";
 import { ShoppingCart } from "lucide-react"; // Lucide icon
 import { useOrderCart } from "@/context/OrderCartContext";
+import { useAuth } from "@/context/AuthContext";
 const Navbar = () => {
   const { cartItems } = useOrderCart(); // Access cart items from the context
+  const { user } = useAuth();
 
   return (
     <nav className="bg-white border-b text-black shadow-md py-4">
@@ -32,6 +34,12 @@ const Navbar = () => {
           <Link to="/" className="text-black">
             Logout
           </Link>
+          <div className="flex items-center justify-center bg-white p-3 rounded-full shadow-lg w-18 h-18 text-center">
+            <div className="text-xl font-semibold text-gray-800">
+              {user.name[0]}
+            </div>
+            {/* <div className="text-lg text-gray-500">{user.role}</div> */}
+          </div>
 
           {/* Add to Cart Icon with number of items */}
           <Link to="/waiter/order/summary" className="relative">
