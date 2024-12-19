@@ -24,7 +24,6 @@ const WaiterMenuItemCard = ({ item }) => {
       {/* Stock Quantity Display */}
       <div className="mb-2">
         <span className="text-sm text-gray-600">Stock: </span>
-        <span className="text-lg font-bold text-green-600">{item.stock}</span>
       </div>
 
       <div className="flex justify-between items-center">

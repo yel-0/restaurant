@@ -5,7 +5,10 @@ import { useOrderCart } from "@/context/OrderCartContext";
 import { useAuth } from "@/context/AuthContext";
 const Navbar = () => {
   const { cartItems } = useOrderCart(); // Access cart items from the context
-  const { user } = useAuth();
+  const { user, isLoading } = useAuth();
+  if (isLoading) {
+    return <div>is loading</div>;
+  }
 
   return (
     <nav className="bg-white border-b text-black shadow-md py-4">
@@ -36,7 +39,7 @@ const Navbar = () => {
           </Link>
           <div className="flex items-center justify-center bg-white p-3 rounded-full shadow-lg w-18 h-18 text-center">
             <div className="text-xl font-semibold text-gray-800">
-              {user.name[0]}
+              {user?.name[0]}
             </div>
             {/* <div className="text-lg text-gray-500">{user.role}</div> */}
           </div>
