@@ -22,9 +22,6 @@ const WaiterMenuItemCard = ({ item }) => {
       <p className="text-sm text-gray-600 mb-2">{item.description}</p>
 
       {/* Stock Quantity Display */}
-      <div className="mb-2">
-        <span className="text-sm text-gray-600">Stock: </span>
-      </div>
 
       <div className="flex justify-between items-center">
         <span className="text-lg font-bold">${item.price}</span>

@@ -23,14 +23,36 @@ export const OrderCartProvider = ({ children }) => {
       const itemIndex = prevItems.findIndex((i) => i.id === item.id);
 
       if (itemIndex > -1) {
-        return prevItems.map((item, index) =>
+        return prevItems.map((existingItem, index) =>
           index === itemIndex
-            ? { ...item, quantity: item.quantity + quantity }
-            : item
+            ? { ...existingItem, quantity: existingItem.quantity + quantity }
+            : existingItem
         );
       } else {
         return [...prevItems, { ...item, quantity }];
       }
+    });
+  };
+
+  const decreaseQuantity = (itemId) => {
+    setCartItems((prevItems) => {
+      const itemIndex = prevItems.findIndex((item) => item.id === itemId);
+
+      if (itemIndex > -1) {
+        const updatedItems = [...prevItems];
+        const item = updatedItems[itemIndex];
+
+        // Ensure quantity doesn't go below 1
+        if (item.quantity > 1) {
+          item.quantity -= 1;
+        } else {
+          item.quantity = 1;
+        }
+
+        updatedItems[itemIndex] = item;
+        return updatedItems;
+      }
+      return prevItems;
     });
   };
 
@@ -44,7 +66,13 @@ export const OrderCartProvider = ({ children }) => {
 
   return (
     <OrderCartContext.Provider
-      value={{ cartItems, addToCart, removeFromCart, clearCart }}
+      value={{
+        cartItems,
+        addToCart,
+        removeFromCart,
+        decreaseQuantity,
+        clearCart,
+      }}
     >
       {children}
     </OrderCartContext.Provider>

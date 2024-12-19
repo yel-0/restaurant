@@ -2,7 +2,8 @@ import React, { useState } from "react";
 import { useOrderCart } from "@/context/OrderCartContext";
 
 const WaiterOrderSummary = () => {
-  const { cartItems, addToCart, removeFromCart } = useOrderCart();
+  const { cartItems, addToCart, removeFromCart, decreaseQuantity } =
+    useOrderCart();
   const [note, setNote] = useState("");
   const [selectedTable, setSelectedTable] = useState("");
 
@@ -24,9 +25,11 @@ const WaiterOrderSummary = () => {
   };
 
   const handleQuantityChange = (itemId, change) => {
-    const item = cartItems.find((item) => item.id === itemId);
-    if (item) {
-      addToCart({ ...item, quantity: item.quantity + change });
+    if (change === 1) {
+      const item = cartItems.find((item) => item.id === itemId);
+      addToCart(item, change);
+    } else if (change === -1) {
+      decreaseQuantity(itemId); // Decrease quantity using the new function
     }
   };
 
@@ -147,27 +150,25 @@ const WaiterOrderSummary = () => {
       </div>
 
       <div className="mb-6">
-        <label htmlFor="notes" className="text-lg text-gray-600">
-          Notes:
+        <label htmlFor="order-notes" className="text-lg text-gray-600">
+          Special Notes:
         </label>
         <textarea
-          id="notes"
+          id="order-notes"
           value={note}
           onChange={(e) => setNote(e.target.value)}
-          rows="3"
+          rows="4"
           className="w-full p-3 mt-2 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
-          placeholder="Add any special instructions or notes here..."
+          placeholder="Add any special instructions or requests..."
         />
       </div>
 
-      <div className="flex justify-end">
-        <button
-          className="px-8 py-3 bg-blue-600 text-white rounded-md text-lg font-semibold hover:bg-blue-700 transition"
-          onClick={() => alert("Order Submitted!")}
-        >
-          Submit Order
-        </button>
-      </div>
+      <button
+        onClick={() => console.log("Order Submitted")}
+        className="w-full py-3 bg-green-500 text-white font-semibold rounded-lg shadow-md hover:bg-green-600 transition"
+      >
+        Submit Order
+      </button>
     </div>
   );
 };
