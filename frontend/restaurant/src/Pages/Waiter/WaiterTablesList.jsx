@@ -9,17 +9,15 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { Button } from "@/components/ui/button";
+import useFetchTables from "@/Hook/Table/useFetchTables";
 
 // WaiterTablesList Component
 const WaiterTablesList = () => {
-  // Sample data for tables, including their location and availability
-  const [tables, setTables] = useState([
-    { id: 1, tableNumber: "1", isAvailable: true, location: "Near the window" },
-    { id: 2, tableNumber: "2", isAvailable: false, location: "Near the bar" },
-    { id: 3, tableNumber: "3", isAvailable: true, location: "Outdoor seating" },
-    { id: 4, tableNumber: "4", isAvailable: false, location: "Near the stage" },
-    { id: 5, tableNumber: "5", isAvailable: true, location: "By the entrance" },
-  ]);
+  const { data, isLoading, isError } = useFetchTables();
+
+  if (isLoading) {
+    return <div>loading ...</div>;
+  }
 
   // Toggle table availability
   const toggleAvailability = (tableId) => {
@@ -51,31 +49,31 @@ const WaiterTablesList = () => {
           </TableRow>
         </TableHeader>
         <TableBody>
-          {tables.map((table) => (
-            <TableRow key={table.id}>
+          {data?.map((table) => (
+            <TableRow key={table._id}>
               <TableCell>{table.tableNumber}</TableCell>
               <TableCell>{table.location}</TableCell>
               <TableCell>
                 <span
                   className={`${
-                    table.isAvailable ? "text-green-600" : "text-red-600"
+                    table.status ? "text-green-600" : "text-red-600"
                   } font-semibold`}
                 >
-                  {table.isAvailable ? "Available" : "Occupied"}
+                  {table.status ? "Available" : "Occupied"}
                 </span>
               </TableCell>
               <TableCell>
                 <Button
-                  onClick={() => toggleAvailability(table.id)}
+                  onClick={() => toggleAvailability(table._id)}
                   variant="outline"
                   size="sm"
                   className={`${
-                    table.isAvailable
+                    table.status
                       ? "bg-red-500 text-white"
                       : "bg-green-500 text-white"
                   }`}
                 >
-                  {table.isAvailable ? "Mark as Occupied" : "Mark as Available"}
+                  {table.status ? "Mark as Occupied" : "Mark as Available"}
                 </Button>
               </TableCell>
             </TableRow>
