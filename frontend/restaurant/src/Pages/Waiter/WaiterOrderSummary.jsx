@@ -13,7 +13,7 @@ const WaiterOrderSummary = () => {
   const taxRate = 0.1;
 
   const { data: tables, isLoading: tableLoading, isError } = useFetchTables();
-  const { createOrder, isLoading, isSuccess, error } = useCreateOrder();
+  const { mutate: createOrder, isLoading, isSuccess, error } = useCreateOrder();
 
   const calculateSubtotal = () => {
     return cartItems.reduce(
@@ -57,15 +57,15 @@ const WaiterOrderSummary = () => {
       total: calculateTotal(subtotal),
       specialNotes: note,
       status: status, // Use selected order status
-      createdBy: "userId", // Assuming the user is logged in and you have their userId
     };
+    createOrder(orderData);
 
     // const response = await createOrder(orderData);
     // if (response) {
     //   console.log("Order submitted successfully:", response);
     // }
 
-    console.log(orderData);
+    // console.log(orderData);
   };
 
   const subtotal = calculateSubtotal();

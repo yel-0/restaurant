@@ -4,7 +4,7 @@ const Order = require("../models/Order");
 const createOrder = async (req, res) => {
   try {
     const { table, items, subtotal, tax, total, specialNotes } = req.body;
-    const createdBy = req.user.userId; // Get the user from the token
+    const createdBy = req.user.userId;
 
     // Create a new order
     const newOrder = new Order({
