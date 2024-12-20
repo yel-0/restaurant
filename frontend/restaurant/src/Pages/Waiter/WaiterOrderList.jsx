@@ -10,55 +10,22 @@ import {
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Link } from "react-router-dom";
+import useFetchOrders from "@/Hook/Order/useFetchOrders";
 
 export default function WaiterOrderList() {
   const [orders, setOrders] = useState([]);
-  const [loading, setLoading] = useState(true);
 
-  // Static data for orders
-  useEffect(() => {
-    const fetchOrders = () => {
-      const staticOrders = [
-        {
-          id: "1234",
-          table: 5,
-          total: 45.5,
-          status: "Pending",
-        },
-        {
-          id: "5678",
-          table: 3,
-          total: 32.2,
-          status: "InProgress",
-        },
-        {
-          id: "91011",
-          table: 8,
-          total: 50.0,
-          status: "Served",
-        },
-        {
-          id: "1213",
-          table: 2,
-          total: 40.7,
-          status: "Canceled",
-        },
-      ];
-      setOrders(staticOrders);
-      setLoading(false);
-    };
-
-    fetchOrders();
-  }, []);
+  const { data, isLoading, isError } = useFetchOrders();
+  if (isLoading) {
+    return <div> is loading</div>;
+  }
 
   const statusColors = {
-    Pending: "yellow",
+    pending: "yellow",
     InProgress: "blue",
     Served: "green",
     Canceled: "red",
   };
-
-  if (loading) return <div>Loading...</div>;
 
   return (
     <div className="p-4">
@@ -74,10 +41,10 @@ export default function WaiterOrderList() {
           </TableRow>
         </TableHeader>
         <TableBody>
-          {orders.map((order) => (
-            <TableRow key={order.id}>
-              <TableCell>{order.id}</TableCell>
-              <TableCell>{order.table}</TableCell>
+          {data?.map((order) => (
+            <TableRow key={order._id}>
+              <TableCell>{order._id}</TableCell>
+              <TableCell>{order.table.tableNumber}</TableCell>
               <TableCell>{order.total.toFixed(2)}</TableCell>
               <TableCell>
                 <Badge
