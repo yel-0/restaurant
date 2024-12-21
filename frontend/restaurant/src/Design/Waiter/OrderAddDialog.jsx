@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import {
   Dialog,
   DialogContent,
@@ -9,89 +9,42 @@ import {
 } from "@/components/ui/dialog";
 import CategorySelector from "../Share/CategorySelector";
 import WaiterMenuItemForOrderAdd from "./WaiterMenuItemForOrderAdd";
-const fakeMenuItems = [
-  {
-    id: 1,
-    name: "Burger",
-    image: "https://via.placeholder.com/300?text=Burger",
-    description: "A delicious beef burger",
-    stock: 10,
-    price: 8.99,
-  },
-  {
-    id: 2,
-    name: "Pizza",
-    image: "https://via.placeholder.com/300?text=Pizza",
-    description: "Cheese pizza with fresh toppings",
-    stock: 5,
-    price: 12.99,
-  },
-  {
-    id: 3,
-    name: "Pasta",
-    image: "https://via.placeholder.com/300?text=Pasta",
-    description: "Classic Italian pasta",
-    stock: 7,
-    price: 10.99,
-  },
-  {
-    id: 4,
-    name: "Fries",
-    image: "https://via.placeholder.com/300?text=Fries",
-    description: "Crispy golden fries",
-    stock: 15,
-    price: 3.99,
-  },
-  {
-    id: 5,
-    name: "Salad",
-    image: "https://via.placeholder.com/300?text=Salad",
-    description: "Fresh mixed salad",
-    stock: 8,
-    price: 5.99,
-  },
-  {
-    id: 6,
-    name: "Soda",
-    image: "https://via.placeholder.com/300?text=Soda",
-    description: "Refreshing soda drink",
-    stock: 20,
-    price: 1.99,
-  },
-  {
-    id: 7,
-    name: "Coffee",
-    image: "https://via.placeholder.com/300?text=Coffee",
-    description: "Hot brewed coffee",
-    stock: 25,
-    price: 2.99,
-  },
-  {
-    id: 8,
-    name: "Cake",
-    image: "https://via.placeholder.com/300?text=Cake",
-    description: "Delicious chocolate cake",
-    stock: 3,
-    price: 4.99,
-  },
-  {
-    id: 9,
-    name: "Ice Cream",
-    image: "https://via.placeholder.com/300?text=Ice+Cream",
-    description: "Cold and sweet ice cream",
-    stock: 12,
-    price: 3.49,
-  },
-  {
-    id: 10,
-    name: "Smoothie",
-    image: "https://via.placeholder.com/300?text=Smoothie",
-    description: "Fresh fruit smoothie",
-    stock: 6,
-    price: 5.49,
-  },
-];
-const OrderAddDialog = () => {
+import { useGetMenus } from "@/Hook/Menu/useGetMenus";
+
+const OrderAddDialog = ({ onAddItem }) => {
+  const [searchTerm, setSearchTerm] = useState("");
+  const [selectedCategory, setSelectedCategory] = useState(null);
+  const [page, setPage] = useState(1);
+  const [queryParams, setQueryParams] = useState({
+    category: "",
+    name: "",
+    limit: 10,
+    page: 1,
+  });
+
+  const { data, isLoading, isError } = useGetMenus(queryParams);
+
+  const handleSearchClick = () => {
+    setQueryParams((prev) => ({
+      ...prev,
+      name: searchTerm,
+      page: 1,
+    }));
+  };
+
+  useEffect(() => {
+    setQueryParams((prev) => ({
+      ...prev,
+      category: selectedCategory ? selectedCategory._id : "",
+    }));
+  }, [selectedCategory]);
+
+  const handleAddNewItem = (item) => {
+    console.log(item);
+
+    onAddItem(item); // Pass the added item to the parent component
+  };
+
   return (
     <Dialog>
       <DialogTrigger>
@@ -110,17 +63,33 @@ const OrderAddDialog = () => {
           <input
             type="text"
             placeholder="Search menu items..."
-            className="px-4 py-2 w-80 border rounded-lg shadow-md focus:outline-none"
+            value={searchTerm}
+            onChange={(e) => setSearchTerm(e.target.value)}
+            className="px-4 py-2 w-80 border rounded-lg shadow-md focus:outline-none "
           />
-          <button className="px-4 py-2 bg-blue-600 text-white rounded-lg shadow-md">
+          <button
+            className="px-4 py-2 bg-blue-600 text-white rounded-lg shadow-md"
+            onClick={handleSearchClick}
+          >
             Search
           </button>
         </div>
-        <CategorySelector />
-        <div className="flex flex-row justify-center  items-start">
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-            {fakeMenuItems.map((item) => (
-              <WaiterMenuItemForOrderAdd key={item.id} item={item} />
+
+        {/* Category Navigation */}
+        <div className="flex flex-row justify-between items-center">
+          <CategorySelector
+            selectedCategory={selectedCategory}
+            setSelectedCategory={setSelectedCategory}
+          />
+        </div>
+        <div className="flex flex-row justify-center items-start">
+          <div className="flex flex-row justify-start items-center flex-wrap gap-6">
+            {data?.menuItems.map((item) => (
+              <WaiterMenuItemForOrderAdd
+                key={item.id}
+                item={item}
+                onAdd={handleAddNewItem}
+              />
             ))}
           </div>
         </div>

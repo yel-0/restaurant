@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import OrderAddDialog from "@/Design/Waiter/OrderAddDialog";
@@ -9,11 +9,74 @@ export default function WaiterOrderDetail() {
   const navigate = useNavigate();
   const { data: order, isLoading, isError, error } = useFetchOrderById(id);
 
+  const [quantities, setQuantities] = useState({});
+  const [updatedItems, setUpdatedItems] = useState([]);
+  const [updatedQuantities, setUpdatedQuantities] = useState({}); // Track quantities for updated items
+
+  // Initialize quantities when the order is fetched
+  useEffect(() => {
+    if (order) {
+      const initialQuantities = order.items.reduce((acc, item) => {
+        acc[item.product._id] = item.quantity;
+        return acc;
+      }, {});
+      setQuantities(initialQuantities);
+    }
+  }, [order]);
+
   if (isLoading) return <div>Loading...</div>;
   if (isError) return <div>Error: {error.message}</div>;
 
-  const calculateTotal = () =>
-    order.items.reduce((total, item) => total + item.quantity * item.price, 0);
+  const handleIncrease = (productId, isUpdated = false) => {
+    if (isUpdated) {
+      setUpdatedQuantities((prev) => ({
+        ...prev,
+        [productId]: (prev[productId] || 1) + 1,
+      }));
+    } else {
+      setQuantities((prev) => ({
+        ...prev,
+        [productId]: prev[productId] + 1,
+      }));
+    }
+  };
+
+  const handleDecrease = (productId, isUpdated = false) => {
+    if (isUpdated) {
+      setUpdatedQuantities((prev) => ({
+        ...prev,
+        [productId]: Math.max(1, (prev[productId] || 1) - 1),
+      }));
+    } else {
+      setQuantities((prev) => ({
+        ...prev,
+        [productId]: Math.max(1, prev[productId] - 1),
+      }));
+    }
+  };
+
+  const handleAddItem = (newItem) => {
+    setUpdatedItems((prev) => [...prev, { product: newItem, quantity: 1 }]);
+    setUpdatedQuantities((prev) => ({
+      ...prev,
+      [newItem._id]: 1,
+    }));
+  };
+
+  const calculateTotal = () => {
+    const orderTotal = order.items.reduce(
+      (total, item) => total + quantities[item.product._id] * item.price,
+      0
+    );
+
+    const updatedTotal = updatedItems.reduce(
+      (total, item) =>
+        total + updatedQuantities[item.product._id] * item.product.price,
+      0
+    );
+
+    return orderTotal + updatedTotal;
+  };
 
   return (
     <div className="p-8 max-w-4xl mx-auto bg-white shadow-xl rounded-lg border border-gray-200">
@@ -28,7 +91,7 @@ export default function WaiterOrderDetail() {
             <h2 className="text-2xl font-semibold text-gray-700">
               Order Information
             </h2>
-            <OrderAddDialog />
+            <OrderAddDialog onAddItem={handleAddItem} />
           </div>
           <div className="text-gray-600 text-lg">
             <p>
@@ -61,9 +124,9 @@ export default function WaiterOrderDetail() {
             Items Ordered:
           </h2>
           <ul className="space-y-6">
-            {order.items.map((item, index) => (
+            {order.items.map((item) => (
               <li
-                key={index}
+                key={item.product._id}
                 className="flex items-center justify-between border-b border-gray-300 pb-4 hover:bg-gray-100 transition duration-300 ease-in-out"
               >
                 <div className="flex items-center space-x-6">
@@ -77,13 +140,65 @@ export default function WaiterOrderDetail() {
                     <p className="text-sm text-gray-500">
                       Price: ${item.price.toFixed(2)}
                     </p>
+                    <p className="text-sm text-gray-500">
+                      Total: $
+                      {(quantities[item.product._id] * item.price).toFixed(2)}
+                    </p>
                   </div>
                 </div>
-                <div>
-                  <p className="text-gray-700">
-                    Quantity:{" "}
-                    <span className="font-semibold">{item.quantity}</span>
+                <div className="flex items-center space-x-4">
+                  <Button onClick={() => handleDecrease(item.product._id)}>
+                    -
+                  </Button>
+                  <p className="text-gray-700 font-semibold">
+                    {quantities[item.product._id]}
                   </p>
+                  <Button onClick={() => handleIncrease(item.product._id)}>
+                    +
+                  </Button>
+                </div>
+              </li>
+            ))}
+
+            {/* Render Updated Items */}
+            {updatedItems.map((item, index) => (
+              <li
+                key={`new-${index}`}
+                className="flex items-center justify-between border-b border-gray-300 pb-4 hover:bg-gray-100 transition duration-300 ease-in-out"
+              >
+                <div className="flex items-center space-x-6">
+                  <img
+                    src={item.product.image || "https://via.placeholder.com/80"}
+                    alt={item.product.name}
+                    className="w-24 h-24 object-cover rounded-xl shadow-lg"
+                  />
+                  <div className="text-gray-700">
+                    <p className="font-semibold text-lg">{item.product.name}</p>
+                    <p className="text-sm text-gray-500">
+                      Price: ${item.product.price.toFixed(2)}
+                    </p>
+                    <p className="text-sm text-gray-500">
+                      Total: $
+                      {(
+                        updatedQuantities[item.product._id] * item.product.price
+                      ).toFixed(2)}
+                    </p>
+                  </div>
+                </div>
+                <div className="flex items-center space-x-4">
+                  <Button
+                    onClick={() => handleDecrease(item.product._id, true)}
+                  >
+                    -
+                  </Button>
+                  <p className="text-gray-700 font-semibold">
+                    {updatedQuantities[item.product._id]}
+                  </p>
+                  <Button
+                    onClick={() => handleIncrease(item.product._id, true)}
+                  >
+                    +
+                  </Button>
                 </div>
               </li>
             ))}

@@ -15,9 +15,7 @@ const fetchOrderById = async (id) => {
 const useFetchOrderById = (id) => {
   return useQuery(["order", id], () => fetchOrderById(id), {
     enabled: !!id, // Ensures the query runs only when `id` is truthy
-    onSuccess: (data) => {
-      console.log("Fetched order by ID:", data);
-    },
+    onSuccess: (data) => {},
     onError: (error) => {
       console.error("Error fetching order by ID:", error.message);
     },

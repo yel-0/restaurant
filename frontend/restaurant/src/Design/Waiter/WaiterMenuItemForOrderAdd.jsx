@@ -1,7 +1,13 @@
 import { Button } from "@/components/ui/button";
 import React from "react";
 
-const WaiterMenuItemForOrderAdd = ({ item }) => {
+const WaiterMenuItemForOrderAdd = ({ item, onAdd }) => {
+  const handleAddClick = () => {
+    if (onAdd) {
+      onAdd(item); // Pass the item to the onAdd function
+    }
+  };
+
   return (
     <div className="border rounded-lg shadow-md p-4 w-64">
       <img
@@ -21,7 +27,13 @@ const WaiterMenuItemForOrderAdd = ({ item }) => {
       <div className="flex justify-between items-center">
         <span className="text-lg font-bold">${item.price}</span>
       </div>
-      <Button className="w-full bg-green-500 text-white">Add</Button>
+
+      <Button
+        onClick={handleAddClick}
+        className="w-full mt-4 bg-green-500 text-white hover:bg-green-600 transition duration-300"
+      >
+        Add
+      </Button>
     </div>
   );
 };
