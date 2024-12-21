@@ -55,7 +55,7 @@ export default function WaiterOrderList() {
                 </Badge>
               </TableCell>
               <TableCell>
-                <Link to={`/waiter/order/detail`}>
+                <Link to={`/waiter/order/detail/${order._id}`}>
                   <Button size="sm" variant="outline">
                     View Details
                   </Button>

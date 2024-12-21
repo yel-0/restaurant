@@ -49,7 +49,7 @@ const getOrderById = async (req, res) => {
     const orderId = req.params.id;
     const order = await Order.findById(orderId)
       .populate("table", "tableNumber")
-      .populate("items.product", "name price")
+      .populate("items.product", "name price image")
       .populate("createdBy", "name email"); // Populate the user who created the order
 
     if (!order) {

@@ -101,7 +101,7 @@ const App = () => (
             }
           />
           <Route
-            path="/admin/order/detail"
+            path={`/admin/order/detail/:id`}
             element={
               <AdminLayout>
                 <AdminOrderDetail />
@@ -143,7 +143,7 @@ const App = () => (
             }
           />
           <Route
-            path="/waiter/order/detail"
+            path="/waiter/order/detail/:id"
             element={
               <WaiterLayout>
                 <WaiterOrderDetail />
