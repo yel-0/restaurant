@@ -23,6 +23,8 @@ export default function WaiterOrderDetail() {
   }, [fetchedOrder]);
 
   const updateQuantity = (index, newQuantity) => {
+    if (!order) return;
+
     setOrder((prevOrder) => {
       const updatedItems = [...prevOrder.items];
       updatedItems[index].quantity = newQuantity;
@@ -31,6 +33,8 @@ export default function WaiterOrderDetail() {
   };
 
   const deleteItem = (index) => {
+    if (!order) return;
+
     setOrder((prevOrder) => {
       const updatedItems = prevOrder.items.filter((_, i) => i !== index);
       return { ...prevOrder, items: updatedItems };
@@ -38,6 +42,8 @@ export default function WaiterOrderDetail() {
   };
 
   const addItem = (newItem) => {
+    if (!order) return;
+
     setOrder((prevOrder) => {
       const existingIndex = prevOrder.items.findIndex(
         (item) => item.product._id === newItem._id
@@ -57,7 +63,9 @@ export default function WaiterOrderDetail() {
   };
 
   const calculateTotal = () => {
-    return order?.items.reduce(
+    if (!order) return 0;
+
+    return order.items.reduce(
       (total, item) => total + item.quantity * item.product.price,
       0
     );
@@ -69,6 +77,9 @@ export default function WaiterOrderDetail() {
     return (
       <div className="text-center text-red-600">Error: {error.message}</div>
     );
+
+  if (!order)
+    return <div className="text-center text-gray-600">No order found</div>;
 
   return (
     <div className="p-8 max-w-4xl mx-auto bg-white shadow-lg rounded-lg border border-gray-200 space-y-6">
