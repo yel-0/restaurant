@@ -47,10 +47,8 @@ const OrderAddDialog = ({ onAddItem }) => {
 
   return (
     <Dialog>
-      <DialogTrigger>
-        <button className="px-4 py-2 bg-green-600 text-white rounded-lg shadow-md">
-          Add New Order
-        </button>
+      <DialogTrigger className="px-4 py-2 bg-green-600 text-white rounded-lg shadow-md">
+        Add New Order
       </DialogTrigger>
       <DialogContent className="h-[500px] overflow-scroll ">
         <DialogHeader>
@@ -86,7 +84,7 @@ const OrderAddDialog = ({ onAddItem }) => {
           <div className="flex flex-row justify-start items-center flex-wrap gap-6">
             {data?.menuItems.map((item) => (
               <WaiterMenuItemForOrderAdd
-                key={item.id}
+                key={item._id}
                 item={item}
                 onAdd={handleAddNewItem}
               />

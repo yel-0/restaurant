@@ -11,90 +11,9 @@ import {
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Link } from "react-router-dom";
+import useFetchOrders from "@/Hook/Order/useFetchOrders";
 
 // Fake data with 10 entries
-const orders = [
-  {
-    id: "ORD001",
-    customer: "John Doe",
-    items: 3,
-    total: 150.75,
-    status: "Pending",
-    date: "2024-12-01",
-  },
-  {
-    id: "ORD002",
-    customer: "Jane Smith",
-    items: 5,
-    total: 275.5,
-    status: "Shipped",
-    date: "2024-12-02",
-  },
-  {
-    id: "ORD003",
-    customer: "Michael Brown",
-    items: 2,
-    total: 89.99,
-    status: "Delivered",
-    date: "2024-12-03",
-  },
-  {
-    id: "ORD004",
-    customer: "Emily White",
-    items: 1,
-    total: 45.0,
-    status: "Canceled",
-    date: "2024-12-04",
-  },
-  {
-    id: "ORD005",
-    customer: "Chris Evans",
-    items: 4,
-    total: 120.99,
-    status: "Pending",
-    date: "2024-12-05",
-  },
-  {
-    id: "ORD006",
-    customer: "Emma Watson",
-    items: 6,
-    total: 300.75,
-    status: "Delivered",
-    date: "2024-12-06",
-  },
-  {
-    id: "ORD007",
-    customer: "Daniel Radcliffe",
-    items: 7,
-    total: 500.5,
-    status: "Shipped",
-    date: "2024-12-07",
-  },
-  {
-    id: "ORD008",
-    customer: "Scarlett Johansson",
-    items: 8,
-    total: 800.25,
-    status: "Pending",
-    date: "2024-12-08",
-  },
-  {
-    id: "ORD009",
-    customer: "Tom Holland",
-    items: 2,
-    total: 200.0,
-    status: "Canceled",
-    date: "2024-12-09",
-  },
-  {
-    id: "ORD010",
-    customer: "Zendaya",
-    items: 3,
-    total: 250.0,
-    status: "Delivered",
-    date: "2024-12-10",
-  },
-];
 
 const statusColors = {
   Pending: "yellow",
@@ -104,6 +23,11 @@ const statusColors = {
 };
 
 export function AdminOrderList() {
+  const { data, isLoading, isError } = useFetchOrders();
+
+  if (isLoading) {
+    return <div> is loading</div>;
+  }
   return (
     <div className="p-4">
       <h1 className="text-xl font-bold mb-4">Admin Order List</h1>
@@ -112,7 +36,6 @@ export function AdminOrderList() {
           <TableRow>
             <TableHead>Table</TableHead>
             <TableHead>Order ID</TableHead>
-            <TableHead>Customer</TableHead>
             <TableHead>Items</TableHead>
             <TableHead>Total ($)</TableHead>
             <TableHead>Status</TableHead>
@@ -121,13 +44,12 @@ export function AdminOrderList() {
           </TableRow>
         </TableHeader>
         <TableBody>
-          {orders.map((order, index) => (
+          {data?.map((order, index) => (
             <TableRow key={order.id}>
-              <TableCell>Table {index + 1}</TableCell>{" "}
+              <TableCell>Table {order.table.tableNumber}</TableCell>{" "}
               {/* Table number column */}
-              <TableCell>{order.id}</TableCell>
-              <TableCell>{order.customer}</TableCell>
-              <TableCell>{order.items}</TableCell>
+              <TableCell>{order._id}</TableCell>
+              <TableCell>{order.items.length}</TableCell>
               <TableCell>{order.total.toFixed(2)}</TableCell>
               <TableCell>
                 <Badge
@@ -139,9 +61,9 @@ export function AdminOrderList() {
                   <div className="w-full">{order.status}</div>
                 </Badge>
               </TableCell>
-              <TableCell>{order.date}</TableCell>
+              <TableCell>{order.orderDate}</TableCell>
               <TableCell>
-                <Link to={`/admin/order/detail`}>
+                <Link to={`/admin/order/detail/${order._id}`}>
                   <Button size="sm" variant="outline">
                     View
                   </Button>

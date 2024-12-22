@@ -1,54 +1,42 @@
-import React, { useState } from "react";
+import useFetchOrderById from "@/Hook/Order/useFetchOrderById";
+import React, { useEffect, useState } from "react";
+import { useParams } from "react-router-dom";
 
 const AdminOrderDetail = () => {
+  const { id } = useParams();
   const TAX_RATE = 0.1;
+  const { data, isLoading, isError } = useFetchOrderById(id);
 
-  // Initial order data
-  const initialOrder = {
-    id: "101",
-    tableNumber: 5,
-    waiterName: "John Doe",
-    status: "Pending",
-    orderTime: "2024-12-08 12:30 PM",
-    cashStatus: "Pending",
-    items: [
-      {
-        name: "Pasta",
-        quantity: 2,
-        pricePerUnit: 12.5,
-        image: "https://via.placeholder.com/100?text=Pasta",
-      },
-      {
-        name: "Salad",
-        quantity: 1,
-        pricePerUnit: 8.0,
-        image: "https://via.placeholder.com/100?text=Salad",
-      },
-    ],
-    specialRequests: "No onions in the salad, please.",
-  };
+  const [order, setOrder] = useState(null);
 
-  // State for the order
-  const [order, setOrder] = useState(initialOrder);
+  // Load data into state when fetched
+  useEffect(() => {
+    if (data) {
+      setOrder(data);
+    }
+  }, [data]);
+
+  if (isLoading) return <p>Loading...</p>;
+  if (isError || !order) return <p>Error loading order details.</p>;
 
   // Calculate total price
-  const calculateTotal = () => {
+  const calculateSubtotal = () => {
     return order.items
-      .reduce((total, item) => total + item.quantity * item.pricePerUnit, 0)
+      .reduce((total, item) => total + item.quantity * item.price, 0)
       .toFixed(2);
   };
 
   // Calculate tax
   const calculateTax = () => {
-    const total = parseFloat(calculateTotal());
-    return (total * TAX_RATE).toFixed(2);
+    const subtotal = parseFloat(calculateSubtotal());
+    return (subtotal * TAX_RATE).toFixed(2);
   };
 
   // Calculate final total
   const calculateFinalTotal = () => {
-    const total = parseFloat(calculateTotal());
+    const subtotal = parseFloat(calculateSubtotal());
     const tax = parseFloat(calculateTax());
-    return (total + tax).toFixed(2);
+    return (subtotal + tax).toFixed(2);
   };
 
   // Handle quantity update
@@ -58,14 +46,6 @@ const AdminOrderDetail = () => {
       updatedItems[index].quantity = newQuantity;
       return { ...prevOrder, items: updatedItems };
     });
-  };
-
-  // Handle adding a new item
-  const addItem = (newItem) => {
-    setOrder((prevOrder) => ({
-      ...prevOrder,
-      items: [...prevOrder.items, newItem],
-    }));
   };
 
   // Handle deleting an item
@@ -78,7 +58,7 @@ const AdminOrderDetail = () => {
 
   // Handle payment update
   const markAsPaid = () => {
-    setOrder((prevOrder) => ({ ...prevOrder, cashStatus: "Done" }));
+    setOrder((prevOrder) => ({ ...prevOrder, status: "completed" }));
   };
 
   return (
@@ -86,18 +66,18 @@ const AdminOrderDetail = () => {
       {/* Header */}
       <div>
         <h1 className="text-3xl font-bold text-gray-800 mb-2">Order Details</h1>
-        <p className="text-gray-600">Order ID: {order.id}</p>
+        <p className="text-gray-600">Order ID: {order._id}</p>
       </div>
 
       {/* Order Summary */}
       <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
         <div>
           <h2 className="font-medium text-gray-700">Table Number</h2>
-          <p className="text-gray-900">{order.tableNumber}</p>
+          <p className="text-gray-900">{order.table.tableNumber}</p>
         </div>
         <div>
           <h2 className="font-medium text-gray-700">Waiter Name</h2>
-          <p className="text-gray-900">{order.waiterName}</p>
+          <p className="text-gray-900">{order.createdBy.name}</p>
         </div>
         <div>
           <h2 className="font-medium text-gray-700">Order Status</h2>
@@ -107,10 +87,10 @@ const AdminOrderDetail = () => {
           <h2 className="font-medium text-gray-700">Payment Status</h2>
           <span
             className={`font-semibold ${
-              order.cashStatus === "Done" ? "text-green-600" : "text-red-600"
+              order.status === "completed" ? "text-green-600" : "text-red-600"
             }`}
           >
-            {order.cashStatus}
+            {order.status === "completed" ? "Paid" : "Pending"}
           </span>
         </div>
       </div>
@@ -130,8 +110,15 @@ const AdminOrderDetail = () => {
           </thead>
           <tbody>
             {order.items.map((item, index) => (
-              <tr key={index} className="border-b">
-                <td className="px-4 py-2">{item.name}</td>
+              <tr key={item._id} className="border-b">
+                <td className="px-4 py-2 flex items-center gap-2">
+                  <img
+                    src={item.product.image}
+                    alt={item.product.name}
+                    className="w-10 h-10 rounded object-cover"
+                  />
+                  {item.product.name}
+                </td>
                 <td className="px-4 py-2">
                   <input
                     type="number"
@@ -143,9 +130,9 @@ const AdminOrderDetail = () => {
                     className="w-16 p-1 border border-gray-300 rounded"
                   />
                 </td>
-                <td className="px-4 py-2">${item.pricePerUnit.toFixed(2)}</td>
+                <td className="px-4 py-2">${item.price.toFixed(2)}</td>
                 <td className="px-4 py-2">
-                  ${(item.quantity * item.pricePerUnit).toFixed(2)}
+                  ${(item.quantity * item.price).toFixed(2)}
                 </td>
                 <td className="px-4 py-2">
                   <button
@@ -161,28 +148,11 @@ const AdminOrderDetail = () => {
         </table>
       </div>
 
-      {/* Add Item Button */}
-      {/* <div>
-        <button
-          onClick={() =>
-            addItem({
-              name: "Soup",
-              quantity: 1,
-              pricePerUnit: 5.0,
-              image: "https://via.placeholder.com/100?text=Soup",
-            })
-          }
-          className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700"
-        >
-          Add Soup
-        </button>
-      </div> */}
-
       {/* Total Calculation */}
       <div className="border-t border-gray-200 pt-4">
         <div className="flex justify-between text-lg font-medium">
-          <span>Total:</span>
-          <span>${calculateTotal()}</span>
+          <span>Subtotal:</span>
+          <span>${calculateSubtotal()}</span>
         </div>
         <div className="flex justify-between text-lg font-medium">
           <span>Tax (10%):</span>
@@ -199,13 +169,13 @@ const AdminOrderDetail = () => {
         <button
           onClick={markAsPaid}
           className={`w-full py-2 rounded ${
-            order.cashStatus === "Done"
+            order.status === "completed"
               ? "bg-gray-400 cursor-not-allowed"
               : "bg-green-600 hover:bg-green-700"
           } text-white`}
-          disabled={order.cashStatus === "Done"}
+          disabled={order.status === "completed"}
         >
-          {order.cashStatus === "Done" ? "Paid" : "Mark as Paid"}
+          {order.status === "completed" ? "Paid" : "Mark as Paid"}
         </button>
       </div>
     </div>

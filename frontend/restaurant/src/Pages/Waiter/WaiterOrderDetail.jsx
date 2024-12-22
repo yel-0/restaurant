@@ -7,221 +7,182 @@ import useFetchOrderById from "@/Hook/Order/useFetchOrderById";
 export default function WaiterOrderDetail() {
   const { id } = useParams();
   const navigate = useNavigate();
-  const { data: order, isLoading, isError, error } = useFetchOrderById(id);
+  const {
+    data: fetchedOrder,
+    isLoading,
+    isError,
+    error,
+  } = useFetchOrderById(id);
 
-  const [quantities, setQuantities] = useState({});
-  const [updatedItems, setUpdatedItems] = useState([]);
-  const [updatedQuantities, setUpdatedQuantities] = useState({}); // Track quantities for updated items
+  const [order, setOrder] = useState(null);
 
-  // Initialize quantities when the order is fetched
   useEffect(() => {
-    if (order) {
-      const initialQuantities = order.items.reduce((acc, item) => {
-        acc[item.product._id] = item.quantity;
-        return acc;
-      }, {});
-      setQuantities(initialQuantities);
+    if (fetchedOrder) {
+      setOrder(fetchedOrder);
     }
-  }, [order]);
+  }, [fetchedOrder]);
 
-  if (isLoading) return <div>Loading...</div>;
-  if (isError) return <div>Error: {error.message}</div>;
-
-  const handleIncrease = (productId, isUpdated = false) => {
-    if (isUpdated) {
-      setUpdatedQuantities((prev) => ({
-        ...prev,
-        [productId]: (prev[productId] || 1) + 1,
-      }));
-    } else {
-      setQuantities((prev) => ({
-        ...prev,
-        [productId]: prev[productId] + 1,
-      }));
-    }
+  const updateQuantity = (index, newQuantity) => {
+    setOrder((prevOrder) => {
+      const updatedItems = [...prevOrder.items];
+      updatedItems[index].quantity = newQuantity;
+      return { ...prevOrder, items: updatedItems };
+    });
   };
 
-  const handleDecrease = (productId, isUpdated = false) => {
-    if (isUpdated) {
-      setUpdatedQuantities((prev) => ({
-        ...prev,
-        [productId]: Math.max(1, (prev[productId] || 1) - 1),
-      }));
-    } else {
-      setQuantities((prev) => ({
-        ...prev,
-        [productId]: Math.max(1, prev[productId] - 1),
-      }));
-    }
+  const deleteItem = (index) => {
+    setOrder((prevOrder) => {
+      const updatedItems = prevOrder.items.filter((_, i) => i !== index);
+      return { ...prevOrder, items: updatedItems };
+    });
   };
 
-  const handleAddItem = (newItem) => {
-    setUpdatedItems((prev) => [...prev, { product: newItem, quantity: 1 }]);
-    setUpdatedQuantities((prev) => ({
-      ...prev,
-      [newItem._id]: 1,
-    }));
+  const addItem = (newItem) => {
+    setOrder((prevOrder) => {
+      const existingIndex = prevOrder.items.findIndex(
+        (item) => item.product._id === newItem._id
+      );
+
+      if (existingIndex !== -1) {
+        const updatedItems = [...prevOrder.items];
+        updatedItems[existingIndex].quantity += 1;
+        return { ...prevOrder, items: updatedItems };
+      } else {
+        return {
+          ...prevOrder,
+          items: [...prevOrder.items, { product: newItem, quantity: 1 }],
+        };
+      }
+    });
   };
 
   const calculateTotal = () => {
-    const orderTotal = order.items.reduce(
-      (total, item) => total + quantities[item.product._id] * item.price,
+    return order?.items.reduce(
+      (total, item) => total + item.quantity * item.product.price,
       0
     );
-
-    const updatedTotal = updatedItems.reduce(
-      (total, item) =>
-        total + updatedQuantities[item.product._id] * item.product.price,
-      0
-    );
-
-    return orderTotal + updatedTotal;
   };
 
+  if (isLoading)
+    return <div className="text-center text-gray-600">Loading...</div>;
+  if (isError)
+    return (
+      <div className="text-center text-red-600">Error: {error.message}</div>
+    );
+
   return (
-    <div className="p-8 max-w-4xl mx-auto bg-white shadow-xl rounded-lg border border-gray-200">
-      <h1 className="text-4xl font-extrabold text-gray-900 mb-8 text-center">
-        Order Details - {order._id}
+    <div className="p-8 max-w-4xl mx-auto bg-white shadow-lg rounded-lg border border-gray-200 space-y-6">
+      <h1 className="text-3xl font-bold text-center text-gray-800">
+        Order Details
       </h1>
 
-      <div className="space-y-8">
-        {/* Order Information */}
-        <div className="bg-blue-100 p-6 rounded-xl shadow-md">
-          <div className="flex justify-between items-center">
-            <h2 className="text-2xl font-semibold text-gray-700">
-              Order Information
-            </h2>
-            <OrderAddDialog onAddItem={handleAddItem} />
-          </div>
-          <div className="text-gray-600 text-lg">
-            <p>
-              Table:{" "}
-              <span className="font-semibold">
-                {order.table?.tableNumber || "N/A"}
-              </span>
-            </p>
-            <p>
-              Status:{" "}
-              <span
-                className={`font-semibold ${
-                  order.status === "pending"
-                    ? "text-yellow-600"
-                    : order.status === "served"
-                    ? "text-green-600"
-                    : "text-red-600"
-                }`}
-              >
-                {order.status}
-              </span>
-            </p>
-            <p>Special Notes: {order.specialNotes || "None"}</p>
-          </div>
-        </div>
-
-        {/* Items Ordered */}
-        <div>
-          <h2 className="text-3xl font-semibold text-gray-700 mb-6">
-            Items Ordered:
-          </h2>
-          <ul className="space-y-6">
-            {order.items.map((item) => (
-              <li
-                key={item.product._id}
-                className="flex items-center justify-between border-b border-gray-300 pb-4 hover:bg-gray-100 transition duration-300 ease-in-out"
-              >
-                <div className="flex items-center space-x-6">
-                  <img
-                    src={item.product.image || "https://via.placeholder.com/80"}
-                    alt={item.name}
-                    className="w-24 h-24 object-cover rounded-xl shadow-lg"
-                  />
-                  <div className="text-gray-700">
-                    <p className="font-semibold text-lg">{item.product.name}</p>
-                    <p className="text-sm text-gray-500">
-                      Price: ${item.price.toFixed(2)}
-                    </p>
-                    <p className="text-sm text-gray-500">
-                      Total: $
-                      {(quantities[item.product._id] * item.price).toFixed(2)}
-                    </p>
-                  </div>
-                </div>
-                <div className="flex items-center space-x-4">
-                  <Button onClick={() => handleDecrease(item.product._id)}>
-                    -
-                  </Button>
-                  <p className="text-gray-700 font-semibold">
-                    {quantities[item.product._id]}
-                  </p>
-                  <Button onClick={() => handleIncrease(item.product._id)}>
-                    +
-                  </Button>
-                </div>
-              </li>
-            ))}
-
-            {/* Render Updated Items */}
-            {updatedItems.map((item, index) => (
-              <li
-                key={`new-${index}`}
-                className="flex items-center justify-between border-b border-gray-300 pb-4 hover:bg-gray-100 transition duration-300 ease-in-out"
-              >
-                <div className="flex items-center space-x-6">
-                  <img
-                    src={item.product.image || "https://via.placeholder.com/80"}
-                    alt={item.product.name}
-                    className="w-24 h-24 object-cover rounded-xl shadow-lg"
-                  />
-                  <div className="text-gray-700">
-                    <p className="font-semibold text-lg">{item.product.name}</p>
-                    <p className="text-sm text-gray-500">
-                      Price: ${item.product.price.toFixed(2)}
-                    </p>
-                    <p className="text-sm text-gray-500">
-                      Total: $
-                      {(
-                        updatedQuantities[item.product._id] * item.product.price
-                      ).toFixed(2)}
-                    </p>
-                  </div>
-                </div>
-                <div className="flex items-center space-x-4">
-                  <Button
-                    onClick={() => handleDecrease(item.product._id, true)}
-                  >
-                    -
-                  </Button>
-                  <p className="text-gray-700 font-semibold">
-                    {updatedQuantities[item.product._id]}
-                  </p>
-                  <Button
-                    onClick={() => handleIncrease(item.product._id, true)}
-                  >
-                    +
-                  </Button>
-                </div>
-              </li>
-            ))}
-          </ul>
-        </div>
-
-        {/* Total */}
-        <div className="flex justify-between items-center mt-8">
-          <p className="text-3xl font-semibold text-gray-800">
-            Total: ${calculateTotal().toFixed(2)}
+      <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+        <div className="space-y-1">
+          <h2 className="text-sm font-medium text-gray-700">Table Number</h2>
+          <p className="text-lg font-semibold text-gray-900">
+            {order.table.tableNumber}
           </p>
+        </div>
+        <div className="space-y-1">
+          <h2 className="text-sm font-medium text-gray-700">Waiter Name</h2>
+          <p className="text-lg font-semibold text-gray-900">
+            {order.createdBy.name}
+          </p>
+        </div>
+        <div className="space-y-1">
+          <h2 className="text-sm font-medium text-gray-700">Order Status</h2>
+          <p className="text-lg font-semibold text-gray-900">{order.status}</p>
+        </div>
+        <div className="space-y-1">
+          <h2 className="text-sm font-medium text-gray-700">Payment Status</h2>
+          <span
+            className={`text-lg font-semibold ${
+              order.status === "completed" ? "text-green-600" : "text-red-600"
+            }`}
+          >
+            {order.status === "completed" ? "Paid" : "Pending"}
+          </span>
         </div>
       </div>
 
-      {/* Navigation Button */}
-      <Button
-        onClick={() => navigate(-1)} // Navigate back to the previous page
-        variant="outline"
-        size="lg"
-        className="mt-8 block mx-auto"
-      >
-        Go Back
-      </Button>
+      <div>
+        <h2 className="text-2xl font-semibold mb-4 text-gray-700">
+          Order Items
+        </h2>
+        <div className="space-y-4">
+          {order?.items.map((item, index) => (
+            <div
+              key={item.product._id}
+              className="flex items-center justify-between p-4 bg-gray-50 rounded-lg shadow-sm border"
+            >
+              <div className="flex items-center space-x-4">
+                <img
+                  src={item.product.image || "/placeholder.png"}
+                  alt={item.product.name}
+                  className="w-16 h-16 rounded-lg object-cover"
+                />
+                <div>
+                  <p className="text-lg font-medium text-gray-800">
+                    {item.product.name}
+                  </p>
+                  <p className="text-sm text-gray-500">
+                    ${item.product.price} each
+                  </p>
+                </div>
+              </div>
+              <div className="flex items-center space-x-2">
+                <button
+                  onClick={() => updateQuantity(index, item.quantity - 1)}
+                  disabled={item.quantity <= 1}
+                  className="px-3 py-1 bg-gray-200 hover:bg-gray-300 text-gray-800 rounded-l-lg"
+                >
+                  -
+                </button>
+                <span className="px-4 py-1 bg-white border text-gray-800">
+                  {item.quantity}
+                </span>
+                <button
+                  onClick={() => updateQuantity(index, item.quantity + 1)}
+                  className="px-3 py-1 bg-gray-200 hover:bg-gray-300 text-gray-800 rounded-r-lg"
+                >
+                  +
+                </button>
+              </div>
+              <p className="text-lg font-semibold text-gray-800">
+                ${item.quantity * item.product.price}
+              </p>
+              <button
+                onClick={() => deleteItem(index)}
+                className="ml-4 text-red-500 hover:text-red-700"
+              >
+                ✕
+              </button>
+            </div>
+          ))}
+        </div>
+      </div>
+
+      <OrderAddDialog onAddItem={addItem} />
+
+      <div className="mt-8">
+        <h2 className="text-2xl font-semibold text-gray-700">
+          Total:{" "}
+          <span className="text-gray-800">${calculateTotal().toFixed(2)}</span>
+        </h2>
+      </div>
+
+      <div className="mt-6 flex justify-end gap-4">
+        <Button
+          variant="secondary"
+          onClick={() => navigate(-1)}
+          className="text-gray-800"
+        >
+          Back
+        </Button>
+        <Button variant="primary" className="bg-blue-600 hover:bg-blue-700">
+          Submit Changes
+        </Button>
+      </div>
     </div>
   );
 }
