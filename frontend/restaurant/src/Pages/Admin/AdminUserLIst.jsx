@@ -22,6 +22,8 @@ import useFetchUsers from "@/Hook/Auth/useFetchUsers";
 
 const AdminUserList = () => {
   const [roleFilter, setRoleFilter] = useState(""); // Manage role filter state
+  const [nameFilter, setNameFilter] = useState(""); // Manage name filter state
+  const [tempName, setTempName] = useState(""); // Temporary state for name input
   const [page, setPage] = useState(1); // Manage page state
   const limit = 10; // Number of users per page
 
@@ -31,12 +33,26 @@ const AdminUserList = () => {
     isError,
   } = useFetchUsers({
     role: roleFilter,
+    name: nameFilter, // Add the name filter
     page,
     limit,
   });
 
-  const handleRoleChange = (e) => {
-    setRoleFilter(e.target.value);
+  const handleRoleChange = (value) => {
+    if (value === "all") {
+      setRoleFilter(""); // Reset role filter when "All Roles" is selected
+    } else {
+      setRoleFilter(value);
+    }
+  };
+
+  const handleNameChange = (event) => {
+    setTempName(event.target.value); // Update temporary name state
+  };
+
+  const handleSearchByName = () => {
+    setNameFilter(tempName); // Only update the main name filter when "Search" is clicked
+    setPage(1); // Reset to first page when searching by name
   };
 
   const handlePageChange = (newPage) => {
@@ -65,12 +81,24 @@ const AdminUserList = () => {
           </SelectTrigger>
           <SelectContent>
             <SelectItem value="all">All Roles</SelectItem>
-            <SelectItem value="admin">Admin</SelectItem>
-            <SelectItem value="user">User</SelectItem>
-            <SelectItem value="waiter">Waiter</SelectItem>
-            <SelectItem value="cook">Cook</SelectItem>
+            <SelectItem value="Admin">Admin</SelectItem>
+            <SelectItem value="User">User</SelectItem>
+            <SelectItem value="Waiter">Waiter</SelectItem>
+            <SelectItem value="Cook">Cook</SelectItem>
           </SelectContent>
         </Select>
+      </div>
+
+      {/* Name search input */}
+      <div className="mb-4 flex items-center gap-2">
+        <input
+          type="text"
+          placeholder="Search by name"
+          value={tempName}
+          onChange={handleNameChange}
+          className="border p-2 rounded-md w-[180px]"
+        />
+        <Button onClick={handleSearchByName}>Search</Button>
       </div>
 
       {/* Table */}
