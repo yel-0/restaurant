@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import {
   Table,
   TableBody,
@@ -12,11 +12,29 @@ import { UpdateTableDialog } from "@/Design/Admin/UpdateTableDialog";
 import { DeleteTableDialog } from "@/Design/Admin/DeleteTableDialog";
 import CreateTableDialog from "@/Design/Admin/CreateTableDialog";
 import useFetchTables from "@/Hook/Table/useFetchTables";
+
 const AdminTables = () => {
-  const { data: tables, isLoading, isError } = useFetchTables();
+  const [page, setPage] = useState(1);
+  const limit = 2; // Define items per page
+  const { data, isLoading, isError } = useFetchTables(page, limit);
+
+  const tables = data?.tables || [];
+  const totalPages = data?.totalPages || 1; // Get total pages from API response
+
+  const handlePrevious = () => {
+    if (page > 1) setPage(page - 1);
+  };
+
+  const handleNext = () => {
+    if (page < totalPages) setPage(page + 1);
+  };
 
   if (isLoading) {
-    return <div>Loading</div>;
+    return <div>Loading...</div>;
+  }
+
+  if (isError) {
+    return <div>Error loading tables</div>;
   }
 
   return (
@@ -52,10 +70,23 @@ const AdminTables = () => {
         </TableBody>
       </Table>
 
-      {/* Optional Pagination */}
+      {/* Pagination Controls */}
       <div className="mt-4 text-center">
-        <button className="px-4 py-2 border rounded-l-md">Previous</button>
-        <button className="px-4 py-2 border rounded-r-md">Next</button>
+        <button
+          className="px-4 py-2 border rounded-l-md"
+          onClick={handlePrevious}
+          disabled={page === 1}
+        >
+          Previous
+        </button>
+        <span className="px-4">{`Page ${page} of ${totalPages}`}</span>
+        <button
+          className="px-4 py-2 border rounded-r-md"
+          onClick={handleNext}
+          disabled={page === totalPages}
+        >
+          Next
+        </button>
       </div>
     </div>
   );

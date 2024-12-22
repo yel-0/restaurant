@@ -23,8 +23,23 @@ exports.createTable = async (req, res) => {
 // Get all tables
 exports.getTables = async (req, res) => {
   try {
-    const tables = await Table.find();
-    res.status(200).json(tables);
+    const { page = 1, limit = 10 } = req.query;
+
+    const pageNumber = parseInt(page, 10);
+    const limitNumber = parseInt(limit, 10);
+
+    const tables = await Table.find()
+      .skip((pageNumber - 1) * limitNumber) // Skip documents for previous pages
+      .limit(limitNumber); // Limit the number of documents per page
+
+    const totalTables = await Table.countDocuments();
+
+    res.status(200).json({
+      tables,
+      totalPages: Math.ceil(totalTables / limitNumber),
+      currentPage: pageNumber,
+      totalTables,
+    });
   } catch (error) {
     console.error("Error fetching tables:", error);
     res.status(500).json({ message: "Error fetching tables", error });
