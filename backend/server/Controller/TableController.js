@@ -23,16 +23,28 @@ exports.createTable = async (req, res) => {
 // Get all tables
 exports.getTables = async (req, res) => {
   try {
-    const { page = 1, limit = 10 } = req.query;
+    const { page = 1, limit = 10, search = "" } = req.query;
 
     const pageNumber = parseInt(page, 10);
     const limitNumber = parseInt(limit, 10);
 
-    const tables = await Table.find()
+    // Convert search to an integer if it's a numeric value, otherwise default to an empty string
+    const searchNumber = !isNaN(parseInt(search, 10))
+      ? parseInt(search, 10)
+      : null;
+
+    // Define the search query
+    const searchQuery = searchNumber
+      ? { tableNumber: searchNumber } // Exact match for numeric search
+      : {};
+
+    // Fetch filtered tables with pagination
+    const tables = await Table.find(searchQuery)
       .skip((pageNumber - 1) * limitNumber) // Skip documents for previous pages
       .limit(limitNumber); // Limit the number of documents per page
 
-    const totalTables = await Table.countDocuments();
+    // Count total filtered documents
+    const totalTables = await Table.countDocuments(searchQuery);
 
     res.status(200).json({
       tables,

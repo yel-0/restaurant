@@ -12,9 +12,9 @@ export const deleteTable = async (tableId) => {
   return response.data;
 };
 
-export const fetchTables = async (page = 1, limit = 10) => {
+export const fetchTables = async (page = 1, limit = 10, search = "") => {
   const response = await axiosInstance.get(
-    `/tables?page=${page}&limit=${limit}`
+    `/tables?page=${page}&limit=${limit}&search=${search}`
   );
   return response.data;
 };
