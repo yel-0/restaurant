@@ -14,7 +14,6 @@ import { Link } from "react-router-dom";
 import useFetchOrders from "@/Hook/Order/useFetchOrders";
 
 // Fake data with 10 entries
-
 const statusColors = {
   Pending: "yellow",
   Shipped: "blue",
@@ -26,8 +25,13 @@ export function AdminOrderList() {
   const { data, isLoading, isError } = useFetchOrders();
 
   if (isLoading) {
-    return <div> is loading</div>;
+    return <div>is loading...</div>;
   }
+
+  if (isError) {
+    return <div>Error fetching orders!</div>;
+  }
+
   return (
     <div className="p-4">
       <h1 className="text-xl font-bold mb-4">Admin Order List</h1>
@@ -44,8 +48,8 @@ export function AdminOrderList() {
           </TableRow>
         </TableHeader>
         <TableBody>
-          {data?.map((order, index) => (
-            <TableRow key={order.id}>
+          {data?.map((order) => (
+            <TableRow key={order._id}>
               <TableCell>Table {order.table.tableNumber}</TableCell>{" "}
               {/* Table number column */}
               <TableCell>{order._id}</TableCell>
@@ -58,7 +62,7 @@ export function AdminOrderList() {
                     statusColors[order.status]
                   }-200 w-[80px] text-center`}
                 >
-                  <div className="w-full">{order.status}</div>
+                  {order.status}
                 </Badge>
               </TableCell>
               <TableCell>{order.orderDate}</TableCell>
