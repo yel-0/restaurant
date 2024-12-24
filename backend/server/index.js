@@ -40,6 +40,9 @@ app.use("/tables", tableRoutes);
 const orderRoutes = require("./routes/OrderRoutes");
 app.use("/order", orderRoutes);
 
+const orderHistoryRoutes = require("./routes/orderHistoryRoutes");
+app.use("/order-history", orderHistoryRoutes);
+
 // Start the server
 app.listen(port, () => {
   console.log(`Server is running on port ${port}`);

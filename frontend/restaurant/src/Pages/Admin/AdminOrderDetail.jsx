@@ -1,3 +1,4 @@
+import AdminOrderHistory from "@/Design/Admin/AdminOrderHistory";
 import useFetchOrderById from "@/Hook/Order/useFetchOrderById";
 import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
@@ -67,6 +68,7 @@ const AdminOrderDetail = () => {
       <div>
         <h1 className="text-3xl font-bold text-gray-800 mb-2">Order Details</h1>
         <p className="text-gray-600">Order ID: {order._id}</p>
+        <AdminOrderHistory orderId={order._id} />
       </div>
 
       {/* Order Summary */}

@@ -1,7 +1,12 @@
 const Order = require("../models/Order");
+const OrderHistory = require("../models/OrderHistory");
 
-// Create an Order
+const mongoose = require("mongoose");
+
 const createOrder = async (req, res) => {
+  const session = await mongoose.startSession();
+  session.startTransaction();
+
   try {
     const { table, items, subtotal, tax, total, specialNotes } = req.body;
     const createdBy = req.user.userId;
@@ -18,13 +23,45 @@ const createOrder = async (req, res) => {
       updatedBy: [],
     });
 
-    // Save the order
-    await newOrder.save();
+    // Save the order within the transaction
+    await newOrder.save({ session });
+
+    // Create an entry in OrderHistory
+    const orderHistoryEntry = new OrderHistory({
+      order: newOrder._id,
+      changes: [
+        {
+          field: "Order Created",
+          previousValue: null,
+          newValue: {
+            table,
+            items,
+            subtotal,
+            tax,
+            total,
+            specialNotes,
+          },
+        },
+      ],
+      changedBy: createdBy,
+      changeDate: new Date(),
+    });
+
+    // Save the history entry within the transaction
+    await orderHistoryEntry.save({ session });
+
+    // Commit the transaction if both operations succeed
+    await session.commitTransaction();
+    session.endSession();
 
     return res
       .status(201)
       .json({ message: "Order created successfully", order: newOrder });
   } catch (error) {
+    // Rollback the transaction
+    await session.abortTransaction();
+    session.endSession();
+
     console.error(error);
     return res.status(500).json({ message: "Server error" });
   }
@@ -34,8 +71,10 @@ const createOrder = async (req, res) => {
 const getAllOrders = async (req, res) => {
   try {
     const orders = await Order.find()
-      .populate("table", "tableNumber") // Optional, populate table name for convenience
+      .sort({ orderDate: -1 }) // Sort by orderDate in descending order
+      .populate("table", "tableNumber") // Optional: populate table details
       .populate("items.product", "name price"); // Populate menu item details
+
     return res.status(200).json(orders);
   } catch (error) {
     console.error(error);
