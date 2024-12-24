@@ -59,7 +59,8 @@ const WaiterOrderSummary = () => {
     const orderData = {
       table: selectedTable,
       items: cartItems.map((item) => ({
-        product: item._id, // Assuming `_id` corresponds to the product reference
+        product: item._id,
+        name: item.name,
         quantity: item.quantity,
         price: item.price,
       })),

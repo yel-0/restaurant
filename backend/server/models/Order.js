@@ -13,6 +13,10 @@ const orderSchema = new mongoose.Schema({
         ref: "MenuItem",
         required: true,
       },
+      name: {
+        type: String,
+        require: true,
+      },
       quantity: {
         type: Number,
         required: true,

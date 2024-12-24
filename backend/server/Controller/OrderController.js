@@ -34,12 +34,12 @@ const createOrder = async (req, res) => {
           field: "Order Created",
           previousValue: null,
           newValue: {
-            table,
+            // table,
             items,
-            subtotal,
-            tax,
-            total,
-            specialNotes,
+            // subtotal,
+            // tax,
+            // total,
+            // specialNotes,
           },
         },
       ],
@@ -116,7 +116,6 @@ const updateOrder = async (req, res) => {
     if (!order) {
       return res.status(404).json({ message: "Order not found" });
     }
-    // console.log(items);
 
     // Track changes
     const changes = [];
@@ -135,8 +134,18 @@ const updateOrder = async (req, res) => {
     if (items && JSON.stringify(items) !== JSON.stringify(order.items)) {
       changes.push({
         field: "items",
-        previousValue: order.items,
-        newValue: items,
+        previousValue: order.items.map((item) => ({
+          product: item.product._id, // Only include the _id of the product
+          name: item.name,
+          quantity: item.quantity,
+          price: item.price,
+        })),
+        newValue: items.map((item) => ({
+          product: item.product._id, // Only include the _id of the product
+          name: item.name,
+          quantity: item.quantity,
+          price: item.price,
+        })),
       });
 
       // Recalculate subtotal, tax, and total based on the new items
