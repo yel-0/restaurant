@@ -3,16 +3,19 @@ import { useParams, useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import OrderAddDialog from "@/Design/Waiter/OrderAddDialog";
 import useFetchOrderById from "@/Hook/Order/useFetchOrderById";
-
+import { useUpdateOrder } from "@/Hook/Order/useUpdateOrder";
 export default function WaiterOrderDetail() {
   const { id } = useParams();
   const navigate = useNavigate();
+
   const {
     data: fetchedOrder,
     isLoading,
     isError,
     error,
   } = useFetchOrderById(id);
+
+  const { mutate: updateOrder, isLoading: isUpdating } = useUpdateOrder();
 
   const [order, setOrder] = useState(null);
 
@@ -52,11 +55,15 @@ export default function WaiterOrderDetail() {
       if (existingIndex !== -1) {
         const updatedItems = [...prevOrder.items];
         updatedItems[existingIndex].quantity += 1;
+        updatedItems[existingIndex].price = newItem.price; // Update the price if needed
         return { ...prevOrder, items: updatedItems };
       } else {
         return {
           ...prevOrder,
-          items: [...prevOrder.items, { product: newItem, quantity: 1 }],
+          items: [
+            ...prevOrder.items,
+            { product: newItem, quantity: 1, price: newItem.price },
+          ],
         };
       }
     });
@@ -82,8 +89,8 @@ export default function WaiterOrderDetail() {
 
   const submitChanges = () => {
     const { status, items, specialNotes } = order;
-    console.log("Submitting order:", { status, items, specialNotes });
-    // Add your API call or any further logic here
+
+    updateOrder({ id, data: { status, items, specialNotes } });
   };
 
   if (isLoading)
@@ -219,8 +226,9 @@ export default function WaiterOrderDetail() {
           variant="primary"
           className="bg-blue-600 hover:bg-blue-700"
           onClick={submitChanges}
+          disabled={isUpdating}
         >
-          Submit Changes
+          {isUpdating ? "Saving..." : "Submit Changes"}
         </Button>
       </div>
     </div>

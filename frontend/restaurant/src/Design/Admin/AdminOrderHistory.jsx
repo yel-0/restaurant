@@ -51,47 +51,65 @@ const AdminOrderHistory = ({ orderId }) => {
               <span>Error fetching order history. Please try again later.</span>
             </div>
           )}
-          {data && (
-            <div className="space-y-4">
-              <h3 className="text-xl font-semibold text-gray-700">Changes:</h3>
-              <ul className="space-y-3">
-                {data.map((history) => (
-                  <li
-                    key={history._id}
-                    className="border p-4 rounded-md bg-white shadow-md"
-                  >
-                    <div className="flex justify-between items-center">
-                      <h4 className="font-medium text-lg">
-                        {history.changedBy.name}
-                      </h4>
-                      <p className="text-sm text-gray-500">
-                        {new Date(history.changeDate).toLocaleString()}
-                      </p>
-                    </div>
-                    <div className="mt-2">
-                      <h5 className="text-sm text-gray-600">Changes:</h5>
-                      {history.changes.map((change, index) => (
-                        <div key={index} className="text-sm text-gray-700">
-                          <p>
-                            <span className="font-semibold">
-                              {change.field}:
-                            </span>{" "}
-                            <span className="text-gray-500">
-                              Previous: {change.previousValue || "N/A"}
-                            </span>
-                          </p>
-                          <p className="font-semibold">New Value:</p>
-                          <pre className="bg-gray-100 p-2 rounded-md text-sm">
-                            {JSON.stringify(change.newValue, null, 2)}
-                          </pre>
-                        </div>
-                      ))}
-                    </div>
-                  </li>
-                ))}
-              </ul>
-            </div>
-          )}
+          <div className="overflow-y-scroll max-h-[700px]">
+            {data && (
+              <div className="space-y-4">
+                <h3 className="text-xl font-semibold text-gray-700">
+                  Changes:
+                </h3>
+                <ul className="space-y-3">
+                  {data.map((history) => (
+                    <li
+                      key={history._id}
+                      className="border p-4 rounded-md bg-white shadow-md"
+                    >
+                      <div className="flex justify-between items-center">
+                        <h4 className="font-medium text-lg">
+                          Changed by: {history.changedBy.name}
+                        </h4>
+                        <p className="text-sm text-gray-500">
+                          {new Date(history.changeDate).toLocaleString()}
+                        </p>
+                      </div>
+                      <div className="mt-2">
+                        <h5 className="text-sm text-gray-600">Changes:</h5>
+                        {history.changes.map((change, index) => (
+                          <div
+                            key={change._id || index}
+                            className="text-sm text-gray-700 space-y-2"
+                          >
+                            <p>
+                              <span className="font-semibold">Field:</span>{" "}
+                              {change.field}
+                            </p>
+                            <p>
+                              <span className="font-semibold">
+                                Previous Value:
+                              </span>{" "}
+                              <pre className="bg-gray-100 p-2 rounded-md text-sm overflow-auto">
+                                {JSON.stringify(
+                                  change.previousValue,
+                                  null,
+                                  2
+                                ) || "N/A"}
+                              </pre>
+                            </p>
+                            <p>
+                              <span className="font-semibold">New Value:</span>{" "}
+                              <pre className="bg-gray-100 p-2 rounded-md text-sm overflow-auto">
+                                {JSON.stringify(change.newValue, null, 2) ||
+                                  "N/A"}
+                              </pre>
+                            </p>
+                          </div>
+                        ))}
+                      </div>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            )}
+          </div>
         </div>
       </SheetContent>
     </Sheet>

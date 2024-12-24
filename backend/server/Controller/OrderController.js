@@ -102,31 +102,105 @@ const getOrderById = async (req, res) => {
   }
 };
 
-// Update an Order
 const updateOrder = async (req, res) => {
+  const session = await mongoose.startSession(); // Start a session
+  session.startTransaction(); // Begin a transaction
+
   try {
     const orderId = req.params.id;
     const { status, items, specialNotes } = req.body;
+    const userId = req.user.userId; // Get the userId from the request
 
-    // Check if order exists
-    let order = await Order.findById(orderId);
+    // Check if the order exists
+    let order = await Order.findById(orderId).session(session);
     if (!order) {
       return res.status(404).json({ message: "Order not found" });
     }
+    // console.log(items);
 
-    // Update the order fields
-    order.status = status || order.status;
-    order.items = items || order.items;
-    order.specialNotes = specialNotes || order.specialNotes;
-    order.updatedBy.push(req.user.userId); // Add the current user to the update history
+    // Track changes
+    const changes = [];
+
+    // Update status if provided
+    if (status && status !== order.status) {
+      changes.push({
+        field: "status",
+        previousValue: order.status,
+        newValue: status,
+      });
+      order.status = status;
+    }
+
+    // Update items if provided
+    if (items && JSON.stringify(items) !== JSON.stringify(order.items)) {
+      changes.push({
+        field: "items",
+        previousValue: order.items,
+        newValue: items,
+      });
+
+      // Recalculate subtotal, tax, and total based on the new items
+      let subtotal = 0;
+      items.forEach((item) => {
+        subtotal += item.price * item.quantity;
+      });
+
+      const taxRate = 0.1; // Fixed tax rate (10%)
+      const tax = subtotal * taxRate;
+      const total = subtotal + tax;
+
+      // Update order with the new items and calculated prices
+      order.items = items;
+
+      order.subtotal = subtotal;
+      order.tax = tax;
+      order.total = total;
+    }
+
+    // Update specialNotes if provided
+    if (specialNotes && specialNotes !== order.specialNotes) {
+      changes.push({
+        field: "specialNotes",
+        previousValue: order.specialNotes,
+        newValue: specialNotes,
+      });
+      order.specialNotes = specialNotes;
+    }
+
+    // If no changes, return early
+    if (changes.length === 0) {
+      await session.abortTransaction();
+      session.endSession();
+      return res.status(200).json({ message: "No changes detected" });
+    }
+
+    // Add the updater to the updatedBy array
+    order.updatedBy.push(userId);
 
     // Save the updated order
-    await order.save();
+    await order.save({ session });
 
-    return res
-      .status(200)
-      .json({ message: "Order updated successfully", order });
+    // Save the order history
+    const orderHistory = new OrderHistory({
+      order: orderId,
+      changes,
+      changedBy: userId, // Record the user who made the change
+    });
+    await orderHistory.save({ session });
+
+    // Commit the transaction
+    await session.commitTransaction();
+    session.endSession();
+
+    return res.status(200).json({
+      message: "Order updated successfully",
+      order,
+      history: orderHistory,
+    });
   } catch (error) {
+    // Rollback the transaction in case of an error
+    await session.abortTransaction();
+    session.endSession();
     console.error(error);
     return res.status(500).json({ message: "Server error" });
   }
