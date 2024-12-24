@@ -160,7 +160,7 @@ export default function WaiterOrderDetail() {
                 </button>
               </div>
               <p className="text-lg font-semibold text-gray-800">
-                ${item.quantity * item.product.price}
+                ${item.quantity * item.product.price}/ {item.status}
               </p>
               <button
                 onClick={() => deleteItem(index)}

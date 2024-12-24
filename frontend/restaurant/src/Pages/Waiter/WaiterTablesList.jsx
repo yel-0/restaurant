@@ -9,7 +9,6 @@ import {
   TableRow,
 } from "@/components/ui/table";
 
-import CreateTableDialog from "@/Design/Admin/CreateTableDialog";
 import useFetchTables from "@/Hook/Table/useFetchTables";
 
 const WaiterTableList = () => {
@@ -65,10 +64,6 @@ const WaiterTableList = () => {
         >
           Search
         </button>
-      </div>
-
-      <div className="p-4">
-        <CreateTableDialog />
       </div>
 
       <Table>

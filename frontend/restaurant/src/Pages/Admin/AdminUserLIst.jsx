@@ -25,7 +25,7 @@ const AdminUserList = () => {
   const [nameFilter, setNameFilter] = useState(""); // Manage name filter state
   const [tempName, setTempName] = useState(""); // Temporary state for name input
   const [page, setPage] = useState(1); // Manage page state
-  const limit = 10; // Number of users per page
+  const limit = 2; // Number of users per page
 
   const {
     data: users,
