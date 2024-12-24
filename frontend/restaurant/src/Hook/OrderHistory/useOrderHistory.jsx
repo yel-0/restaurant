@@ -1,7 +1,8 @@
 import { useQuery } from "react-query";
 import axiosInstance from "@/assets/api/axiosInstance";
+
 // Custom hook to fetch order history by orderId
-const useOrderHistory = (orderId) => {
+const useOrderHistory = (orderId, shouldFetch) => {
   // Define the query key based on the orderId
   const queryKey = ["orderHistory", orderId];
 
@@ -14,7 +15,7 @@ const useOrderHistory = (orderId) => {
     queryKey,
     fetchOrderHistory,
     {
-      enabled: !!orderId,
+      enabled: shouldFetch && !!orderId, // Fetch only if both conditions are met
     }
   );
 

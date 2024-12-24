@@ -62,6 +62,15 @@ export default function WaiterOrderDetail() {
     });
   };
 
+  const updateSpecialNotes = (notes) => {
+    if (!order) return;
+
+    setOrder((prevOrder) => ({
+      ...prevOrder,
+      specialNotes: notes,
+    }));
+  };
+
   const calculateTotal = () => {
     if (!order) return 0;
 
@@ -69,6 +78,12 @@ export default function WaiterOrderDetail() {
       (total, item) => total + item.quantity * item.product.price,
       0
     );
+  };
+
+  const submitChanges = () => {
+    const { status, items, specialNotes } = order;
+    console.log("Submitting order:", { status, items, specialNotes });
+    // Add your API call or any further logic here
   };
 
   if (isLoading)
@@ -160,7 +175,7 @@ export default function WaiterOrderDetail() {
                 </button>
               </div>
               <p className="text-lg font-semibold text-gray-800">
-                ${item.quantity * item.product.price}/ {item.status}
+                ${item.quantity * item.product.price}
               </p>
               <button
                 onClick={() => deleteItem(index)}
@@ -174,6 +189,16 @@ export default function WaiterOrderDetail() {
       </div>
 
       <OrderAddDialog onAddItem={addItem} />
+
+      <div className="mt-8">
+        <h2 className="text-2xl font-semibold text-gray-700">Special Notes</h2>
+        <textarea
+          value={order.specialNotes || ""}
+          onChange={(e) => updateSpecialNotes(e.target.value)}
+          className="w-full p-4 border rounded-lg text-gray-800 focus:ring focus:ring-blue-300"
+          placeholder="Add any special notes for the order..."
+        />
+      </div>
 
       <div className="mt-8">
         <h2 className="text-2xl font-semibold text-gray-700">
@@ -190,7 +215,11 @@ export default function WaiterOrderDetail() {
         >
           Back
         </Button>
-        <Button variant="primary" className="bg-blue-600 hover:bg-blue-700">
+        <Button
+          variant="primary"
+          className="bg-blue-600 hover:bg-blue-700"
+          onClick={submitChanges}
+        >
           Submit Changes
         </Button>
       </div>

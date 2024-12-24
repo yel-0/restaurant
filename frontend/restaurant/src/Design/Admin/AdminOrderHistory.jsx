@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import {
   Sheet,
   SheetContent,
@@ -7,14 +7,26 @@ import {
   SheetTitle,
   SheetTrigger,
 } from "@/components/ui/sheet";
-import { Loader2, X } from "lucide-react"; // You can use icons like 'lucide-react' for some visual elements
+import { Loader2, X } from "lucide-react";
 import useOrderHistory from "@/Hook/OrderHistory/useOrderHistory";
+
 const AdminOrderHistory = ({ orderId }) => {
-  const { data, error, isLoading, isError } = useOrderHistory(orderId); // Fetch order history using the custom hook
+  const [shouldFetch, setShouldFetch] = useState(false); // State to control query fetching
+  const { data, error, isLoading, isError } = useOrderHistory(
+    orderId,
+    shouldFetch
+  );
+
+  const handleSheetOpen = () => {
+    setShouldFetch(true); // Enable fetching when the sheet is opened
+  };
 
   return (
     <Sheet>
-      <SheetTrigger className="bg-blue-500 text-white px-4 py-2 rounded-md">
+      <SheetTrigger
+        className="bg-blue-500 text-white px-4 py-2 rounded-md"
+        onClick={handleSheetOpen} // Trigger fetching when the sheet is opened
+      >
         Open Order History
       </SheetTrigger>
 
