@@ -130,6 +130,13 @@ const updateOrder = async (req, res) => {
       order.status = status;
     }
 
+    // console.log("New Items:");
+    // console.table(
+    //   items.map((item) => ({
+    //     name: item.name,
+    //   }))
+    // );
+
     // Update items if provided
     if (items && JSON.stringify(items) !== JSON.stringify(order.items)) {
       changes.push({
@@ -140,6 +147,7 @@ const updateOrder = async (req, res) => {
           quantity: item.quantity,
           price: item.price,
         })),
+
         newValue: items.map((item) => ({
           product: item.product._id, // Only include the _id of the product
           name: item.name,

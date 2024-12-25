@@ -55,14 +55,19 @@ export default function WaiterOrderDetail() {
       if (existingIndex !== -1) {
         const updatedItems = [...prevOrder.items];
         updatedItems[existingIndex].quantity += 1;
-        updatedItems[existingIndex].price = newItem.price; // Update the price if needed
+        updatedItems[existingIndex].price = newItem.price;
         return { ...prevOrder, items: updatedItems };
       } else {
         return {
           ...prevOrder,
           items: [
             ...prevOrder.items,
-            { product: newItem, quantity: 1, price: newItem.price },
+            {
+              product: newItem,
+              quantity: 1,
+              price: newItem.price,
+              name: newItem.name,
+            },
           ],
         };
       }

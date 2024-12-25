@@ -40,9 +40,9 @@ const OrderAddDialog = ({ onAddItem }) => {
   }, [selectedCategory]);
 
   const handleAddNewItem = (item) => {
-    console.log(item);
+    // console.log(item);
 
-    onAddItem(item); // Pass the added item to the parent component
+    onAddItem(item);
   };
 
   return (

@@ -1,12 +1,15 @@
 import AdminOrderHistory from "@/Design/Admin/AdminOrderHistory";
+import OrderAddDialog from "@/Design/Waiter/OrderAddDialog";
 import useFetchOrderById from "@/Hook/Order/useFetchOrderById";
 import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
-
+import { Button } from "@/components/ui/button";
+import { useUpdateOrder } from "@/Hook/Order/useUpdateOrder";
 const AdminOrderDetail = () => {
   const { id } = useParams();
   const TAX_RATE = 0.1;
   const { data, isLoading, isError } = useFetchOrderById(id);
+  const { mutate: updateOrder, isLoading: isUpdating } = useUpdateOrder();
 
   const [order, setOrder] = useState(null);
 
@@ -42,6 +45,8 @@ const AdminOrderDetail = () => {
 
   // Handle quantity update
   const updateQuantity = (index, newQuantity) => {
+    if (!order) return;
+
     setOrder((prevOrder) => {
       const updatedItems = [...prevOrder.items];
       updatedItems[index].quantity = newQuantity;
@@ -51,15 +56,61 @@ const AdminOrderDetail = () => {
 
   // Handle deleting an item
   const deleteItem = (index) => {
+    if (!order) return;
+
     setOrder((prevOrder) => {
       const updatedItems = prevOrder.items.filter((_, i) => i !== index);
       return { ...prevOrder, items: updatedItems };
     });
   };
 
+  const addItem = (newItem) => {
+    if (!order) return;
+
+    setOrder((prevOrder) => {
+      const existingIndex = prevOrder.items.findIndex(
+        (item) => item.product._id === newItem._id
+      );
+
+      if (existingIndex !== -1) {
+        const updatedItems = [...prevOrder.items];
+        updatedItems[existingIndex].quantity += 1;
+        updatedItems[existingIndex].price = newItem.price;
+        return { ...prevOrder, items: updatedItems };
+      } else {
+        return {
+          ...prevOrder,
+          items: [
+            ...prevOrder.items,
+            {
+              product: newItem,
+              quantity: 1,
+              price: newItem.price,
+              name: newItem.name,
+            },
+          ],
+        };
+      }
+    });
+  };
+
+  const updateSpecialNotes = (notes) => {
+    if (!order) return;
+
+    setOrder((prevOrder) => ({
+      ...prevOrder,
+      specialNotes: notes,
+    }));
+  };
   // Handle payment update
   const markAsPaid = () => {
     setOrder((prevOrder) => ({ ...prevOrder, status: "completed" }));
+  };
+
+  const submitChanges = () => {
+    const { status, items, specialNotes } = order;
+
+    updateOrder({ id, data: { status, items, specialNotes } });
   };
 
   return (
@@ -73,6 +124,7 @@ const AdminOrderDetail = () => {
 
       {/* Order Summary */}
       <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+        <OrderAddDialog onAddItem={addItem} />
         <div>
           <h2 className="font-medium text-gray-700">Table Number</h2>
           <p className="text-gray-900">{order.table.tableNumber}</p>
@@ -112,7 +164,7 @@ const AdminOrderDetail = () => {
           </thead>
           <tbody>
             {order.items.map((item, index) => (
-              <tr key={item._id} className="border-b">
+              <tr key={index} className="border-b">
                 <td className="px-4 py-2 flex items-center gap-2">
                   <img
                     src={item.product.image}
@@ -150,6 +202,16 @@ const AdminOrderDetail = () => {
         </table>
       </div>
 
+      <div className="mt-8">
+        <h2 className="text-2xl font-semibold text-gray-700">Special Notes</h2>
+        <textarea
+          value={order.specialNotes || ""}
+          onChange={(e) => updateSpecialNotes(e.target.value)}
+          className="w-full p-4 border rounded-lg text-gray-800 focus:ring focus:ring-blue-300"
+          placeholder="Add any special notes for the order..."
+        />
+      </div>
+
       {/* Total Calculation */}
       <div className="border-t border-gray-200 pt-4">
         <div className="flex justify-between text-lg font-medium">
@@ -180,6 +242,14 @@ const AdminOrderDetail = () => {
           {order.status === "completed" ? "Paid" : "Mark as Paid"}
         </button>
       </div>
+      <Button
+        variant="primary"
+        className="bg-blue-600 hover:bg-blue-700"
+        onClick={submitChanges}
+        disabled={isUpdating}
+      >
+        {isUpdating ? "Saving..." : "Submit Changes"}
+      </Button>
     </div>
   );
 };
