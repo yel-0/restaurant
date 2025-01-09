@@ -241,10 +241,49 @@ const deleteOrder = async (req, res) => {
   }
 };
 
+const getKitchenOrders = async (req, res) => {
+  try {
+    const { startDate } = req.query;
+
+    // Build a query object for filtering by startDate
+    const dateFilter = startDate
+      ? { orderDate: { $gte: new Date(startDate) } }
+      : {};
+
+    // Fetch orders based on date filter (if provided)
+    const orders = await Order.find(dateFilter)
+      .populate("table", "tableNumber")
+      .populate("items.product", "name") // Populate product name
+      .populate("createdBy", "name")
+      .select("orderDate items status table specialNotes") // Select additional fields
+      .lean(); // Use lean() to return plain objects for easier manipulation
+
+    // Modify items to include quantity, preparedQuantity, and specialNotes
+    const updatedOrders = orders.map((order) => ({
+      ...order,
+      items: order.items.map((item) => ({
+        ...item,
+        productName: item.product.name, // Include product name in the response
+        preparedQuantity: item.preparedQuantity, // Include preparedQuantity
+        specialNotes: order.specialNotes, // Include specialNotes from the order
+      })),
+    }));
+
+    res.status(200).json({ success: true, data: updatedOrders });
+  } catch (error) {
+    console.error("Error fetching filtered orders for the kitchen:", error);
+    res.status(500).json({
+      success: false,
+      message: "Error fetching orders for the kitchen",
+    });
+  }
+};
+
 module.exports = {
   createOrder,
   getAllOrders,
   getOrderById,
   updateOrder,
   deleteOrder,
+  getKitchenOrders,
 };

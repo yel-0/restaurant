@@ -6,6 +6,7 @@ const {
   getOrderById,
   updateOrder,
   deleteOrder,
+  getKitchenOrders,
 } = require("../Controller/OrderController");
 const { verifyToken } = require("../middware/Auth");
 
@@ -15,5 +16,6 @@ router.get("/", verifyToken, getAllOrders); // Get all orders (Admin/Manager)
 router.get("/:id", verifyToken, getOrderById); // Get a single order by ID
 router.put("/:id", verifyToken, updateOrder); // Update an order
 router.delete("/:id", verifyToken, deleteOrder); // Delete an order
+router.get("/kitchen/orders", getKitchenOrders);
 
 module.exports = router;

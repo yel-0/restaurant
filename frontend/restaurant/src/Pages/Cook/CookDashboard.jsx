@@ -1,121 +1,183 @@
-import React, { useState } from "react";
-import { ChefHat, ClipboardCheck, Timer } from "lucide-react";
+import React, { useState, useEffect } from "react";
+import { useKitchenOrders } from "@/Hook/Order/useKitchenOrders";
 
 const CookDashboard = () => {
-  const [selectedDate, setSelectedDate] = useState("");
-  const [orders, setOrders] = useState([
-    { id: 1, status: "in-progress", date: "2024-12-11" },
-    { id: 2, status: "completed", date: "2024-12-11" },
-    { id: 3, status: "new", date: "2024-12-12" },
-    { id: 4, status: "in-progress", date: "2024-12-12" },
-    { id: 5, status: "completed", date: "2024-12-12" },
-  ]);
+  // Set the default date to today
+  const [startDate, setStartDate] = useState(() => {
+    const today = new Date();
+    return today.toISOString().split("T")[0]; // Format the date as YYYY-MM-DD
+  });
 
-  // Filter orders by date
-  const filteredOrders = selectedDate
-    ? orders.filter((order) => order.date === selectedDate)
-    : orders;
+  const { data, isLoading, error } = useKitchenOrders(startDate);
 
-  const getOrderCountByStatus = (status) =>
-    filteredOrders.filter((order) => order.status === status).length;
+  const handleStatusChange = (orderId, newStatus) => {
+    console.log(`Updating status for order ${orderId} to ${newStatus}`);
+  };
+
+  const handlePreparedQtyChange = (orderId, itemId, newQty) => {
+    console.log(
+      `Updating prepared quantity for order ${orderId}, item ${itemId} to ${newQty}`
+    );
+  };
+
+  if (isLoading)
+    return (
+      <div className="text-center text-lg text-blue-600">Loading orders...</div>
+    );
+  if (error)
+    return (
+      <div className="text-center text-lg text-red-500">
+        Error: {error.message}
+      </div>
+    );
 
   return (
-    <div className="p-6 space-y-6 bg-gray-50 min-h-screen">
-      <h1 className="text-3xl font-bold text-gray-800">Cook Dashboard</h1>
+    <div className="max-w-4xl mx-auto p-4 bg-white shadow-lg rounded-lg">
+      <h1 className="text-2xl font-semibold text-center text-gray-800 mb-6">
+        Cook Dashboard
+      </h1>
 
-      {/* Date Filter */}
-      <div className="flex items-center space-x-4 mb-6">
-        <label className="font-medium text-gray-600">Filter by Date:</label>
+      {/* Date Filter Input */}
+      <div className="flex justify-center mb-6">
         <input
           type="date"
-          value={selectedDate}
-          onChange={(e) => setSelectedDate(e.target.value)}
-          className="px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-400"
+          value={startDate}
+          onChange={(e) => setStartDate(e.target.value)}
+          className="border border-gray-300 rounded-lg p-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
         />
-        <button
-          onClick={() => setSelectedDate("")}
-          className="px-4 py-2 text-white bg-red-500 rounded-md hover:bg-red-600"
-        >
-          Reset
-        </button>
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-        {/* Orders in Progress */}
-        <div className="bg-blue-100 p-6 rounded-lg shadow hover:shadow-lg transition-shadow">
-          <div className="flex items-center justify-between">
-            <Timer className="text-blue-600 w-8 h-8" />
-            <span className="bg-blue-200 text-blue-800 text-sm px-2 py-1 rounded-full">
-              {selectedDate || "All Dates"}
-            </span>
-          </div>
-          <h2 className="text-2xl font-semibold mt-4">Orders in Progress</h2>
-          <p className="text-gray-600 mt-2">
-            {getOrderCountByStatus("in-progress")} orders being prepared.
-          </p>
-          <button className="mt-4 text-blue-600 font-medium hover:underline">
-            View Details
-          </button>
-        </div>
+      {/* Orders List */}
+      <div className="space-y-4">
+        {data?.data && data.data.length > 0 ? (
+          data.data.map((order) => (
+            <div
+              key={order._id}
+              className="bg-gray-50 border w-[350px] border-gray-200 rounded-lg p-4 shadow-sm hover:shadow-md transition-all duration-200"
+            >
+              {/* Table Info and Order Status */}
+              <div className="flex justify-between items-center mb-4">
+                <h2 className="text-lg font-semibold text-gray-700">
+                  Table #{order.table.tableNumber || "N/A"}
+                </h2>
+                <span
+                  className={`px-2 py-1 text-xs font-medium rounded-full ${
+                    order.status === "pending"
+                      ? "bg-yellow-200 text-yellow-800"
+                      : order.status === "in-progress"
+                      ? "bg-blue-200 text-blue-800"
+                      : order.status === "completed"
+                      ? "bg-green-200 text-green-800"
+                      : "bg-red-200 text-red-800"
+                  }`}
+                >
+                  {order.status}
+                </span>
+              </div>
 
-        {/* New Orders */}
-        <div className="bg-green-100 p-6 rounded-lg shadow hover:shadow-lg transition-shadow">
-          <div className="flex items-center justify-between">
-            <ChefHat className="text-green-600 w-8 h-8" />
-            <span className="bg-green-200 text-green-800 text-sm px-2 py-1 rounded-full">
-              {selectedDate || "All Dates"}
-            </span>
-          </div>
-          <h2 className="text-2xl font-semibold mt-4">New Orders</h2>
-          <p className="text-gray-600 mt-2">
-            {getOrderCountByStatus("new")} new orders just arrived!
-          </p>
-          <button className="mt-4 text-green-600 font-medium hover:underline">
-            View Details
-          </button>
-        </div>
+              {/* Order Date */}
+              <p className="text-sm text-gray-500 mb-4">
+                Order Date:{" "}
+                {new Date(order.orderDate).toLocaleString("en-US", {
+                  weekday: "short",
+                  year: "numeric",
+                  month: "short",
+                  day: "numeric",
+                  hour: "numeric",
+                  minute: "numeric",
+                  second: "numeric",
+                })}
+              </p>
 
-        {/* Completed Orders */}
-        <div className="bg-gray-100 p-6 rounded-lg shadow hover:shadow-lg transition-shadow">
-          <div className="flex items-center justify-between">
-            <ClipboardCheck className="text-gray-600 w-8 h-8" />
-            <span className="bg-gray-200 text-gray-800 text-sm px-2 py-1 rounded-full">
-              {selectedDate || "All Dates"}
-            </span>
-          </div>
-          <h2 className="text-2xl font-semibold mt-4">Completed Orders</h2>
-          <p className="text-gray-600 mt-2">
-            {getOrderCountByStatus("completed")} orders completed.
-          </p>
-          <button className="mt-4 text-gray-600 font-medium hover:underline">
-            View All Completed
-          </button>
-        </div>
-      </div>
+              {/* Special Notes (Highlighted) */}
+              <div className="mb-4 p-4 bg-yellow-100 border border-yellow-300 rounded-lg">
+                <p className="text-sm font-bold text-gray-700">
+                  <span className="font-medium">Special Notes: </span>
+                  {order.specialNotes || "None"}
+                </p>
+              </div>
 
-      {/* Summary Section */}
-      <div className="bg-white p-6 rounded-lg shadow hover:shadow-lg transition-shadow">
-        <h2 className="text-2xl font-semibold text-gray-800">Order Summary</h2>
-        <div className="flex justify-between mt-4">
-          <div className="flex flex-col items-center">
-            <span className="text-4xl font-bold text-blue-600">
-              {getOrderCountByStatus("in-progress")}
-            </span>
-            <span className="text-gray-600">In Progress</span>
+              {/* Items List */}
+              <div className="space-y-3">
+                {order.items.map((item) => (
+                  <div
+                    key={item._id}
+                    className="flex justify-between items-center bg-white p-3 rounded-lg shadow-sm"
+                  >
+                    <div>
+                      <p className="text-lg font-semibold text-gray-800">
+                        {item.name}
+                      </p>
+                      <p className="text-sm text-gray-600">
+                        Product: {item.product.name}
+                      </p>
+                    </div>
+
+                    <div className="text-right">
+                      <p className="text-sm text-gray-500">
+                        Qty: {item.quantity}
+                      </p>
+                      <p className="text-sm text-gray-500">
+                        Prepared: {item.preparedQuantity}
+                      </p>
+                      <p className="text-sm text-gray-500">
+                        Price: ${item.price}
+                      </p>
+
+                      {/* Action Buttons */}
+                      <div className="mt-2 flex gap-3 justify-between">
+                        <button
+                          onClick={() =>
+                            handleStatusChange(order._id, "completed")
+                          }
+                          className="px-4 py-2 text-white bg-green-500 rounded-lg hover:bg-green-600 w-28"
+                        >
+                          Complete
+                        </button>
+
+                        <input
+                          type="number"
+                          min="0"
+                          defaultValue={item.preparedQuantity}
+                          onBlur={(e) =>
+                            handlePreparedQtyChange(
+                              order._id,
+                              item._id,
+                              e.target.value
+                            )
+                          }
+                          className="w-16 p-2 text-center border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                        />
+                      </div>
+                    </div>
+                  </div>
+                ))}
+              </div>
+
+              {/* Mark Entire Order as In-Progress Button */}
+              <div className="flex justify-between gap-4 mt-4">
+                <button
+                  onClick={() => handleStatusChange(order._id, "in-progress")}
+                  className="px-4 py-2 text-white bg-blue-500 rounded-lg hover:bg-blue-600 w-full"
+                >
+                  Mark Order as In-Progress
+                </button>
+
+                {/* Mark Entire Order as Completed Button */}
+                <button
+                  onClick={() => handleStatusChange(order._id, "completed")}
+                  className="px-4 py-2 text-white bg-green-500 rounded-lg hover:bg-green-600 w-full"
+                >
+                  Mark Order as Completed
+                </button>
+              </div>
+            </div>
+          ))
+        ) : (
+          <div className="text-center text-lg text-gray-600">
+            No orders found.
           </div>
-          <div className="flex flex-col items-center">
-            <span className="text-4xl font-bold text-green-600">
-              {getOrderCountByStatus("new")}
-            </span>
-            <span className="text-gray-600">New Orders</span>
-          </div>
-          <div className="flex flex-col items-center">
-            <span className="text-4xl font-bold text-gray-600">
-              {getOrderCountByStatus("completed")}
-            </span>
-            <span className="text-gray-600">Completed</span>
-          </div>
-        </div>
+        )}
       </div>
     </div>
   );
