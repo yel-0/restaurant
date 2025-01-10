@@ -279,6 +279,63 @@ const getKitchenOrders = async (req, res) => {
   }
 };
 
+const updateOrderAndItemStatuses = async (req, res) => {
+  const { orderId } = req.params;
+  const { orderStatus, items } = req.body;
+  // console.log(items);
+
+  try {
+    // Find the order by ID
+    const order = await Order.findById(orderId);
+    if (!order) {
+      return res.status(404).json({ message: "Order not found" });
+    }
+
+    // Update order status if provided
+    if (orderStatus) {
+      if (
+        !["pending", "in-progress", "completed", "cancelled"].includes(
+          orderStatus
+        )
+      ) {
+        return res.status(400).json({ message: "Invalid order status" });
+      }
+      order.status = orderStatus;
+
+      // Update completedAt timestamp if order is completed
+      if (orderStatus === "completed") {
+        order.completedAt = new Date();
+      } else {
+        order.completedAt = null;
+      }
+    }
+
+    // Update item statuses if provided
+    if (items && Array.isArray(items)) {
+      items.forEach((itemUpdate) => {
+        const item = order.items.id(itemUpdate.itemId); // Find the specific item by ID
+        if (item) {
+          if (itemUpdate.preparedQuantity >= 0) {
+            item.preparedQuantity = itemUpdate.preparedQuantity;
+          }
+        }
+      });
+    }
+
+    // Save the updated order
+    await order.save();
+
+    res
+      .status(200)
+      .json({ message: "Order and item statuses updated successfully", order });
+  } catch (error) {
+    console.error(error);
+    res
+      .status(500)
+      .json({ message: "An error occurred while updating the order", error });
+  }
+};
+
 module.exports = {
   createOrder,
   getAllOrders,
@@ -286,4 +343,5 @@ module.exports = {
   updateOrder,
   deleteOrder,
   getKitchenOrders,
+  updateOrderAndItemStatuses,
 };
