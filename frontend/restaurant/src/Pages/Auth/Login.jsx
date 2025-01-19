@@ -27,9 +27,8 @@ const Login = () => {
   return (
     <div className="flex items-center justify-center min-h-screen bg-white">
       <div className="bg-white p-8 rounded-lg w-full max-w-md sm:max-w-lg lg:max-w-xl">
-        <div className="flex flex-row justify-center items-center p-3">
-          <Crown className="text-4xl mr-2" />
-          <h2 className="text-2xl text-black">Iron Fork</h2>
+        <div className="flex text-3xl flex-row justify-center items-center p-3">
+          Login
         </div>
 
         <form onSubmit={handleSubmit}>

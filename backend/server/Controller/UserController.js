@@ -3,7 +3,8 @@ const bcrypt = require("bcrypt");
 // Controller function to update a user
 const updateUser = async (req, res) => {
   const { id } = req.params;
-  const { name, email, password, role } = req.body;
+  const { name, email, password, role, status } = req.body;
+  console.log(req.body);
 
   try {
     // Find the user by ID
@@ -18,7 +19,8 @@ const updateUser = async (req, res) => {
     user.name = name || user.name;
     user.email = email || user.email;
     user.role = role || user.role;
-    user.password = await bcrypt.hash(password, 10); // Hash the password
+    user.password = await bcrypt.hash(password, 10);
+    user.status = status || user.status;
 
     // Save the updated user
     const updatedUser = await user.save();

@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import {
   Dialog,
   DialogContent,
@@ -9,25 +9,36 @@ import {
 } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import useDeleteUser from "@/Hook/Auth/useDeleteUser";
+import { Trash2 } from "lucide-react";
+
 const DeleteUserDialog = ({ user }) => {
   const { mutate } = useDeleteUser(); // Hook for deleting the user
+  const [open, setOpen] = useState(false); // State to control dialog visibility
 
   const handleDelete = () => {
     // Call the delete function from the custom hook with the user's ID
     mutate(user._id);
+    setOpen(false); // Close the dialog after deletion
+  };
+
+  const handleCancel = () => {
+    setOpen(false); // Close the dialog on cancel
   };
 
   return (
-    <Dialog>
+    <Dialog open={open} onOpenChange={setOpen}>
       {/* Trigger Button */}
       <DialogTrigger asChild>
-        <Button className="bg-red-500 text-white hover:bg-red-600">
-          Delete
+        <Button
+          className="bg-red-500 text-white hover:bg-red-600"
+          onClick={() => setOpen(true)}
+        >
+          <Trash2 /> <div>Delete</div>
         </Button>
       </DialogTrigger>
 
       {/* Dialog Content */}
-      <DialogContent>
+      <DialogContent className="w-[600px]">
         <DialogHeader>
           <DialogTitle>Confirm Deletion</DialogTitle>
           <DialogDescription>
@@ -48,6 +59,13 @@ const DeleteUserDialog = ({ user }) => {
 
         {/* Action Buttons */}
         <div className="flex justify-end gap-2">
+          <Button
+            type="button"
+            className="bg-white text-black shadow-sm"
+            onClick={handleCancel}
+          >
+            Cancel
+          </Button>
           <Button
             type="button"
             className="bg-red-500 text-white hover:bg-red-600"
