@@ -61,14 +61,14 @@ const DeleteUserDialog = ({ user }) => {
         <div className="flex justify-end gap-2">
           <Button
             type="button"
-            className="bg-white text-black shadow-sm"
+            className="bg-gray-200 text-gray-800 hover:bg-gray-300"
             onClick={handleCancel}
           >
             Cancel
           </Button>
           <Button
             type="button"
-            className="bg-red-500 text-white hover:bg-red-600"
+            className="bg-red-500 text-white hover:bg-red-600 "
             onClick={handleDelete} // Trigger the delete process
           >
             Delete

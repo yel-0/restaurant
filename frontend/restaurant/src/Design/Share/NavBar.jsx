@@ -11,8 +11,8 @@ const Navbar = () => {
   }
 
   return (
-    <nav className="bg-white border-b text-black shadow-md py-4">
-      <div className="container mx-auto flex justify-between items-center px-6">
+    <nav className="bg-white border-b text-black shadow-md py-2">
+      <div className="container  h-[50px] mx-auto flex justify-between items-center px-6">
         {/* Logo Section */}
         <div className="text-2xl font-bold">
           <Link to="/" className="text-black">
