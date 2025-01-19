@@ -74,3 +74,44 @@
     @apply bg-background text-foreground;
   }
 } */
+.custom-shape-divider-top-1737266567 {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  overflow: hidden;
+  line-height: 0;
+}
+
+.custom-shape-divider-top-1737266567 svg {
+  position: relative;
+  display: block;
+  width: calc(164% + 1.3px);
+  height: 22px;
+  transform: rotateY(180deg);
+}
+
+.custom-shape-divider-top-1737266567 .shape-fill {
+  fill: #ffffff;
+}
+.custom-shape-divider-bottom-1737266525 {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  overflow: hidden;
+  line-height: 0;
+  transform: rotate(180deg);
+}
+
+.custom-shape-divider-bottom-1737266525 svg {
+  position: relative;
+  display: block;
+  width: calc(164% + 1.3px);
+  height: 22px;
+  transform: rotateY(180deg);
+}
+
+.custom-shape-divider-bottom-1737266525 .shape-fill {
+  fill: #ffffff;
+}

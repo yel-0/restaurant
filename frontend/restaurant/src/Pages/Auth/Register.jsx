@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { useRegister } from "@/Hook/Auth/useRegister";
+import { Checkbox } from "@/components/ui/checkbox";
 
 const Register = () => {
   const [name, setName] = useState("");
@@ -89,6 +90,16 @@ const Register = () => {
               <option value="Cook">Cook</option>
               <option value="User">User</option>
             </select>
+          </div>
+          {/* Terms and Conditions Checkbox */}
+          <div className="flex items-center mb-4 space-x-2">
+            <Checkbox id="terms" />
+            <label
+              htmlFor="terms"
+              className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+            >
+              Accept terms and conditions
+            </label>
           </div>
           <button
             type="submit"
