@@ -9,6 +9,7 @@ import {
 } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import useDeleteTable from "@/Hook/Table/useDeleteTable";
+import { Trash2 } from "lucide-react";
 
 export const DeleteTableDialog = ({ tableId }) => {
   const { mutate: deleteTable, isLoading } = useDeleteTable();
@@ -20,9 +21,11 @@ export const DeleteTableDialog = ({ tableId }) => {
   return (
     <Dialog>
       <DialogTrigger asChild>
-        <Button variant="destructive">Delete</Button>
+        <Button variant="destructive">
+          <Trash2 /> <div>Delete</div>
+        </Button>
       </DialogTrigger>
-      <DialogContent>
+      <DialogContent className="w-[700px] ">
         <DialogHeader>
           <DialogTitle>Delete Table</DialogTitle>
           <DialogDescription>

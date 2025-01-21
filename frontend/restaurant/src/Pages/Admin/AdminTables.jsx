@@ -12,6 +12,9 @@ import { UpdateTableDialog } from "@/Design/Admin/UpdateTableDialog";
 import { DeleteTableDialog } from "@/Design/Admin/DeleteTableDialog";
 import CreateTableDialog from "@/Design/Admin/CreateTableDialog";
 import useFetchTables from "@/Hook/Table/useFetchTables";
+import { Input } from "@/components/ui/input";
+import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
 
 const AdminTables = () => {
   const [page, setPage] = useState(1);
@@ -48,28 +51,24 @@ const AdminTables = () => {
   if (isError) return <div>Error loading tables</div>;
 
   return (
-    <div className="p-6 bg-white shadow rounded-md">
+    <div className="">
       <h1 className="text-xl font-bold mb-4">Table Management</h1>
 
       {/* Search Bar */}
       <div className="mb-4 flex items-center space-x-2">
-        <input
+        <Input
+          className="py-5"
           type="text"
-          className="border p-2 w-full"
           placeholder="Search by Table Number"
           value={searchInput}
           onChange={handleSearchChange}
         />
-        <button
-          className="bg-blue-500 text-white px-4 py-2 rounded-md"
-          onClick={handleSearchClick}
-        >
+        <Button className=" text-white" onClick={handleSearchClick}>
           Search
-        </button>
-      </div>
-
-      <div className="p-4">
-        <CreateTableDialog />
+        </Button>
+        <div className="p-4">
+          <CreateTableDialog />
+        </div>
       </div>
 
       <Table>
@@ -86,11 +85,13 @@ const AdminTables = () => {
         <TableBody>
           {tables.map((table) => (
             <TableRow key={table._id}>
-              <TableCell>{table.tableNumber}</TableCell>
+              <TableCell>Table {table.tableNumber}</TableCell>
               <TableCell>{table.seats}</TableCell>
               <TableCell>{table.location}</TableCell>
-              <TableCell>{table.status}</TableCell>
-              <TableCell className="text-center space-x-2">
+              <TableCell>
+                <Badge>{table.status}</Badge>
+              </TableCell>
+              <TableCell className="text-center gap-3 flex justify-center items-center">
                 <UpdateTableDialog table={table} />
                 <DeleteTableDialog tableId={table._id} />
               </TableCell>

@@ -9,6 +9,7 @@ import {
 } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import useUpdateTable from "@/Hook/Table/useUpdateTable";
+import { Pencil } from "lucide-react";
 
 export const UpdateTableDialog = ({ table }) => {
   const { mutate: updateTable, isLoading } = useUpdateTable();
@@ -35,8 +36,8 @@ export const UpdateTableDialog = ({ table }) => {
   return (
     <Dialog>
       <DialogTrigger asChild>
-        <Button className="bg-blue-500 text-white hover:bg-blue-600">
-          Update
+        <Button className="bg-white shadow-none flex flex-row justify-center items-center border-black border text-black hover:text-gray-700">
+          <Pencil /> <div>Edit</div>
         </Button>
       </DialogTrigger>
       <DialogContent>

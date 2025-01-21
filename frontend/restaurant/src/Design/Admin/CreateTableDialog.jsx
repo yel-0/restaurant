@@ -41,9 +41,7 @@ const CreateTableDialog = () => {
   return (
     <Dialog>
       <DialogTrigger asChild>
-        <Button className="bg-green-500 text-white hover:bg-green-600">
-          Create Table
-        </Button>
+        <Button className="">Create Table +</Button>
       </DialogTrigger>
       <DialogContent>
         <DialogHeader>

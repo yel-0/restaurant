@@ -5,7 +5,6 @@ import {
   SidebarContent,
   SidebarFooter,
   SidebarGroup,
-  SidebarHeader,
 } from "@/components/ui/sidebar";
 import { SidebarProvider } from "@/components/ui/sidebar";
 import Navbar from "@/Design/Share/NavBar";
@@ -16,7 +15,6 @@ import {
   List,
   Settings,
   ListOrdered,
-  Grid,
   Crown,
 } from "lucide-react";
 
@@ -27,21 +25,24 @@ const AdminLayout = ({ children }) => {
   const isActive = (path) => location.pathname === path;
 
   return (
-    <div className="">
+    <div>
       {/* Sidebar */}
       <SidebarProvider>
         <Sidebar className="w-64 bg-white border-l text-black">
-          <div className=" h-[66px] px-6 text-2xl flex flex-row   items-center gap-2">
-            <Crown className="text-4xl mr-2" />
-            <h2 className="text-2xl text-black">Iron Fork</h2>
+          {/* Sidebar Header */}
+          <div className="h-14 px-6 flex items-center gap-2">
+            <Crown className="text-3xl" />
+            <h2 className="text-xl font-semibold text-black">Iron Fork</h2>
           </div>
-          <SidebarContent className="border-l">
+
+          {/* Sidebar Content */}
+          <SidebarContent className="border-l mt-3">
             <SidebarGroup>
               <Link
                 to="/admin"
-                className={`p-4 flex items-center gap-2  rounded-xl ${
+                className={`p-3 flex items-center gap-2 rounded-xl ${
                   isActive("/admin")
-                    ? "bg-blue-500 text-white"
+                    ? "bg-black text-white"
                     : "hover:bg-gray-200"
                 }`}
               >
@@ -52,9 +53,9 @@ const AdminLayout = ({ children }) => {
             <SidebarGroup>
               <Link
                 to="/admin/users"
-                className={`p-4 flex items-center gap-2  rounded-xl ${
+                className={`p-3 flex items-center gap-2 rounded-xl ${
                   isActive("/admin/users")
-                    ? "bg-blue-500 text-white"
+                    ? "bg-black text-white"
                     : "hover:bg-gray-200"
                 }`}
               >
@@ -65,9 +66,9 @@ const AdminLayout = ({ children }) => {
             <SidebarGroup>
               <Link
                 to="/admin/order/lists"
-                className={`p-4 flex items-center gap-2  rounded-xl ${
+                className={`p-3 flex items-center gap-2 rounded-xl ${
                   isActive("/admin/order/lists")
-                    ? "bg-blue-500 text-white"
+                    ? "bg-black text-white"
                     : "hover:bg-gray-200"
                 }`}
               >
@@ -78,9 +79,9 @@ const AdminLayout = ({ children }) => {
             <SidebarGroup>
               <Link
                 to="/admin/tables"
-                className={`p-4 flex items-center gap-2  rounded-xl ${
+                className={`p-3 flex items-center gap-2 rounded-xl ${
                   isActive("/admin/tables")
-                    ? "bg-blue-500 text-white"
+                    ? "bg-black text-white"
                     : "hover:bg-gray-200"
                 }`}
               >
@@ -91,9 +92,9 @@ const AdminLayout = ({ children }) => {
             <SidebarGroup>
               <Link
                 to="/admin/category"
-                className={`p-4 flex items-center gap-2  rounded-xl ${
+                className={`p-3 flex items-center gap-2 rounded-xl ${
                   isActive("/admin/category")
-                    ? "bg-blue-500 text-white"
+                    ? "bg-black text-white"
                     : "hover:bg-gray-200"
                 }`}
               >
@@ -104,9 +105,9 @@ const AdminLayout = ({ children }) => {
             <SidebarGroup>
               <Link
                 to="/admin/menus"
-                className={`p-4 flex items-center gap-2  rounded-xl ${
+                className={`p-3 flex items-center gap-2 rounded-xl ${
                   isActive("/admin/menus")
-                    ? "bg-blue-500 text-white"
+                    ? "bg-black text-white"
                     : "hover:bg-gray-200"
                 }`}
               >
@@ -117,9 +118,9 @@ const AdminLayout = ({ children }) => {
             <SidebarGroup>
               <Link
                 to="/admin/settings"
-                className={`p-4 flex items-center gap-2 rounded-xl ${
+                className={`p-3 flex items-center gap-2 rounded-xl ${
                   isActive("/admin/settings")
-                    ? "bg-blue-500 text-white"
+                    ? "bg-black text-white"
                     : "hover:bg-gray-200"
                 }`}
               >
@@ -128,12 +129,16 @@ const AdminLayout = ({ children }) => {
               </Link>
             </SidebarGroup>
           </SidebarContent>
+
+          {/* Sidebar Footer */}
           <SidebarFooter>
-            <div className="p-4 text-sm text-center ">
+            <div className="p-4 text-sm text-center">
               Powered by Restaurant App
             </div>
           </SidebarFooter>
         </Sidebar>
+
+        {/* Main Content */}
         <div className="w-full bg-gray-100">
           <Navbar />
           <div className="bg-white p-6 h-full">{children}</div>

@@ -168,7 +168,7 @@ const AdminUserList = () => {
       </Table>
 
       {/* Pagination */}
-      <div className="mt-4 text-center">
+      <div className="mt-4 text-center flex flex-row justify-center items-center gap-3">
         <button
           className="px-4 py-2 border rounded-l-md"
           onClick={() => handlePageChange(page - 1)}
@@ -176,6 +176,9 @@ const AdminUserList = () => {
         >
           Previous
         </button>
+        <div className="text-center mt-2">
+          Page {page} of {users?.totalPages}
+        </div>
         <button
           className="px-4 py-2 border rounded-r-md"
           onClick={() => handlePageChange(page + 1)}
@@ -183,9 +186,6 @@ const AdminUserList = () => {
         >
           Next
         </button>
-      </div>
-      <div className="text-center mt-2">
-        Page {page} of {users?.totalPages}
       </div>
     </div>
   );
