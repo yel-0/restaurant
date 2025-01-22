@@ -11,7 +11,18 @@ const useCreateTable = () => {
     onSuccess: () => {
       queryClient.invalidateQueries("tables");
       toast({
-        title: "Table  create successfully",
+        title: "Table created successfully",
+        description:
+          "The new table has been added and is now available for reservations.",
+      });
+    },
+    onError: (error) => {
+      toast({
+        title: "Failed to create table",
+        description:
+          error?.response?.data?.message ||
+          "Something went wrong. Please try again.",
+        variant: "destructive",
       });
     },
   });

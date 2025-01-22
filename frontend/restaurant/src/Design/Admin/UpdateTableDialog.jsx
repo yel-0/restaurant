@@ -17,8 +17,9 @@ export const UpdateTableDialog = ({ table }) => {
     tableNumber: table.tableNumber,
     seats: table.seats,
     location: table.location,
-    status: table.status || "available", // Default status
+    status: table.status || "available",
   });
+  const [open, setOpen] = useState(false); // Manage dialog open/close state
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -30,11 +31,18 @@ export const UpdateTableDialog = ({ table }) => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    updateTable({ tableId: table._id, updatedData: formData });
+    updateTable(
+      { tableId: table._id, updatedData: formData },
+      {
+        onSuccess: () => {
+          setOpen(false);
+        },
+      }
+    );
   };
 
   return (
-    <Dialog>
+    <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
         <Button className="bg-white shadow-none flex flex-row justify-center items-center border-black border text-black hover:text-gray-700">
           <Pencil /> <div>Edit</div>
@@ -91,14 +99,19 @@ export const UpdateTableDialog = ({ table }) => {
               <option value="reserved">Reserved</option>
             </select>
           </div>
-          <div className="text-right">
+          <div className="flex justify-end gap-3">
             <Button
-              type="submit"
-              disabled={isLoading}
-              className="bg-green-500 text-white hover:bg-green-600"
+              type="button"
+              onClick={() => setOpen(false)} // Close the dialog
+              className="bg-gray-200 text-gray-800 hover:bg-gray-300"
             >
+              Close
+            </Button>
+            {/* Save Button */}
+            <Button type="submit" disabled={isLoading}>
               {isLoading ? "Saving..." : "Save Changes"}
             </Button>
+            {/* Close Button */}
           </div>
         </form>
       </DialogContent>

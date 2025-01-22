@@ -9,6 +9,9 @@ import {
 import useUpdateCategory from "@/Hook/Category/useUpdateCategory";
 import { useQueryClient } from "react-query";
 import { useToast } from "@/hooks/use-toast";
+import { Pencil } from "lucide-react";
+import { Button } from "@/components/ui/button";
+
 const UpdateCategoryDialog = ({ category }) => {
   const [name, setName] = useState(category.name);
   const [open, setOpen] = useState(false);
@@ -49,10 +52,16 @@ const UpdateCategoryDialog = ({ category }) => {
     }
   };
 
+  const handleClose = () => {
+    setOpen(false); // Close the dialog without performing any action
+  };
+
   return (
     <Dialog open={open} onOpenChange={setOpen}>
-      <DialogTrigger className="bg-blue-500 text-white hover:bg-blue-600 py-1 px-2 text-sm rounded-md shadow-md">
-        Update
+      <DialogTrigger>
+        <Button className="bg-white shadow-none flex flex-row justify-center items-center border-black border text-black hover:text-gray-700">
+          <Pencil /> <div>Edit</div>
+        </Button>
       </DialogTrigger>
       <DialogContent className="w-[90%] lg:max-w-lg rounded-lg">
         <DialogHeader>
@@ -66,13 +75,20 @@ const UpdateCategoryDialog = ({ category }) => {
             onChange={(e) => setName(e.target.value)}
             className="border border-gray-300 rounded-md p-2 outline-none focus:border-blue-500 transition"
           />
-          <button
-            onClick={handleUpdate}
-            disabled={isLoading}
-            className="bg-blue-500 text-white py-2 rounded-md mt-4 hover:bg-blue-600 transition"
-          >
-            {isLoading ? "Updating..." : "Save Changes"}
-          </button>
+          <div className="flex justify-end gap-2 mt-4">
+            {/* Close button */}
+            <Button
+              type="button"
+              onClick={handleClose}
+              className="bg-gray-200 text-gray-800 hover:bg-gray-300"
+            >
+              Close
+            </Button>
+            {/* Save Changes button */}
+            <Button onClick={handleUpdate} disabled={isLoading}>
+              {isLoading ? "Updating..." : "Save Changes"}
+            </Button>
+          </div>
         </div>
       </DialogContent>
     </Dialog>

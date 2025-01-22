@@ -6,12 +6,13 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
-
 import useCreateCategory from "@/Hook/Category/useCreateCategory";
+import { Button } from "@/components/ui/button";
+
 const CreateCategoryDialog = () => {
   const [open, setOpen] = useState(false);
-
   const [name, setName] = useState("");
+
   const {
     mutate: createCategory,
     isLoading,
@@ -27,11 +28,16 @@ const CreateCategoryDialog = () => {
     }
   };
 
+  const handleClose = () => {
+    setOpen(false); // Close the dialog without performing any action
+  };
+
   return (
     <Dialog open={open} onOpenChange={setOpen}>
-      <DialogTrigger className="bg-blue-500 text-white hover:opacity-75 p-5 lg:py-1 lg:px-2 text-sm rounded-md shadow-md">
-        Add Category
+      <DialogTrigger className="bg-black text-white hover:opacity-75 p-3 text-sm rounded-md shadow-md">
+        Add Category +
       </DialogTrigger>
+
       <DialogContent className="w-[90%] lg:max-w-lg">
         <DialogHeader>
           <DialogTitle>Create New Category</DialogTitle>
@@ -45,13 +51,20 @@ const CreateCategoryDialog = () => {
             placeholder="Enter category name"
             className="border border-gray-300 rounded-md p-2 outline-none transition"
           />
-          <button
-            onClick={handleCreate}
-            disabled={isLoading}
-            className="bg-blue-500 text-white py-2 rounded-md mt-4 hover:opacity-75 transition"
-          >
-            {isLoading ? "Creating..." : "Create Category"}
-          </button>
+          <div className="flex justify-end gap-2 mt-4">
+            {/* Close button */}
+            <Button
+              type="button"
+              onClick={handleClose}
+              className="bg-gray-200 text-gray-800 hover:bg-gray-300"
+            >
+              Close
+            </Button>
+            {/* Create button */}
+            <Button onClick={handleCreate} disabled={isLoading} className="">
+              {isLoading ? "Creating..." : "Create Category"}
+            </Button>
+          </div>
         </div>
       </DialogContent>
     </Dialog>

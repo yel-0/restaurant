@@ -9,6 +9,7 @@ import {
 } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import useCreateTable from "@/Hook/Table/useCreateTable";
+
 const CreateTableDialog = () => {
   const [tableData, setTableData] = useState({
     tableNumber: "",
@@ -16,6 +17,7 @@ const CreateTableDialog = () => {
     status: "available",
     location: "",
   });
+  const [open, setOpen] = useState(false); // Manage dialog open/close state
 
   // Handle form field changes
   const handleChange = (e) => {
@@ -29,7 +31,12 @@ const CreateTableDialog = () => {
   // Submit handler for the form
   const handleSubmit = (e) => {
     e.preventDefault();
-    createTable(tableData);
+    createTable(tableData, {
+      onSuccess: () => {
+        setOpen(false); // Close dialog on successful creation
+      },
+    });
+
     setTableData({
       tableNumber: "",
       seats: "",
@@ -38,11 +45,16 @@ const CreateTableDialog = () => {
     });
   };
 
+  const handleClose = () => {
+    setOpen(false); // Close the dialog without performing any action
+  };
+
   return (
-    <Dialog>
+    <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
-        <Button className="">Create Table +</Button>
+        <Button>Create Table +</Button>
       </DialogTrigger>
+
       <DialogContent>
         <DialogHeader>
           <DialogTitle>Create Table</DialogTitle>
@@ -102,8 +114,16 @@ const CreateTableDialog = () => {
               required
             />
           </div>
-          <div className="text-right">
-            <Button type="submit" className="bg-blue-500 hover:bg-blue-600">
+          <div className="text-right flex justify-end gap-2">
+            <Button
+              type="button"
+              variant="outline"
+              onClick={handleClose} // Close dialog without action
+              className="bg-gray-200 text-gray-800 hover:bg-gray-300"
+            >
+              Close
+            </Button>
+            <Button type="submit">
               {isLoading ? "Creating..." : "Create"}
             </Button>
           </div>

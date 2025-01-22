@@ -20,7 +20,7 @@ const AdminTables = () => {
   const [page, setPage] = useState(1);
   const [searchInput, setSearchInput] = useState(""); // Temporary state for input
   const [search, setSearch] = useState(""); // Final search state for API call
-  const limit = 4; // Items per page
+  const limit = 10; // Items per page
   const { data, isLoading, isError } = useFetchTables(page, limit, search);
 
   const tables = data?.tables || [];
