@@ -2,6 +2,9 @@ import React, { useState, useEffect } from "react";
 import { useOrderCart } from "@/context/OrderCartContext";
 import useFetchTables from "@/Hook/Table/useFetchTables";
 import useCreateOrder from "@/Hook/Order/useCreateOrder";
+import { Input } from "@/components/ui/input";
+import { useToast } from "@/hooks/use-toast";
+import { Button } from "@/components/ui/button";
 
 const WaiterOrderSummary = () => {
   const { cartItems, addToCart, removeFromCart, decreaseQuantity } =
@@ -11,6 +14,7 @@ const WaiterOrderSummary = () => {
   const [status, setStatus] = useState("pending"); // Order status (default is pending)
   const [searchQuery, setSearchQuery] = useState(""); // For searching tables
   const [currentPage, setCurrentPage] = useState(1); // Pagination state
+  const { toast } = useToast();
 
   const taxRate = 0.1;
 
@@ -52,6 +56,12 @@ const WaiterOrderSummary = () => {
 
   const handleDeleteItem = (itemId) => {
     removeFromCart(itemId);
+    toast({
+      title: "Item removed from cart",
+      description: "The item has been removed from your cart.",
+
+      variant: "destructive",
+    });
   };
 
   const handleSubmitOrder = async () => {
@@ -101,16 +111,16 @@ const WaiterOrderSummary = () => {
 
       <div className="mb-6">
         <label htmlFor="table-search" className="text-lg text-gray-600">
-          Search Table:
+          Search Table
         </label>
         <div className="flex mb-2 relative">
-          <input
+          <Input
             type="text"
             id="table-search"
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
             placeholder="Search by Table Number"
-            className="p-3 border border-gray-300 rounded-lg w-full"
+            className="p-5 px-3"
           />
           {searchQuery && !tableLoading && filteredTables?.length === 0 && (
             <div className="absolute top-full left-0 w-full bg-white border border-gray-300 rounded-lg mt-1">
@@ -238,18 +248,13 @@ const WaiterOrderSummary = () => {
         />
       </div>
 
-      <button
+      <Button
         onClick={handleSubmitOrder}
-        className="w-full py-3 bg-green-500 text-white font-semibold rounded-lg shadow-md hover:bg-green-600 transition"
         disabled={isLoading || !selectedTable || cartItems.length === 0}
+        className="w-full "
       >
         {isLoading ? "Submitting..." : "Submit Order"}
-      </button>
-
-      {isSuccess && (
-        <p className="text-green-500 mt-4">Order submitted successfully!</p>
-      )}
-      {error && <p className="text-red-500 mt-4">Error: {error}</p>}
+      </Button>
     </div>
   );
 };

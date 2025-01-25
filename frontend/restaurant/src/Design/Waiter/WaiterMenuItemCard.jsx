@@ -1,38 +1,45 @@
 import React from "react";
 import { useOrderCart } from "@/context/OrderCartContext";
+import {
+  Card,
+  CardContent,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { useToast } from "@/hooks/use-toast";
+
 const WaiterMenuItemCard = ({ item }) => {
-  const { addToCart } = useOrderCart(); // Access addToCart function from the context
+  const { addToCart } = useOrderCart();
+  const { toast } = useToast();
 
   const handleAddToOrder = () => {
-    // Add the item to the order using the addToCart function from the context
     addToCart(item);
-
-    // Optionally, show a confirmation message
-    alert(`Added ${item.name} to the order`);
+    toast({
+      title: "Item added to cart",
+      description: `${item.name} has been added to your cart.`,
+    });
   };
 
   return (
-    <div className="border rounded-lg shadow-md p-4 w-64">
-      <img
-        src={item.image}
-        alt={item.name}
-        className="w-full h-40 object-cover rounded-md mb-4"
-      />
-      <h3 className="text-lg font-semibold mb-2">{item.name}</h3>
-      <p className="text-sm text-gray-600 mb-2">{item.description}</p>
-
-      {/* Stock Quantity Display */}
-
-      <div className="flex justify-between items-center">
+    <Card className="w-70 shadow-lg border rounded-lg">
+      <CardHeader className="p-0">
+        <img
+          src={item.image}
+          alt={item.name}
+          className="w-full h-40 object-cover rounded-md"
+        />
+      </CardHeader>
+      <CardContent className="mt-2">
+        <CardTitle className="text-lg ">{item.name}</CardTitle>
+        <p className="text-sm text-gray-600 mb-2">{item.description}</p>
         <span className="text-lg font-bold">${item.price}</span>
-        <button
-          onClick={handleAddToOrder}
-          className="px-3 py-1 bg-green-600 text-white text-sm rounded-md"
-        >
-          Add to Order
-        </button>
-      </div>
-    </div>
+      </CardContent>
+      <CardFooter className="flex justify-end">
+        <Button onClick={handleAddToOrder}>Add to Order</Button>
+      </CardFooter>
+    </Card>
   );
 };
 

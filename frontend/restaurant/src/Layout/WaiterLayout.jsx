@@ -1,57 +1,87 @@
 import React from "react";
+import { useLocation, Link } from "react-router-dom";
 import {
   Sidebar,
   SidebarContent,
   SidebarFooter,
   SidebarGroup,
-  SidebarHeader,
-  SidebarTrigger,
 } from "@/components/ui/sidebar";
 import { SidebarProvider } from "@/components/ui/sidebar";
 import Navbar from "@/Design/Share/NavBar";
-import Footer from "@/Design/Share/Footer";
-import { Link } from "react-router-dom";
+import { Table, ListOrdered, ClipboardList } from "lucide-react";
 
 const WaiterLayout = ({ children }) => {
+  const location = useLocation();
+
+  // Function to determine active route
+  const isActive = (path) => location.pathname === path;
+
   return (
-    <div className="flex">
+    <div>
       {/* Sidebar */}
       <SidebarProvider>
-        <Sidebar className="w-64 h-screen  bg-white border-l text-black">
-          <SidebarHeader>
-            <div className="p-4 text-lg font-bold">Waiter Dashboard</div>
-          </SidebarHeader>
+        <Sidebar className="w-64 bg-white border-l text-black">
+          {/* Sidebar Header */}
+          <div className="h-14 px-6 flex items-center gap-2">
+            <ClipboardList className="text-3xl" />
+            <h2 className="text-xl font-semibold text-black">Waiter Panel</h2>
+          </div>
 
-          <SidebarContent>
+          {/* Sidebar Content */}
+          <SidebarContent className="border-l mt-3">
             <SidebarGroup>
-              <Link to="/waiter/order" className="p-4  border-gray-700">
-                Waiter Order
+              <Link
+                to="/waiter/order"
+                className={`p-3 flex items-center gap-2 rounded-xl ${
+                  isActive("/waiter/order")
+                    ? "bg-black text-white"
+                    : "hover:bg-gray-200"
+                }`}
+              >
+                <ClipboardList className="h-5 w-5" />
+                Menus
               </Link>
             </SidebarGroup>
             <SidebarGroup>
-              <Link to="/waiter/order/lists" className="p-4  border-gray-700">
-                Waiter OrderLists
+              <Link
+                to="/waiter/order/lists"
+                className={`p-3 flex items-center gap-2 rounded-xl ${
+                  isActive("/waiter/order/lists")
+                    ? "bg-black text-white"
+                    : "hover:bg-gray-200"
+                }`}
+              >
+                <ListOrdered className="h-5 w-5" />
+                Order Lists
               </Link>
             </SidebarGroup>
             <SidebarGroup>
-              <Link to="/waiter/tables" className="p-4 border-gray-700">
-                Waiter Tables
+              <Link
+                to="/waiter/tables"
+                className={`p-3 flex items-center gap-2 rounded-xl ${
+                  isActive("/waiter/tables")
+                    ? "bg-black text-white"
+                    : "hover:bg-gray-200"
+                }`}
+              >
+                <Table className="h-5 w-5" />
+                Tables
               </Link>
             </SidebarGroup>
           </SidebarContent>
+
+          {/* Sidebar Footer */}
           <SidebarFooter>
-            <div className="p-4 text-sm text-center  border-gray-700">
+            <div className="p-4 text-sm text-center">
               Powered by Restaurant App
             </div>
           </SidebarFooter>
         </Sidebar>
 
-        <div className="flex-1 flex flex-col bg-gray-100">
+        {/* Main Content */}
+        <div className="w-full bg-gray-100">
           <Navbar />
-          <main className="flex-1 bg-white shadow rounded-lg p-6 h-full">
-            <SidebarTrigger />
-            {children}
-          </main>
+          <div className="bg-white p-6 h-full">{children}</div>
         </div>
       </SidebarProvider>
     </div>

@@ -12,6 +12,7 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Link } from "react-router-dom";
 import useFetchOrders from "@/Hook/Order/useFetchOrders";
+import DeleteOrderDialog from "./DeleteOrderDialog";
 
 // Fake data with 10 entries
 const statusColors = {
@@ -66,12 +67,13 @@ export function AdminOrderList() {
                 </Badge>
               </TableCell>
               <TableCell>{order.orderDate}</TableCell>
-              <TableCell>
+              <TableCell className="flex flex-row justify-start items-center">
                 <Link to={`/admin/order/detail/${order._id}`}>
-                  <Button size="sm" variant="outline">
+                  <Button size="sm" variant="outline" className="mr-2">
                     View
                   </Button>
                 </Link>
+                <DeleteOrderDialog orderId={order._id} />
               </TableCell>
             </TableRow>
           ))}

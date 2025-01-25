@@ -1,34 +1,49 @@
-import OverviewCards from "@/Design/Admin/OverviewCards";
 import React from "react";
+import { Calendar } from "lucide-react"; // Icon for the date
+import OverviewCards from "@/Design/Admin/OverviewCards";
 import { SalesPerformance } from "@/Design/Admin/SalesPerformance";
-import { OrderBreakdown } from "@/Design/Admin/OrderBreakdown";
-import { CustomerInsights } from "@/Design/Admin/CustomerInsights";
-import { InventoryManagement } from "@/Design/Admin/InventoryManagement";
-import { RecentOrders } from "@/Design/Admin/RecentOrders";
-import { RevenueOverview } from "@/Design/Admin/RevenueOverview";
-import { EmployeeActivity } from "@/Design/Admin/EmployeeActivity";
-import { MotivationalCard } from "@/Design/Admin/MotivationalCard";
+
 import { MonthlySalesPerformance } from "@/Design/Admin/MonthlySalesPerformance";
 import { AdminOrderList } from "@/Design/Admin/AdminOrderList";
 
 const AdminDashboard = () => {
+  const today = new Date();
+  const currentDate = today.toLocaleDateString("en-US", {
+    weekday: "long",
+    year: "numeric",
+    month: "long",
+    day: "numeric",
+  });
+
   return (
     <div className="flex flex-col gap-6">
+      {/* Greeting and Motivational Quote Section */}
+      <div className="flex flex-row justify-between items-center shadow-md hover:shadow-lg px-4 transition-shadow duration-300 rounded-lg">
+        <div className="flex flex-col p-4 ">
+          <p className="text-2xl font-semibold text-black">
+            Hello Yel Win Thein!
+          </p>
+          <p className="text-sm text-black mt-2">
+            Good luck for today, make it amazing!
+          </p>
+        </div>
+
+        {/* Date Section */}
+        <div className="flex items-center bg-blue-500 text-white p-4 rounded-xl">
+          <Calendar size={20} className="mr-2" />
+          <div>
+            <p className="text-sm">{currentDate}</p>
+          </div>
+        </div>
+      </div>
+
+      {/* Other Sections */}
       <OverviewCards />
       <div className="flex flex-row justify-between gap-3">
         <SalesPerformance />
         <MonthlySalesPerformance />
       </div>
       <AdminOrderList />
-      {/* <OrderBreakdown /> */}
-      {/* <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-        <CustomerInsights />
-        <InventoryManagement />
-        <RecentOrders />
-        <RevenueOverview />
-        <EmployeeActivity />
-        <MotivationalCard />
-      </div> */}
     </div>
   );
 };

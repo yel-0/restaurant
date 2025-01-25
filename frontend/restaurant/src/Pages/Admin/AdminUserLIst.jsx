@@ -22,6 +22,19 @@ import useFetchUsers from "@/Hook/Auth/useFetchUsers";
 import { Badge } from "@/components/ui/badge";
 import { Input } from "@/components/ui/input";
 import { Link } from "react-router-dom";
+
+const getStatusBadge = (status) => {
+  switch (status) {
+    case "active":
+      return <Badge className="bg-green-500  text-white">Active</Badge>;
+    case "inactive":
+      return <Badge className="bg-red-500 text-white">Inactive</Badge>;
+
+    default:
+      return <Badge className="bg-yellow-500 text-white">Unknown</Badge>;
+  }
+};
+
 const AdminUserList = () => {
   const [roleFilter, setRoleFilter] = useState(""); // Manage role filter state
   const [nameFilter, setNameFilter] = useState(""); // Manage name filter state
@@ -119,8 +132,6 @@ const AdminUserList = () => {
             </Link>
           </div>
         </div>
-
-        {/* Name search input */}
       </div>
 
       {/* Table */}
@@ -143,19 +154,8 @@ const AdminUserList = () => {
               <TableCell>{user.name}</TableCell>
               <TableCell>{user.email}</TableCell>
               <TableCell>{user.role} </TableCell>
-              <TableCell>
-                {" "}
-                <Badge
-                  variant="outline"
-                  className={
-                    user.status === "active"
-                      ? "bg-white text-black"
-                      : "bg-white text-red-500"
-                  }
-                >
-                  {user.status}
-                </Badge>{" "}
-              </TableCell>
+              <TableCell>{getStatusBadge(user.status)}</TableCell>{" "}
+              {/* Updated status badge */}
               <TableCell>{formatDate(user.createdAt)}</TableCell>{" "}
               {/* Format the createdAt date */}
               <TableCell className="text-center gap-3 flex justify-center items-center">

@@ -16,6 +16,19 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 
+const getStatusBadge = (status) => {
+  switch (status) {
+    case "available":
+      return <Badge className="bg-green-500 text-white">Available</Badge>;
+    case "occupied":
+      return <Badge className="bg-red-500 text-white">Occupied</Badge>;
+    case "reserved":
+      return <Badge className="bg-yellow-500 text-white">Reserved</Badge>;
+    default:
+      return <Badge className="bg-gray-500 text-white">Unknown</Badge>;
+  }
+};
+
 const AdminTables = () => {
   const [page, setPage] = useState(1);
   const [searchInput, setSearchInput] = useState(""); // Temporary state for input
@@ -88,9 +101,7 @@ const AdminTables = () => {
               <TableCell>Table {table.tableNumber}</TableCell>
               <TableCell>{table.seats}</TableCell>
               <TableCell>{table.location}</TableCell>
-              <TableCell>
-                <Badge>{table.status}</Badge>
-              </TableCell>
+              <TableCell>{getStatusBadge(table.status)}</TableCell>
               <TableCell className="text-center gap-3 flex justify-center items-center">
                 <UpdateTableDialog table={table} />
                 <DeleteTableDialog tableId={table._id} />
