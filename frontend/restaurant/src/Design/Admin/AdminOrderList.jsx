@@ -26,11 +26,36 @@ export function AdminOrderList() {
   const { data, isLoading, isError } = useFetchOrders();
 
   if (isLoading) {
-    return <div>is loading...</div>;
+    return <div>Loading orders...</div>;
   }
 
   if (isError) {
     return <div>Error fetching orders!</div>;
+  }
+
+  // Check if there are no orders at all
+  if (data?.length === 0) {
+    return (
+      <div className="text-center p-4">
+        <h1 className="text-xl font-bold mb-4">Admin Order List</h1>
+        <p>No orders available.</p>
+      </div>
+    );
+  }
+
+  // Filter orders for today
+  const today = new Date().toISOString().split("T")[0]; // Get today's date in YYYY-MM-DD format
+  const ordersForToday = data.filter((order) =>
+    order.orderDate.startsWith(today)
+  );
+
+  if (ordersForToday.length === 0) {
+    return (
+      <div className="text-center p-4">
+        <h1 className="text-xl font-bold mb-4">Admin Order List</h1>
+        <p>No orders for today.</p>
+      </div>
+    );
   }
 
   return (
@@ -49,7 +74,7 @@ export function AdminOrderList() {
           </TableRow>
         </TableHeader>
         <TableBody>
-          {data?.map((order) => (
+          {ordersForToday.map((order) => (
             <TableRow key={order._id}>
               <TableCell>Table {order.table.tableNumber}</TableCell>{" "}
               {/* Table number column */}

@@ -1,5 +1,5 @@
 import React from "react";
-import { Calendar } from "lucide-react"; // Icon for the date
+import { Calendar, Smile } from "lucide-react"; // Icon for the date
 import OverviewCards from "@/Design/Admin/OverviewCards";
 import { SalesPerformance } from "@/Design/Admin/SalesPerformance";
 
@@ -20,8 +20,8 @@ const AdminDashboard = () => {
       {/* Greeting and Motivational Quote Section */}
       <div className="flex flex-row justify-between items-center shadow-md hover:shadow-lg px-4 transition-shadow duration-300 rounded-lg">
         <div className="flex flex-col p-4 ">
-          <p className="text-2xl font-semibold text-black">
-            Hello Yel Win Thein!
+          <p className="text-2xl flex flex-row justify-center items-center gap-2 font-semibold text-black">
+            Hello Yel Win Thein <Smile />
           </p>
           <p className="text-sm text-black mt-2">
             Good luck for today, make it amazing!

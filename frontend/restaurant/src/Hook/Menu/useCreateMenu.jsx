@@ -7,12 +7,16 @@ const useCreateMenu = () => {
   const mutation = useMutation(createMenuItem, {
     onSuccess: (data) => {
       toast({
-        title: "Menu item is create successfully",
+        title: "Menu item created successfully",
+        description: `The menu item "${data.name}" has been successfully added to the menu.`,
       });
     },
     onError: (error) => {
       toast({
-        title: "Creating menu item is fail",
+        title: "Failed to create menu item",
+        description:
+          error.message ||
+          "There was an error while creating the menu item. Please try again.",
       });
     },
   });

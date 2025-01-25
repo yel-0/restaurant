@@ -5,6 +5,7 @@ import {
   SidebarContent,
   SidebarFooter,
   SidebarGroup,
+  SidebarTrigger,
 } from "@/components/ui/sidebar";
 import { SidebarProvider } from "@/components/ui/sidebar";
 import Navbar from "@/Design/Share/NavBar";
@@ -126,8 +127,9 @@ const AdminLayout = ({ children }) => {
         </Sidebar>
 
         {/* Main Content */}
-        <div className="w-full bg-gray-100">
+        <div className="w-full bg-white">
           <Navbar />
+          <SidebarTrigger />
           <div className="bg-white p-6 h-full">{children}</div>
         </div>
       </SidebarProvider>

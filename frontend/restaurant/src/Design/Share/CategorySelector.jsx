@@ -14,7 +14,7 @@ const CategorySelector = ({ selectedCategory, setSelectedCategory }) => {
   }
 
   return (
-    <div className="flex space-x-4 mb-6">
+    <div className="flex space-x-4">
       {/* "All" button */}
       <Button
         onClick={() => setSelectedCategory(null)}

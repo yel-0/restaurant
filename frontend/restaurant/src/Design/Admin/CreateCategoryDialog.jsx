@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import {
   Dialog,
   DialogContent,
@@ -31,6 +31,13 @@ const CreateCategoryDialog = () => {
   const handleClose = () => {
     setOpen(false); // Close the dialog without performing any action
   };
+
+  // Close the dialog when category is successfully created
+  useEffect(() => {
+    if (isSuccess) {
+      setOpen(false); // Close the dialog
+    }
+  }, [isSuccess]);
 
   return (
     <Dialog open={open} onOpenChange={setOpen}>

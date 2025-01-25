@@ -15,6 +15,15 @@ import useFetchTables from "@/Hook/Table/useFetchTables";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
+import {
+  Pagination,
+  PaginationContent,
+  PaginationEllipsis,
+  PaginationItem,
+  PaginationLink,
+  PaginationNext,
+  PaginationPrevious,
+} from "@/components/ui/pagination";
 
 const getStatusBadge = (status) => {
   switch (status) {
@@ -111,23 +120,38 @@ const AdminTables = () => {
         </TableBody>
       </Table>
 
-      {/* Pagination Controls */}
-      <div className="mt-4 text-center">
-        <button
-          className="px-4 py-2 border rounded-l-md"
-          onClick={handlePrevious}
-          disabled={page === 1}
-        >
-          Previous
-        </button>
-        <span className="px-4">{`Page ${page} of ${totalPages}`}</span>
-        <button
-          className="px-4 py-2 border rounded-r-md"
-          onClick={handleNext}
-          disabled={page === totalPages}
-        >
-          Next
-        </button>
+      {/* Pagination */}
+      <div className="mt-6 flex justify-center items-center select-none">
+        <Pagination>
+          <PaginationContent>
+            <PaginationItem>
+              <PaginationPrevious
+                onClick={handlePrevious}
+                disabled={page === 1}
+              />
+            </PaginationItem>
+
+            {[...Array(totalPages)].map((_, index) => (
+              <PaginationItem key={index}>
+                <PaginationLink
+                  isActive={page === index + 1}
+                  onClick={() => setPage(index + 1)}
+                >
+                  {index + 1}
+                </PaginationLink>
+              </PaginationItem>
+            ))}
+
+            {totalPages > 5 && <PaginationEllipsis />}
+
+            <PaginationItem>
+              <PaginationNext
+                onClick={handleNext}
+                disabled={page === totalPages}
+              />
+            </PaginationItem>
+          </PaginationContent>
+        </Pagination>
       </div>
     </div>
   );

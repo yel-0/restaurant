@@ -24,6 +24,18 @@ const AdminCategory = () => {
     return <p className="text-red-500">Error: {error.message}</p>;
   }
 
+  const formatDate = (date) => {
+    const newDate = new Date(date); // Directly parse the ISO string
+    return newDate.toLocaleString("en-US", {
+      year: "numeric",
+      month: "short",
+      day: "numeric",
+      hour: "2-digit",
+      minute: "2-digit",
+      hour12: true, // 12-hour clock (AM/PM)
+    });
+  };
+
   return (
     <div>
       {/* Create Category Button */}
@@ -37,6 +49,7 @@ const AdminCategory = () => {
         <TableHeader>
           <TableRow>
             <TableHead>Category Name</TableHead>
+            <TableHead>Create At</TableHead>
             <TableHead className="text-center">Actions</TableHead>
           </TableRow>
         </TableHeader>
@@ -47,14 +60,12 @@ const AdminCategory = () => {
                 {/* Capitalize the first letter of the category name */}
                 {category.name.charAt(0).toUpperCase() + category.name.slice(1)}
               </TableCell>
+              <TableCell>{formatDate(category.createdAt)}</TableCell>{" "}
+              {/* Format the Create At date */}
               <TableCell className="text-center">
                 <div className="flex justify-center items-center space-x-3">
-                  <UpdateCategoryDialog
-                    category={category}
-                  ></UpdateCategoryDialog>
-                  <DeleteCategoryConfirmationDialog
-                    category={category}
-                  ></DeleteCategoryConfirmationDialog>
+                  <UpdateCategoryDialog category={category} />
+                  <DeleteCategoryConfirmationDialog category={category} />
                 </div>
               </TableCell>
             </TableRow>

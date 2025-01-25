@@ -12,7 +12,7 @@ const WaiterOrders = () => {
   const [queryParams, setQueryParams] = useState({
     category: "",
     name: "",
-    limit: 3,
+    limit: 8,
     page: 1,
   });
 

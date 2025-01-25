@@ -26,7 +26,7 @@ const AdminMenuItemCard = ({ item }) => {
         <CardTitle className="text-xl font-semibold text-gray-800">
           {item.name}
         </CardTitle>
-        <CardDescription className="text-sm text-gray-600 mt-1">
+        <CardDescription className="text-sm text-gray-600 mt-1 h-[100px]  overflow-y-scroll">
           {item.description}
         </CardDescription>
         <div className="mt-3 text-lg font-bold text-black">${item.price}</div>

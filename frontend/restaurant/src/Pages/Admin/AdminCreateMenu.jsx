@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import useCreateMenu from "@/Hook/Menu/useCreateMenu";
 import useFetchCategories from "@/Hook/Category/useFetchCategories"; // import the custom hook for fetching categories
+import { Input } from "@/components/ui/input"; // Importing the Input component
 
 // Component for entering menu item details
 const MenuItemDetailsForm = ({ details, setDetails, categories }) => {
@@ -19,14 +20,15 @@ const MenuItemDetailsForm = ({ details, setDetails, categories }) => {
         >
           Name
         </label>
-        <input
+        <Input
           type="text"
           id="name"
           name="name"
           value={details.name}
           onChange={handleChange}
           required
-          className="mt-1 block w-full p-2 border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500"
+          placeholder="Enter menu item name"
+          className="mt-1 block w-full p-2 border border-gray-300 rounded-md"
         />
       </div>
 
@@ -44,7 +46,7 @@ const MenuItemDetailsForm = ({ details, setDetails, categories }) => {
           value={details.category}
           onChange={handleChange}
           required
-          className="mt-1 block w-full p-2 border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500"
+          className="mt-1 block w-full p-2 border border-gray-300 rounded-md"
         >
           <option value="" disabled>
             Select a category
@@ -64,14 +66,15 @@ const MenuItemDetailsForm = ({ details, setDetails, categories }) => {
         >
           Price
         </label>
-        <input
+        <Input
           type="number"
           id="price"
           name="price"
           value={details.price}
           onChange={handleChange}
           required
-          className="mt-1 block w-full p-2 border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500"
+          placeholder="Enter price"
+          className="mt-1 block w-full p-2 border border-gray-300 rounded-md"
         />
       </div>
 
@@ -87,7 +90,8 @@ const MenuItemDetailsForm = ({ details, setDetails, categories }) => {
           name="description"
           value={details.description}
           onChange={handleChange}
-          className="mt-1 block w-full p-2 border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500"
+          placeholder="Enter item description"
+          className="mt-1 block w-full p-2 border border-gray-300 rounded-md"
         ></textarea>
       </div>
 
@@ -98,7 +102,7 @@ const MenuItemDetailsForm = ({ details, setDetails, categories }) => {
           name="available"
           checked={details.available}
           onChange={handleChange}
-          className="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded"
+          className="h-4 w-4 text-blue-600 border-gray-300 rounded"
         />
         <label htmlFor="available" className="ml-2 block text-sm text-gray-700">
           Available
@@ -112,13 +116,14 @@ const MenuItemDetailsForm = ({ details, setDetails, categories }) => {
         >
           Image URL
         </label>
-        <input
+        <Input
           type="text"
           id="image"
           name="image"
           value={details.image}
           onChange={handleChange}
-          className="mt-1 block w-full p-2 border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500"
+          placeholder="Enter image URL"
+          className="mt-1 block w-full p-2 border border-gray-300 rounded-md"
         />
       </div>
     </div>
@@ -154,7 +159,20 @@ const AdminCreateMenu = () => {
     formData.append("available", details.available ? "true" : "false");
     formData.append("image", details.image);
 
-    mutate(formData);
+    // Submit the form data using the mutation hook
+    mutate(formData, {
+      onSuccess: () => {
+        // Clear the form fields if the mutation is successful
+        setDetails({
+          name: "",
+          category: "",
+          price: "",
+          description: "",
+          available: true,
+          image: "",
+        });
+      },
+    });
   };
 
   if (categoriesLoading) return <div>Loading categories...</div>;
@@ -162,10 +180,7 @@ const AdminCreateMenu = () => {
     return <div>Error fetching categories: {categoriesError.message}</div>;
 
   return (
-    <form
-      className="mx-auto p-6 bg-white rounded-lg shadow-md space-y-6"
-      onSubmit={handleSubmit}
-    >
+    <form className="mx-auto p-6 space-y-6" onSubmit={handleSubmit}>
       <h2 className="text-2xl font-bold text-gray-800">
         Create a New Menu Item
       </h2>
@@ -176,7 +191,7 @@ const AdminCreateMenu = () => {
       />
       <button
         type="submit"
-        className="w-full px-4 py-2 text-white bg-blue-600 rounded-md shadow hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
+        className="w-full px-4 py-2 text-white bg-blue-600 rounded-md shadow hover:bg-blue-700 focus:outline-none"
       >
         {isLoading ? "Creating..." : "Create Menu Item"}
       </button>

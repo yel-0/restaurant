@@ -5,6 +5,15 @@ import CategorySelector from "@/Design/Share/CategorySelector";
 import { useGetMenus } from "@/Hook/Menu/useGetMenus";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
+import {
+  Pagination,
+  PaginationContent,
+  PaginationEllipsis,
+  PaginationItem,
+  PaginationLink,
+  PaginationNext,
+  PaginationPrevious,
+} from "@/components/ui/pagination";
 
 const AdminMenu = () => {
   const [searchTerm, setSearchTerm] = useState("");
@@ -13,11 +22,13 @@ const AdminMenu = () => {
   const [queryParams, setQueryParams] = useState({
     category: "",
     name: "",
-    limit: 3,
+    limit: 8,
     page: 1,
   });
 
   const { data, isLoading, isError } = useGetMenus(queryParams);
+  const totalPages = data?.totalPages || 1;
+  const totalItems = data?.totalItems || 0;
 
   const handleSearchClick = () => {
     setQueryParams((prev) => ({
@@ -44,18 +55,6 @@ const AdminMenu = () => {
     }));
   }, [page]);
 
-  const handleNextPage = () => {
-    if (data?.menuItems.length === queryParams.limit) {
-      setPage((prev) => prev + 1);
-    }
-  };
-
-  const handlePreviousPage = () => {
-    if (page > 1) {
-      setPage((prev) => prev - 1);
-    }
-  };
-
   return (
     <div className="container mx-auto p-6">
       <h1 className="text-2xl font-semibold mb-6">Admin Menu Management</h1>
@@ -67,19 +66,19 @@ const AdminMenu = () => {
           placeholder="Search menu items..."
           value={searchTerm}
           onChange={(e) => setSearchTerm(e.target.value)}
-          className="p-5  "
+          className="p-5"
         />
         <Button onClick={handleSearchClick}>Search</Button>
       </div>
 
       {/* Category Navigation */}
-      <div className="flex flex-row justify-between items-center mb-6">
+      <div className="flex flex-row justify-between items-center mb-6 py-4">
         <CategorySelector
           selectedCategory={selectedCategory}
           setSelectedCategory={setSelectedCategory}
         />
         <Link to="/admin/menu/create">
-          <Button>Create + </Button>
+          <Button>Create +</Button>
         </Link>
       </div>
 
@@ -94,23 +93,40 @@ const AdminMenu = () => {
       {isLoading && <div>Loading...</div>}
       {isError && <div>Error loading menu items.</div>}
 
-      {/* Pagination Controls */}
-      <div className="flex justify-between items-center mt-6">
-        <button
-          className="px-4 py-2 bg-gray-300 text-gray-800 rounded-lg shadow-md disabled:opacity-50"
-          onClick={handlePreviousPage}
-          disabled={page === 1}
-        >
-          Previous
-        </button>
-        <span className="text-gray-700">Page {page}</span>
-        <button
-          className="px-4 py-2 bg-gray-300 text-gray-800 rounded-lg shadow-md disabled:opacity-50"
-          onClick={handleNextPage}
-          disabled={data?.menuItems.length < queryParams.limit}
-        >
-          Next
-        </button>
+      {/* Pagination */}
+      <div className="flex justify-center select-none items-center mt-6">
+        <Pagination>
+          <PaginationContent>
+            <PaginationItem>
+              <PaginationPrevious
+                onClick={() => setPage((prev) => Math.max(prev - 1, 1))}
+                disabled={page === 1}
+              />
+            </PaginationItem>
+
+            {[...Array(totalPages)].map((_, index) => (
+              <PaginationItem key={index}>
+                <PaginationLink
+                  isActive={page === index + 1}
+                  onClick={() => setPage(index + 1)}
+                >
+                  {index + 1}
+                </PaginationLink>
+              </PaginationItem>
+            ))}
+
+            {totalPages > 5 && <PaginationEllipsis />}
+
+            <PaginationItem>
+              <PaginationNext
+                onClick={() =>
+                  setPage((prev) => Math.min(prev + 1, totalPages))
+                }
+                disabled={page >= totalPages}
+              />
+            </PaginationItem>
+          </PaginationContent>
+        </Pagination>
       </div>
     </div>
   );

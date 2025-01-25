@@ -33,7 +33,9 @@ const WaiterMenuItemCard = ({ item }) => {
       </CardHeader>
       <CardContent className="mt-2">
         <CardTitle className="text-lg ">{item.name}</CardTitle>
-        <p className="text-sm text-gray-600 mb-2">{item.description}</p>
+        <p className="text-sm text-gray-600 mb-2 h-[100px] overflow-y-scroll">
+          {item.description}
+        </p>
         <span className="text-lg font-bold">${item.price}</span>
       </CardContent>
       <CardFooter className="flex justify-end">
