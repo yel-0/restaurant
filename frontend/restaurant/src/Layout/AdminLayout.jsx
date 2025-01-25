@@ -115,19 +115,6 @@ const AdminLayout = ({ children }) => {
                 Menu
               </Link>
             </SidebarGroup>
-            <SidebarGroup>
-              <Link
-                to="/admin/settings"
-                className={`p-3 flex items-center gap-2 rounded-xl ${
-                  isActive("/admin/settings")
-                    ? "bg-black text-white"
-                    : "hover:bg-gray-200"
-                }`}
-              >
-                <Settings className="h-5 w-5" />
-                Settings
-              </Link>
-            </SidebarGroup>
           </SidebarContent>
 
           {/* Sidebar Footer */}

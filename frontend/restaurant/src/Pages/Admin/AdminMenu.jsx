@@ -3,6 +3,8 @@ import AdminMenuItemCard from "@/Design/Admin/AdminMenuItemCard";
 import { Link } from "react-router-dom";
 import CategorySelector from "@/Design/Share/CategorySelector";
 import { useGetMenus } from "@/Hook/Menu/useGetMenus";
+import { Input } from "@/components/ui/input";
+import { Button } from "@/components/ui/button";
 
 const AdminMenu = () => {
   const [searchTerm, setSearchTerm] = useState("");
@@ -60,19 +62,14 @@ const AdminMenu = () => {
 
       {/* Search Box */}
       <div className="mb-6 flex justify-start gap-4 items-center">
-        <input
+        <Input
           type="text"
           placeholder="Search menu items..."
           value={searchTerm}
           onChange={(e) => setSearchTerm(e.target.value)}
-          className="px-4 py-2 w-80 border rounded-lg shadow-md focus:outline-none"
+          className="p-5  "
         />
-        <button
-          className="px-4 py-2 bg-blue-600 text-white rounded-lg shadow-md"
-          onClick={handleSearchClick}
-        >
-          Search
-        </button>
+        <Button onClick={handleSearchClick}>Search</Button>
       </div>
 
       {/* Category Navigation */}
@@ -81,11 +78,8 @@ const AdminMenu = () => {
           selectedCategory={selectedCategory}
           setSelectedCategory={setSelectedCategory}
         />
-        <Link
-          to="/admin/menu/create"
-          className="px-4 py-2 text-sm font-medium rounded bg-blue-600 text-white"
-        >
-          Create
+        <Link to="/admin/menu/create">
+          <Button>Create + </Button>
         </Link>
       </div>
 

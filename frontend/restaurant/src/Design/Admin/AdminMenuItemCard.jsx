@@ -1,37 +1,45 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import { DeleteMenuItemDialog } from "./DeleteMenuItemDialog";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { Pencil } from "lucide-react";
 
 const AdminMenuItemCard = ({ item }) => {
   return (
-    <div className="border rounded-lg shadow-md p-4 w-64">
-      <img
-        src={item.image}
-        alt={item.name}
-        className="w-full h-40 object-cover rounded-md mb-4"
-      />
-      <h3 className="text-lg font-semibold mb-2">{item.name}</h3>
-      <p className="text-sm text-gray-600 mb-2">{item.description}</p>
-
-      {/* Stock Quantity Display */}
-      <div className="mb-2">
-        <span className="text-sm text-gray-600">Stock: </span>
-        <span className="text-lg font-bold text-green-600">{item.stock}</span>
-      </div>
-
-      <div className="flex justify-between items-center">
-        <span className="text-lg font-bold">${item.price}</span>
-        <div className="flex space-x-2">
-          <Link
-            to={`/admin/menu/update/${item._id}`}
-            className="px-3 py-3 bg-blue-600 text-white text-sm rounded-md"
-          >
-            Edit
-          </Link>
-          <DeleteMenuItemDialog item={item} />
-        </div>
-      </div>
-    </div>
+    <Card className="w-72 shadow-lg rounded-xl overflow-hidden  bg-white">
+      <CardHeader className="relative p-0">
+        <img
+          src={item.image}
+          alt={item.name}
+          className="w-full h-48 object-cover"
+        />
+      </CardHeader>
+      <CardContent className="p-4">
+        <CardTitle className="text-xl font-semibold text-gray-800">
+          {item.name}
+        </CardTitle>
+        <CardDescription className="text-sm text-gray-600 mt-1">
+          {item.description}
+        </CardDescription>
+        <div className="mt-3 text-lg font-bold text-black">${item.price}</div>
+      </CardContent>
+      <CardFooter className="flex justify-between items-center px-4 pb-4">
+        <Link to={`/admin/menu/update/${item._id}`}>
+          <Button className="bg-white shadow-none flex flex-row justify-center items-center border-black border text-black hover:text-gray-700">
+            Edit <Pencil />
+          </Button>
+        </Link>
+        <DeleteMenuItemDialog item={item} />
+      </CardFooter>
+    </Card>
   );
 };
 
