@@ -135,7 +135,7 @@ const WaiterOrderSummary = () => {
               <li
                 key={table._id}
                 onClick={() => setSelectedTable(table._id)}
-                className={`cursor-pointer p-2 bg-white border  p-3  rounded-lg ${
+                className={`cursor-pointer p-2 bg-white border rounded-lg ${
                   selectedTable === table._id
                     ? "bg-black border-2 border-black text-black" // Add border and text color change
                     : ""
