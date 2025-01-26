@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
 import { useMenuItemById } from "@/Hook/Menu/useMenuItemById";
 import useUpdateMenuItem from "@/Hook/Menu/useUpdateMenuItem";
+import { Button } from "@/components/ui/button";
 
 const AdminUpdateMenu = () => {
   const { id } = useParams();
@@ -158,15 +159,15 @@ const AdminUpdateMenu = () => {
         </div>
       </div>
 
-      <button
+      <Button
         type="submit"
         disabled={isUpdating}
         className={`w-full px-4 py-2 text-white ${
-          isUpdating ? "bg-gray-400" : "bg-green-600 hover:bg-green-700"
-        } rounded-md shadow focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2`}
+          isUpdating ? "bg-gray-400" : "bg-blue-500"
+        } `}
       >
         {isUpdating ? "Updating..." : "Update Menu Item"}
-      </button>
+      </Button>
     </form>
   );
 };

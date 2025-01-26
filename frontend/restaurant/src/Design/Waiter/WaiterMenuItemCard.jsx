@@ -38,8 +38,10 @@ const WaiterMenuItemCard = ({ item }) => {
         </p>
         <span className="text-lg font-bold">${item.price}</span>
       </CardContent>
-      <CardFooter className="flex justify-end">
-        <Button onClick={handleAddToOrder}>Add to Order</Button>
+      <CardFooter className="flex ">
+        <Button className="w-full" onClick={handleAddToOrder}>
+          Add to Order
+        </Button>
       </CardFooter>
     </Card>
   );

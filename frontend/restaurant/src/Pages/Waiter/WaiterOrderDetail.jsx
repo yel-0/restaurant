@@ -110,31 +110,32 @@ export default function WaiterOrderDetail() {
 
   return (
     <div className="p-8 max-w-4xl mx-auto bg-white shadow-lg rounded-lg border border-gray-200 space-y-6">
-      <h1 className="text-3xl font-bold text-center text-gray-800">
-        Order Details
-      </h1>
+      <div className="flex flex-row justify-between items-center">
+        <h1 className="text-3xl font-bold text-center text-gray-800">
+          Order Details
+        </h1>
+        <OrderAddDialog onAddItem={addItem} />
+      </div>
 
-      <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-        <div className="space-y-1">
+      <div className="rounded-lg shadow-lg  p-4">
+        <div className="space-y-1 flex flex-row justify-between items-center">
           <h2 className="text-sm font-medium text-gray-700">Table Number</h2>
-          <p className="text-lg font-semibold text-gray-900">
-            {order.table.tableNumber}
-          </p>
+          <p className="text-sm text-gray-900">{order.table.tableNumber}</p>
         </div>
-        <div className="space-y-1">
+        {/* <div className="space-y-1 flex flex-row justify-between items-center">
           <h2 className="text-sm font-medium text-gray-700">Waiter Name</h2>
-          <p className="text-lg font-semibold text-gray-900">
+          <p className="text-sm font-semibold text-gray-900">
             {order.createdBy.name}
           </p>
-        </div>
-        <div className="space-y-1">
+        </div> */}
+        <div className="space-y-1 flex flex-row justify-between items-center">
           <h2 className="text-sm font-medium text-gray-700">Order Status</h2>
-          <p className="text-lg font-semibold text-gray-900">{order.status}</p>
+          <p className="text-sm font-semibold text-gray-900">{order.status}</p>
         </div>
-        <div className="space-y-1">
+        <div className="space-y-1 flex flex-row justify-between items-center">
           <h2 className="text-sm font-medium text-gray-700">Payment Status</h2>
           <span
-            className={`text-lg font-semibold ${
+            className={`text-sm font-semibold ${
               order.status === "completed" ? "text-green-600" : "text-red-600"
             }`}
           >
@@ -144,9 +145,6 @@ export default function WaiterOrderDetail() {
       </div>
 
       <div>
-        <h2 className="text-2xl font-semibold mb-4 text-gray-700">
-          Order Items
-        </h2>
         <div className="space-y-4">
           {order?.items.map((item, index) => (
             <div
@@ -189,18 +187,13 @@ export default function WaiterOrderDetail() {
               <p className="text-lg font-semibold text-gray-800">
                 ${item.quantity * item.product.price}
               </p>
-              <button
-                onClick={() => deleteItem(index)}
-                className="ml-4 text-red-500 hover:text-red-700"
-              >
-                ✕
-              </button>
+              <Button onClick={() => deleteItem(index)} variant="destructive">
+                Delete
+              </Button>
             </div>
           ))}
         </div>
       </div>
-
-      <OrderAddDialog onAddItem={addItem} />
 
       <div className="mt-8">
         <h2 className="text-2xl font-semibold text-gray-700">Special Notes</h2>
@@ -228,8 +221,7 @@ export default function WaiterOrderDetail() {
           Back
         </Button>
         <Button
-          variant="primary"
-          className="bg-blue-600 hover:bg-blue-700"
+          variant="secondary"
           onClick={submitChanges}
           disabled={isUpdating}
         >

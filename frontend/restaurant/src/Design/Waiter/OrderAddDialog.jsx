@@ -10,10 +10,23 @@ import {
 import CategorySelector from "../Share/CategorySelector";
 import WaiterMenuItemForOrderAdd from "./WaiterMenuItemForOrderAdd";
 import { useGetMenus } from "@/Hook/Menu/useGetMenus";
+import { useToast } from "@/hooks/use-toast";
+import { Input } from "@/components/ui/input";
+import { Button } from "@/components/ui/button";
+import {
+  Pagination,
+  PaginationContent,
+  PaginationItem,
+  PaginationPrevious,
+  PaginationNext,
+  PaginationLink,
+  PaginationEllipsis,
+} from "@/components/ui/pagination";
 
 const OrderAddDialog = ({ onAddItem }) => {
   const [searchTerm, setSearchTerm] = useState("");
   const [selectedCategory, setSelectedCategory] = useState(null);
+  const { toast } = useToast();
   const [page, setPage] = useState(1);
   const [queryParams, setQueryParams] = useState({
     category: "",
@@ -23,54 +36,66 @@ const OrderAddDialog = ({ onAddItem }) => {
   });
 
   const { data, isLoading, isError } = useGetMenus(queryParams);
+  const totalPages = data?.totalPages || 1;
 
-  const handleSearchClick = () => {
+  useEffect(() => {
     setQueryParams((prev) => ({
       ...prev,
-      name: searchTerm,
-      page: 1,
+      page,
     }));
-  };
+  }, [page]);
 
   useEffect(() => {
     setQueryParams((prev) => ({
       ...prev,
       category: selectedCategory ? selectedCategory._id : "",
+      page: 1, // Reset to first page when category changes
     }));
   }, [selectedCategory]);
 
-  const handleAddNewItem = (item) => {
-    // console.log(item);
+  const handleSearchClick = () => {
+    setQueryParams((prev) => ({
+      ...prev,
+      name: searchTerm,
+      page: 1, // Reset to first page on search
+    }));
+  };
 
+  const handleAddNewItem = (item) => {
     onAddItem(item);
+    toast({
+      title: "Item Added",
+      description: `${item.name} has been added successfully.`,
+    });
   };
 
   return (
     <Dialog>
-      <DialogTrigger className="px-4 py-2 bg-green-600 text-white rounded-lg shadow-md">
+      <DialogTrigger className="px-4 py-2 bg-black text-white rounded-lg">
         Add New Order
       </DialogTrigger>
-      <DialogContent className="h-[500px] overflow-scroll ">
+      <DialogContent className="h-[700px] w-[1400px] overflow-scroll">
         <DialogHeader>
           <DialogTitle>Add New Product</DialogTitle>
           <DialogDescription>
             Search and select a product to add it to the order.
           </DialogDescription>
         </DialogHeader>
+
         <div className="mb-6 flex justify-start gap-4 items-center">
-          <input
+          <Input
             type="text"
             placeholder="Search menu items..."
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
-            className="px-4 py-2 w-80 border rounded-lg shadow-md focus:outline-none "
+            className="px-4 py-2"
           />
-          <button
-            className="px-4 py-2 bg-blue-600 text-white rounded-lg shadow-md"
+          <Button
+            className="px-4 py-2 bg-black text-white rounded-lg shadow-md"
             onClick={handleSearchClick}
           >
             Search
-          </button>
+          </Button>
         </div>
 
         {/* Category Navigation */}
@@ -80,8 +105,10 @@ const OrderAddDialog = ({ onAddItem }) => {
             setSelectedCategory={setSelectedCategory}
           />
         </div>
-        <div className="flex flex-row justify-center items-start">
-          <div className="flex flex-row justify-start items-center flex-wrap gap-6">
+
+        {/* Menu Items */}
+        <div className="flex flex-row justify-center items-center">
+          <div className="flex flex-row justify-center items-center flex-wrap gap-6">
             {data?.menuItems.map((item) => (
               <WaiterMenuItemForOrderAdd
                 key={item._id}
@@ -90,6 +117,42 @@ const OrderAddDialog = ({ onAddItem }) => {
               />
             ))}
           </div>
+        </div>
+
+        {/* Pagination */}
+        <div className="flex justify-center select-none items-center mt-6">
+          <Pagination>
+            <PaginationContent>
+              <PaginationItem>
+                <PaginationPrevious
+                  onClick={() => setPage((prev) => Math.max(prev - 1, 1))}
+                  disabled={page === 1}
+                />
+              </PaginationItem>
+
+              {[...Array(totalPages)].map((_, index) => (
+                <PaginationItem key={index}>
+                  <PaginationLink
+                    isActive={page === index + 1}
+                    onClick={() => setPage(index + 1)}
+                  >
+                    {index + 1}
+                  </PaginationLink>
+                </PaginationItem>
+              ))}
+
+              {totalPages > 5 && <PaginationEllipsis />}
+
+              <PaginationItem>
+                <PaginationNext
+                  onClick={() =>
+                    setPage((prev) => Math.min(prev + 1, totalPages))
+                  }
+                  disabled={page >= totalPages}
+                />
+              </PaginationItem>
+            </PaginationContent>
+          </Pagination>
         </div>
       </DialogContent>
     </Dialog>

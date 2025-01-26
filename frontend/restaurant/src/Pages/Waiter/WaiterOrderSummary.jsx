@@ -110,10 +110,10 @@ const WaiterOrderSummary = () => {
       <h1 className="text-3xl font-bold text-gray-800 mb-6">Order Summary</h1>
 
       <div className="mb-6">
-        <label htmlFor="table-search" className="text-lg text-gray-600">
-          Search Table
+        <label htmlFor="table-search" className="text-lg  text-gray-600">
+          Table
         </label>
-        <div className="flex mb-2 relative">
+        <div className="flex mb-2 mt-2 relative">
           <Input
             type="text"
             id="table-search"
@@ -130,14 +130,14 @@ const WaiterOrderSummary = () => {
         </div>
 
         {searchQuery && !tableLoading && filteredTables?.length > 0 && (
-          <ul className="mt-2">
+          <ul className="mt-2 flex flex-col gap-3">
             {filteredTables.map((table) => (
               <li
                 key={table._id}
                 onClick={() => setSelectedTable(table._id)}
-                className={`cursor-pointer p-2 bg-gray-100 hover:bg-gray-200 rounded-lg ${
+                className={`cursor-pointer p-2 bg-white border  p-3  rounded-lg ${
                   selectedTable === table._id
-                    ? "bg-blue-100 border-2 border-blue-500 text-blue-700" // Add border and text color change
+                    ? "bg-black border-2 border-black text-black" // Add border and text color change
                     : ""
                 }`}
               >
@@ -222,28 +222,39 @@ const WaiterOrderSummary = () => {
         </tbody>
       </table>
 
-      <div className="flex justify-between items-center mb-6">
-        <div className="text-lg font-semibold text-gray-800">
-          Subtotal: ${subtotal.toFixed(2)}
+      <div className="flex flex-col justify-between items-center mb-6 p-4  rounded-lg shadow-md w-full bg-white">
+        {/* Header */}
+        <div className="w-full text-start text-lg font-semibold mb-4">
+          Payment Summary
         </div>
-        <div className="text-lg font-semibold text-gray-800">
-          Tax (10%): ${tax.toFixed(2)}
-        </div>
-        <div className="text-lg font-semibold text-gray-800">
-          Total: ${total.toFixed(2)}
+
+        {/* Payment Details */}
+        <div className="w-full space-y-3">
+          <div className="flex flex-row justify-between items-center w-full">
+            <span>Subtotal</span>
+            <span>${subtotal.toFixed(2)}</span>
+          </div>
+          <div className="flex flex-row justify-between items-center w-full">
+            <span>Tax (10%)</span>
+            <span>${tax.toFixed(2)}</span>
+          </div>
+          <div className="border-t pt-3 flex flex-row justify-between items-center w-full font-bold text-lg">
+            <span>Total</span>
+            <span>${total.toFixed(2)}</span>
+          </div>
         </div>
       </div>
 
-      <div className="mb-6">
+      <div className="mb-6 shadow-md rounded-lg p-4">
         <label htmlFor="order-notes" className="text-lg text-gray-600">
-          Special Notes:
+          Note
         </label>
         <textarea
           id="order-notes"
           value={note}
           onChange={(e) => setNote(e.target.value)}
           rows="4"
-          className="w-full p-3 mt-2 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+          className="w-full p-3 mt-2 rounded-lg  focus:outline-none focus:ring-1 focus:ring-gray-500"
           placeholder="Add any special instructions or requests..."
         />
       </div>

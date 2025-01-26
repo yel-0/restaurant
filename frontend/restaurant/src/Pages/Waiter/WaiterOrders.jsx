@@ -4,6 +4,15 @@ import CategorySelector from "@/Design/Share/CategorySelector";
 import { useGetMenus } from "@/Hook/Menu/useGetMenus";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
+import {
+  Pagination,
+  PaginationContent,
+  PaginationEllipsis,
+  PaginationItem,
+  PaginationLink,
+  PaginationNext,
+  PaginationPrevious,
+} from "@/components/ui/pagination";
 
 const WaiterOrders = () => {
   const [searchTerm, setSearchTerm] = useState("");
@@ -17,6 +26,8 @@ const WaiterOrders = () => {
   });
 
   const { data, isLoading, isError } = useGetMenus(queryParams);
+  const totalPages = data?.totalPages || 1;
+  const totalItems = data?.totalItems || 0;
 
   const handleSearchClick = () => {
     setQueryParams((prev) => ({
@@ -24,7 +35,7 @@ const WaiterOrders = () => {
       name: searchTerm,
       page: 1,
     }));
-    setPage(1); // Reset to the first page
+    setPage(1); // Reset page on search
   };
 
   useEffect(() => {
@@ -33,7 +44,7 @@ const WaiterOrders = () => {
       category: selectedCategory ? selectedCategory._id : "",
       page: 1,
     }));
-    setPage(1); // Reset to the first page on category change
+    setPage(1); // Reset page on category change
   }, [selectedCategory]);
 
   useEffect(() => {
@@ -42,18 +53,6 @@ const WaiterOrders = () => {
       page,
     }));
   }, [page]);
-
-  const handleNextPage = () => {
-    if (data?.menuItems.length === queryParams.limit) {
-      setPage((prev) => prev + 1);
-    }
-  };
-
-  const handlePreviousPage = () => {
-    if (page > 1) {
-      setPage((prev) => prev - 1);
-    }
-  };
 
   return (
     <div className="">
@@ -94,23 +93,40 @@ const WaiterOrders = () => {
         <div className="mt-6 text-red-500">Error loading menu items.</div>
       )}
 
-      {/* Pagination Controls */}
-      <div className="flex justify-between items-center mt-6">
-        <button
-          className="px-4 py-2 bg-gray-300 text-gray-800 rounded-lg shadow-md disabled:opacity-50"
-          onClick={handlePreviousPage}
-          disabled={page === 1}
-        >
-          Previous
-        </button>
-        <span className="text-gray-700">Page {page}</span>
-        <button
-          className="px-4 py-2 bg-gray-300 text-gray-800 rounded-lg shadow-md disabled:opacity-50"
-          onClick={handleNextPage}
-          disabled={data?.menuItems.length < queryParams.limit}
-        >
-          Next
-        </button>
+      {/* Pagination */}
+      <div className="flex justify-center select-none items-center mt-6">
+        <Pagination>
+          <PaginationContent>
+            <PaginationItem>
+              <PaginationPrevious
+                onClick={() => setPage((prev) => Math.max(prev - 1, 1))}
+                disabled={page === 1}
+              />
+            </PaginationItem>
+
+            {[...Array(totalPages)].map((_, index) => (
+              <PaginationItem key={index}>
+                <PaginationLink
+                  isActive={page === index + 1}
+                  onClick={() => setPage(index + 1)}
+                >
+                  {index + 1}
+                </PaginationLink>
+              </PaginationItem>
+            ))}
+
+            {totalPages > 5 && <PaginationEllipsis />}
+
+            <PaginationItem>
+              <PaginationNext
+                onClick={() =>
+                  setPage((prev) => Math.min(prev + 1, totalPages))
+                }
+                disabled={page >= totalPages}
+              />
+            </PaginationItem>
+          </PaginationContent>
+        </Pagination>
       </div>
     </div>
   );
