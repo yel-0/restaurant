@@ -42,7 +42,7 @@ const CookLayout = ({ children }) => {
                 Dashboard
               </Link>
             </SidebarGroup>
-            <SidebarGroup>
+            {/* <SidebarGroup>
               <Link
                 to="/cook/orders"
                 className={`p-3 flex items-center gap-2 rounded-xl ${
@@ -80,7 +80,7 @@ const CookLayout = ({ children }) => {
                 <List className="h-5 w-5" />
                 Cook TV
               </Link>
-            </SidebarGroup>
+            </SidebarGroup> */}
           </SidebarContent>
 
           {/* Sidebar Footer */}

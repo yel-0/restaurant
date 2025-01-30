@@ -31,7 +31,7 @@ const OrderAddDialog = ({ onAddItem }) => {
   const [queryParams, setQueryParams] = useState({
     category: "",
     name: "",
-    limit: 10,
+    limit: 8,
     page: 1,
   });
 

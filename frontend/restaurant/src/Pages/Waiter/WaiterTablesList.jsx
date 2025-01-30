@@ -8,11 +8,19 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-
 import useFetchTables from "@/Hook/Table/useFetchTables";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
+import {
+  Pagination,
+  PaginationContent,
+  PaginationItem,
+  PaginationPrevious,
+  PaginationNext,
+  PaginationLink,
+  PaginationEllipsis,
+} from "@/components/ui/pagination";
 
 const WaiterTableList = () => {
   const [page, setPage] = useState(1);
@@ -23,14 +31,6 @@ const WaiterTableList = () => {
 
   const tables = data?.tables || [];
   const totalPages = data?.totalPages || 1;
-
-  const handlePrevious = () => {
-    if (page > 1) setPage(page - 1);
-  };
-
-  const handleNext = () => {
-    if (page < totalPages) setPage(page + 1);
-  };
 
   const handleSearchChange = (e) => {
     const value = e.target.value;
@@ -102,22 +102,39 @@ const WaiterTableList = () => {
       </Table>
 
       {/* Pagination Controls */}
-      <div className="mt-4 text-center">
-        <Button
-          className="px-4 py-2 border rounded-l-md"
-          onClick={handlePrevious}
-          disabled={page === 1}
-        >
-          Previous
-        </Button>
-        <span className="px-4">{`Page ${page} of ${totalPages}`}</span>
-        <Button
-          className="px-4 py-2 border rounded-r-md"
-          onClick={handleNext}
-          disabled={page === totalPages}
-        >
-          Next
-        </Button>
+      <div className="flex justify-center select-none items-center mt-6">
+        <Pagination>
+          <PaginationContent>
+            <PaginationItem>
+              <PaginationPrevious
+                onClick={() => setPage((prev) => Math.max(prev - 1, 1))}
+                disabled={page === 1}
+              />
+            </PaginationItem>
+
+            {[...Array(totalPages)].map((_, index) => (
+              <PaginationItem key={index}>
+                <PaginationLink
+                  isActive={page === index + 1}
+                  onClick={() => setPage(index + 1)}
+                >
+                  {index + 1}
+                </PaginationLink>
+              </PaginationItem>
+            ))}
+
+            {totalPages > 5 && <PaginationEllipsis />}
+
+            <PaginationItem>
+              <PaginationNext
+                onClick={() =>
+                  setPage((prev) => Math.min(prev + 1, totalPages))
+                }
+                disabled={page >= totalPages}
+              />
+            </PaginationItem>
+          </PaginationContent>
+        </Pagination>
       </div>
     </div>
   );
